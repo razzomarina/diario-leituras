@@ -825,10 +825,13 @@ function sortByDate(arr) {
 }
 
 function coverCell(b) {
+  const initial = esc(b.title.charAt(0));
   if (b.coverUrl) {
-    return `<div class="book-cover-cell"><img class="book-cover-img" src="${esc(b.coverUrl)}" alt="capa" onerror="this.parentElement.innerHTML='<div class=\\"book-cover-placeholder\\">${esc(b.title.charAt(0))}</div>'"></div>`;
+    // Use raw coverUrl in src (not escaped) to avoid &quot; breaking the attribute
+    const safeUrl = b.coverUrl.replace(/"/g, '');
+    return `<div class="book-cover-cell"><img class="book-cover-img" src="${safeUrl}" alt="capa" onerror="this.parentElement.innerHTML='<div class=\"book-cover-placeholder\">${initial}</div>'"></div>`;
   }
-  return `<div class="book-cover-cell"><div class="book-cover-placeholder">${esc(b.title.charAt(0))}</div></div>`;
+  return `<div class="book-cover-cell"><div class="book-cover-placeholder">${initial}</div></div>`;
 }
 
 function renderGrid() {
