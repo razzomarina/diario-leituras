@@ -727,9 +727,9 @@ window._removeInlineQuote=function(i){pendingQuotes.splice(i,1);renderInlineQuot
 function switchTab(tab){
   ['books','stats','quotes','goals'].forEach(t=>{
     document.getElementById('tab-'+t).classList.toggle('active',t===tab);
-    document.getElementById(t==='books'?'booksPane':t+'Pane').style.display=t===tab?'':'none';
+    document.getElementById(t==='books'?'booksPane':t+'Pane').style.display=t===tab?'block':'none';
   });
-  document.getElementById('insightsBar').style.display=tab==='books'?'':'none';
+  document.getElementById('insightsBar').style.display=tab==='books'?'grid':'none';
   if(tab==='stats') renderCharts();
   if(tab==='quotes') renderQuotes();
   if(tab==='goals') renderGoals();
