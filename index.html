@@ -576,10 +576,13 @@ function startListening(){
   unsubBooks=onSnapshot(booksCol,snap=>{
     books=snap.docs.map(d=>({id:d.id,...d.data()}));
     setLoading(false);render();
+    // Ensure other tabs are populated
+    renderQuotes();renderGoals();
   },err=>{console.error(err);setLoading(false);showToast('⚠ Erro ao conectar.');});
   unsubQuotes=onSnapshot(quotesCol,snap=>{
     quotes=snap.docs.map(d=>({id:d.id,...d.data()}));
-    renderInsights();renderQuotes();
+    renderInsights();
+    renderQuotes();
   },err=>console.error(err));
   unsubGoals=onSnapshot(goalsCol,snap=>{
     snap.docs.forEach(d=>{goals[d.id]=d.data().target;});
@@ -727,9 +730,9 @@ function switchTab(tab){
     document.getElementById(t==='books'?'booksPane':t+'Pane').style.display=t===tab?'':'none';
   });
   document.getElementById('insightsBar').style.display=tab==='books'?'':'none';
-  if(tab==='stats')renderCharts();
-  if(tab==='quotes')renderQuotes();
-  if(tab==='goals')renderGoals();
+  if(tab==='stats') renderCharts();
+  if(tab==='quotes') renderQuotes();
+  if(tab==='goals') renderGoals();
 }
 window.switchTab=switchTab;
 
