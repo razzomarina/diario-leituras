@@ -37,10 +37,11 @@ body {
 /* ── HEADER — dramatic, like a book cover ── */
 header {
   text-align: center;
-  padding: 5rem 2rem 4rem;
+  padding: 5rem 2rem 4.5rem;
   background: var(--cream);
   position: relative;
   border-bottom: 1px solid var(--border);
+  overflow: hidden;
 }
 header::before {
   content: '';
@@ -52,58 +53,77 @@ header::before {
 header::after {
   content: '';
   position: absolute;
-  bottom: 0; left: 50%;
+  bottom: -1px; left: 50%;
   transform: translateX(-50%);
-  width: 80px; height: 1px;
+  width: 120px; height: 1px;
   background: var(--gold);
+}
+/* Decorative large letter watermark */
+header .header-bg-letter {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -52%);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32rem;
+  font-weight: 300;
+  color: rgba(184,151,90,.04);
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  letter-spacing: -.05em;
 }
 .header-super {
   font-family: 'DM Sans', sans-serif;
-  font-size: .6rem;
-  letter-spacing: .5em;
+  font-size: .58rem;
+  letter-spacing: .55em;
   text-transform: uppercase;
   color: var(--gold);
-  margin-bottom: 2rem;
+  margin-bottom: 2.2rem;
   display: block;
+  position: relative;
 }
 h1 {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(3.5rem, 8vw, 6.5rem);
+  font-size: clamp(4rem, 9vw, 7.5rem);
   font-weight: 300;
-  line-height: .95;
+  line-height: .92;
   color: var(--ink);
-  letter-spacing: -.02em;
+  letter-spacing: -.03em;
   margin-bottom: .5rem;
+  position: relative;
 }
 h1 em {
   font-style: italic;
   font-weight: 400;
   color: var(--stone);
   display: block;
+  font-size: clamp(4.2rem, 9.5vw, 8rem);
 }
 .header-rule {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.2rem;
-  margin: 1.8rem 0 1.4rem;
+  gap: 1.4rem;
+  margin: 2rem 0 1.6rem;
+  position: relative;
 }
-.header-rule span { height: 1px; width: 70px; background: var(--stone-pale); display: block; }
+.header-rule span { height: 1px; width: 80px; background: var(--stone-pale); display: block; }
 .header-rule em {
   font-family: 'Cormorant Garamond', serif;
-  font-size: .75rem;
-  letter-spacing: .3em;
+  font-size: .72rem;
+  letter-spacing: .35em;
   text-transform: uppercase;
   color: var(--stone-light);
   font-style: normal;
 }
 .header-name {
   font-family: 'Cormorant Garamond', serif;
-  font-size: clamp(1rem, 2.5vw, 1.35rem);
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
   font-weight: 400;
   font-style: italic;
   color: var(--stone);
-  letter-spacing: .1em;
+  letter-spacing: .08em;
+  position: relative;
 }
 #userBadge {
   margin-top: 1.2rem;
@@ -601,6 +621,7 @@ footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border);
 <!-- APP -->
 <div id="appContent" style="display:none">
 <header>
+  <div class="header-bg-letter" aria-hidden="true">L</div>
   <span class="header-super">✦ registro pessoal ✦</span>
   <h1>Diário de<em>Leituras</em></h1>
   <div class="header-rule"><span></span><em>uma vida em livros</em><span></span></div>
@@ -701,6 +722,11 @@ footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border);
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
           Adicionar
         </button>
+        <label class="btn" style="cursor:pointer" title="Importar CSV (título, autor)">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+          Importar CSV
+          <input type="file" accept=".csv" id="tbrCsvInput" style="display:none" onchange="window._importTbrCsv(this)">
+        </label>
         <button class="tbr-shuffle" onclick="window.shuffleTbr()">✦ Sortear um livro</button>
       </div>
     </div>
@@ -1514,6 +1540,29 @@ function confirmDelete(id,title){
 window._confirmDelete=confirmDelete;
 function closeConfirm(){document.getElementById('confirmOverlay').classList.add('hidden');deleteTargetId=null;}
 window.closeConfirm=closeConfirm;
+
+// ── TBR CSV IMPORT ───────────────────────────────────────
+window._importTbrCsv = async function(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const text = await file.text();
+  const lines = text.split(/\r?\n/).filter(l => l.trim());
+  let imported = 0;
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) continue;
+    // Try to parse: support comma and semicolon separators, with or without quotes
+    const parts = line.split(/,|;/).map(p => p.replace(/^["\s]+|["\s]+$/g, ''));
+    const title = parts[0];
+    const author = parts[1] || '';
+    if (!title || title.toLowerCase() === 'título' || title.toLowerCase() === 'title') continue; // skip header row
+    const id = Date.now().toString(36) + Math.random().toString(36).slice(2,7) + i;
+    await saveBookToDb({ id, title, author, status: 'quero', addedAt: Date.now(), coverUrl: '', genre: '', tags: [], isbn: '', notes: '', rating: 0, favorito: false, publisher: '', pubYear: '', date: '', origin: '' });
+    imported++;
+  }
+  input.value = '';
+  showToast('✓ ' + imported + ' livro' + (imported !== 1 ? 's' : '') + ' importado' + (imported !== 1 ? 's' : '') + ' para Quero Ler!');
+};
 
 function exportCSV(){
   if(!books.length){showToast('⚠ Nenhum livro para exportar.');return;}
