@@ -21,9 +21,7 @@
     --border: rgba(139,115,85,0.25);
     --shadow: rgba(26,23,20,0.12);
   }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   body {
     font-family: 'DM Sans', sans-serif;
     background: var(--paper);
@@ -33,8 +31,6 @@
       radial-gradient(ellipse at 10% 0%, rgba(201,168,76,0.07) 0%, transparent 60%),
       radial-gradient(ellipse at 90% 100%, rgba(139,58,58,0.05) 0%, transparent 60%);
   }
-
-  /* ── HEADER ── */
   header {
     text-align: center;
     padding: 3.5rem 2rem 2.5rem;
@@ -65,10 +61,7 @@
     line-height: 1;
     color: var(--ink);
   }
-  h1 em {
-    font-style: italic;
-    color: var(--sepia);
-  }
+  h1 em { font-style: italic; color: var(--sepia); }
   .header-name {
     font-family: 'Cormorant Garamond', serif;
     font-size: clamp(1rem, 2.5vw, 1.35rem);
@@ -87,14 +80,7 @@
     margin-top: 1.2rem;
   }
   .header-line span { height: 1px; width: 60px; background: var(--sepia-light); display: block; }
-  .header-line p {
-    font-size: 0.72rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
-
-  /* ── INSIGHTS BAR ── */
+  .header-line p { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); }
   .insights {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
@@ -118,31 +104,9 @@
     line-height: 1;
     display: block;
   }
-  .insight-label {
-    font-size: 0.65rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-top: 0.3rem;
-    display: block;
-  }
-  .insight-sub {
-    font-size: 0.72rem;
-    color: var(--sepia-light);
-    margin-top: 0.2rem;
-    display: block;
-    font-style: italic;
-    font-family: 'Cormorant Garamond', serif;
-  }
-
-  /* ── MAIN LAYOUT ── */
-  .container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 1.5rem;
-  }
-
-  /* ── TOOLBAR ── */
+  .insight-label { font-size: 0.65rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); margin-top: 0.3rem; display: block; }
+  .insight-sub { font-size: 0.72rem; color: var(--sepia-light); margin-top: 0.2rem; display: block; font-style: italic; font-family: 'Cormorant Garamond', serif; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
   .toolbar {
     display: flex;
     align-items: center;
@@ -155,7 +119,6 @@
   }
   .toolbar-left { display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap; }
   .toolbar-right { display: flex; align-items: center; gap: 0.6rem; }
-
   .btn {
     display: inline-flex; align-items: center; gap: 0.45rem;
     padding: 0.55rem 1.1rem;
@@ -170,31 +133,13 @@
     color: var(--ink);
   }
   .btn:hover { background: var(--paper-dark); border-color: var(--sepia-light); }
-  .btn-primary {
-    background: var(--ink);
-    color: var(--paper);
-    border-color: var(--ink);
-  }
+  .btn-primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
   .btn-primary:hover { background: #2d2925; border-color: #2d2925; }
-  .btn-gold {
-    background: var(--gold);
-    color: var(--ink);
-    border-color: var(--gold);
-    font-weight: 500;
-  }
+  .btn-gold { background: var(--gold); color: var(--ink); border-color: var(--gold); font-weight: 500; }
   .btn-gold:hover { background: var(--gold-light); border-color: var(--gold-light); }
-  .btn-sm { padding: 0.38rem 0.75rem; font-size: 0.72rem; }
   .btn svg { width: 14px; height: 14px; }
-
-  .search-wrap {
-    position: relative;
-    display: flex; align-items: center;
-  }
-  .search-wrap svg {
-    position: absolute; left: 0.65rem;
-    width: 13px; height: 13px;
-    color: var(--text-muted); pointer-events: none;
-  }
+  .search-wrap { position: relative; display: flex; align-items: center; }
+  .search-wrap svg { position: absolute; left: 0.65rem; width: 13px; height: 13px; color: var(--text-muted); pointer-events: none; }
   #searchInput {
     padding: 0.5rem 0.8rem 0.5rem 2rem;
     border: 1px solid var(--border);
@@ -208,7 +153,6 @@
   }
   #searchInput:focus { outline: none; border-color: var(--sepia-light); }
   #searchInput::placeholder { color: var(--text-muted); }
-
   select.filter-select {
     padding: 0.5rem 0.8rem;
     border: 1px solid var(--border);
@@ -242,23 +186,19 @@
     border-radius: 0;
     padding: 0;
     position: relative;
-    transition: all 0.18s;
+    transition: background 0.18s;
     animation: fadeIn 0.3s ease both;
     box-shadow: none;
     display: grid;
-    grid-template-columns: 3.5rem 1fr auto;
+    grid-template-columns: 3.5rem 52px 1fr auto;
     align-items: stretch;
     min-height: 64px;
   }
   .book-card:last-child { border-bottom: none; }
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateX(-6px); }
-    to { opacity: 1; transform: translateX(0); }
-  }
+  @keyframes fadeIn { from { opacity: 0; transform: translateX(-6px); } to { opacity: 1; transform: translateX(0); } }
   .book-card:hover { background: #fdfaf5; }
   .book-card.favorito { border-left: 3px solid var(--gold); }
 
-  /* Row number / index */
   .book-index {
     display: flex; align-items: center; justify-content: center;
     font-family: 'Cormorant Garamond', serif;
@@ -270,7 +210,40 @@
     flex-shrink: 0;
   }
 
-  /* Main content block */
+  /* ── BOOK COVER ── */
+  .book-cover-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid var(--border);
+    padding: 6px;
+    flex-shrink: 0;
+    background: var(--paper-dark);
+  }
+  .book-cover-img {
+    width: 36px;
+    height: 52px;
+    object-fit: cover;
+    border-radius: 1px;
+    box-shadow: 1px 1px 4px rgba(0,0,0,0.15);
+    display: block;
+  }
+  .book-cover-placeholder {
+    width: 36px;
+    height: 52px;
+    background: var(--sepia-pale);
+    border-radius: 1px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: var(--sepia-light);
+    font-style: italic;
+    box-shadow: 1px 1px 4px rgba(0,0,0,0.08);
+    flex-shrink: 0;
+  }
+
   .book-main {
     padding: 0.85rem 1.2rem;
     display: flex;
@@ -279,9 +252,7 @@
     gap: 0.3rem;
     min-width: 0;
   }
-  .book-row-top {
-    display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap;
-  }
+  .book-row-top { display: flex; align-items: baseline; gap: 0.6rem; flex-wrap: wrap; }
   .book-title {
     font-family: 'Cormorant Garamond', serif;
     font-size: 1.1rem;
@@ -299,48 +270,25 @@
     white-space: nowrap;
     flex-shrink: 0;
   }
-  .book-row-bottom {
-    display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap;
-  }
-  .book-date {
-    font-size: 0.67rem;
-    letter-spacing: 0.1em;
-    color: var(--text-muted);
-    text-transform: uppercase;
-  }
-  .book-genre {
-    font-size: 0.65rem;
-    background: var(--sepia-pale);
-    color: var(--sepia);
-    padding: 0.1rem 0.5rem;
-    border-radius: 20px;
-    letter-spacing: 0.05em;
-  }
+  .book-row-bottom { display: flex; align-items: center; gap: 0.7rem; flex-wrap: wrap; }
+  .book-date { font-size: 0.67rem; letter-spacing: 0.1em; color: var(--text-muted); text-transform: uppercase; }
+  .book-genre { font-size: 0.65rem; background: var(--sepia-pale); color: var(--sepia); padding: 0.1rem 0.5rem; border-radius: 20px; letter-spacing: 0.05em; }
 
-  /* Notes — expandable */
   .book-notes-row {
     grid-column: 1 / -1;
-    padding: 0 1.2rem 0.85rem 3.5rem;
+    padding: 0.6rem 1.2rem 0.85rem 3.5rem;
     font-size: 0.88rem;
     line-height: 1.6;
     color: var(--text-muted);
     font-style: italic;
     font-family: 'Cormorant Garamond', serif;
     border-top: 1px dashed var(--border);
-    padding-top: 0.6rem;
     display: none;
   }
   .book-card.expanded .book-notes-row { display: block; }
   .book-card.has-notes { cursor: pointer; }
-  .notes-indicator {
-    font-size: 0.65rem;
-    color: var(--sepia-light);
-    letter-spacing: 0.08em;
-    cursor: pointer;
-    border-bottom: 1px dotted var(--sepia-light);
-  }
+  .notes-indicator { font-size: 0.65rem; color: var(--sepia-light); letter-spacing: 0.08em; cursor: pointer; border-bottom: 1px dotted var(--sepia-light); }
 
-  /* Right actions column */
   .card-actions {
     display: flex;
     flex-direction: column;
@@ -363,36 +311,17 @@
   .card-actions button:hover { background: var(--paper-dark); }
   .fav-btn.active { color: var(--red); }
 
-  /* Stars */
   .star-display { display: flex; gap: 1px; align-items: center; }
   .star-display .s { font-size: 0.8rem; }
   .star-display .s.full { color: var(--gold); }
   .star-display .s.half { color: var(--gold); opacity: 0.7; }
   .star-display .s.empty { color: #ddd; }
 
-  /* ── EMPTY STATE ── */
-  .empty-state {
-    width: 100%;
-    text-align: center;
-    padding: 5rem 2rem;
-    color: var(--text-muted);
-  }
-  .empty-state .big-icon {
-    font-size: 3.5rem;
-    display: block;
-    margin-bottom: 1rem;
-    opacity: 0.4;
-  }
-  .empty-state h3 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.6rem;
-    font-weight: 400;
-    color: var(--sepia);
-    margin-bottom: 0.5rem;
-  }
+  .empty-state { width: 100%; text-align: center; padding: 5rem 2rem; color: var(--text-muted); }
+  .empty-state .big-icon { font-size: 3.5rem; display: block; margin-bottom: 1rem; opacity: 0.4; }
+  .empty-state h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 400; color: var(--sepia); margin-bottom: 0.5rem; }
   .empty-state p { font-size: 0.85rem; }
 
-  /* ── MODAL OVERLAY ── */
   .modal-overlay {
     position: fixed; inset: 0;
     background: rgba(26,23,20,0.55);
@@ -404,190 +333,98 @@
   }
   @keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
   .modal-overlay.hidden { display: none; }
-
   .modal {
     background: var(--paper);
     border: 1px solid var(--border);
     border-radius: 4px;
-    width: 100%; max-width: 540px;
+    width: 100%; max-width: 560px;
     max-height: 90vh;
     overflow-y: auto;
     box-shadow: 0 20px 60px rgba(26,23,20,0.25);
     animation: modalIn 0.25s cubic-bezier(0.34,1.56,0.64,1);
   }
-  @keyframes modalIn {
-    from { opacity: 0; transform: scale(0.94) translateY(20px); }
-    to { opacity: 1; transform: scale(1) translateY(0); }
-  }
-
-  .modal-header {
-    padding: 1.5rem 1.8rem 1.2rem;
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .modal-header h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.5rem;
-    font-weight: 400;
-    color: var(--ink);
-  }
-  .modal-close {
-    background: none; border: none; cursor: pointer;
-    width: 32px; height: 32px;
-    display: flex; align-items: center; justify-content: center;
-    border-radius: 50%;
-    color: var(--text-muted);
-    font-size: 1.3rem;
-    transition: background 0.15s;
-  }
+  @keyframes modalIn { from { opacity: 0; transform: scale(0.94) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+  .modal-header { padding: 1.5rem 1.8rem 1.2rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .modal-header h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 400; color: var(--ink); }
+  .modal-close { background: none; border: none; cursor: pointer; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: var(--text-muted); font-size: 1.3rem; transition: background 0.15s; }
   .modal-close:hover { background: var(--paper-dark); }
-
   .modal-body { padding: 1.5rem 1.8rem; }
-
-  /* ── FORM ── */
   .form-group { margin-bottom: 1.3rem; }
-  .form-group label {
-    display: block;
-    font-size: 0.7rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    margin-bottom: 0.4rem;
-  }
-  .form-group input,
-  .form-group textarea,
-  .form-group select {
-    width: 100%;
-    padding: 0.6rem 0.85rem;
+  .form-group label { display: block; font-size: 0.7rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.4rem; }
+  .form-group input, .form-group textarea, .form-group select {
+    width: 100%; padding: 0.6rem 0.85rem;
     border: 1px solid var(--border);
-    background: white;
-    border-radius: 2px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.85rem;
-    color: var(--ink);
+    background: white; border-radius: 2px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.85rem; color: var(--ink);
     transition: border-color 0.18s;
   }
-  .form-group input:focus,
-  .form-group textarea:focus,
-  .form-group select:focus {
-    outline: none;
-    border-color: var(--sepia);
-  }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus { outline: none; border-color: var(--sepia); }
   .form-group textarea { resize: vertical; min-height: 90px; }
-
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
-  /* Star picker */
-  .star-picker { display: flex; gap: 4px; align-items: center; margin-top: 0.3rem; }
-  .star-picker span {
-    font-size: 1.5rem;
-    cursor: pointer;
-    color: #ddd;
-    transition: color 0.1s, transform 0.1s;
-    user-select: none;
+  /* ISBN field */
+  .isbn-wrap { position: relative; }
+  .isbn-wrap input { padding-right: 2.5rem; }
+  .isbn-status {
+    position: absolute; right: 0.7rem; top: 50%; transform: translateY(-50%);
+    font-size: 0.85rem;
   }
+  /* Cover preview in modal */
+  .cover-preview-wrap {
+    display: none;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+    background: var(--paper-dark);
+    border-radius: 2px;
+    border: 1px solid var(--border);
+  }
+  .cover-preview-wrap.visible { display: flex; }
+  .cover-preview-wrap img { width: 48px; height: 68px; object-fit: cover; border-radius: 1px; box-shadow: 1px 2px 6px rgba(0,0,0,0.15); }
+  .cover-preview-info { font-size: 0.78rem; color: var(--text-muted); font-style: italic; font-family: 'Cormorant Garamond', serif; }
+  .cover-preview-info strong { font-style: normal; color: var(--ink); font-size: 0.88rem; display: block; margin-bottom: 0.2rem; }
+
+  .star-picker { display: flex; gap: 4px; align-items: center; margin-top: 0.3rem; }
+  .star-picker span { font-size: 1.5rem; cursor: pointer; color: #ddd; transition: color 0.1s, transform 0.1s; user-select: none; }
   .star-picker span:hover { transform: scale(1.15); }
   .star-picker span.full { color: var(--gold); }
-  .star-picker span.half { color: var(--gold); }
-  .rating-val {
-    font-size: 0.78rem;
-    color: var(--text-muted);
-    margin-left: 0.5rem;
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-  }
+  .rating-val { font-size: 0.78rem; color: var(--text-muted); margin-left: 0.5rem; font-family: 'Cormorant Garamond', serif; font-style: italic; }
 
-  /* Favorito toggle */
   .fav-toggle-wrap { display: flex; align-items: center; gap: 0.7rem; margin-top: 0.3rem; }
-  .fav-toggle {
-    width: 44px; height: 24px;
-    background: var(--paper-dark);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    position: relative;
-    cursor: pointer;
-    transition: background 0.2s, border-color 0.2s;
-    flex-shrink: 0;
-  }
+  .fav-toggle { width: 44px; height: 24px; background: var(--paper-dark); border: 1px solid var(--border); border-radius: 12px; position: relative; cursor: pointer; transition: background 0.2s, border-color 0.2s; flex-shrink: 0; }
   .fav-toggle.on { background: var(--red-light); border-color: var(--red); }
-  .fav-toggle::after {
-    content: '';
-    position: absolute;
-    top: 2px; left: 2px;
-    width: 18px; height: 18px;
-    border-radius: 50%;
-    background: white;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    transition: transform 0.2s;
-  }
+  .fav-toggle::after { content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: white; box-shadow: 0 1px 3px rgba(0,0,0,0.2); transition: transform 0.2s; }
   .fav-toggle.on::after { transform: translateX(20px); }
   .fav-label { font-size: 0.82rem; color: var(--ink); }
   .fav-heart { font-size: 1rem; transition: opacity 0.2s; opacity: 0.4; }
-  .fav-toggle.on ~ .fav-label .fav-heart { opacity: 1; }
 
-  .modal-footer {
-    padding: 1rem 1.8rem 1.5rem;
-    display: flex; justify-content: flex-end; gap: 0.6rem;
-    border-top: 1px solid var(--border);
-    margin-top: 0.5rem;
-  }
+  .modal-footer { padding: 1rem 1.8rem 1.5rem; display: flex; justify-content: flex-end; gap: 0.6rem; border-top: 1px solid var(--border); margin-top: 0.5rem; }
 
-  /* ── CONFIRM MODAL ── */
   .confirm-modal .modal { max-width: 380px; }
-  .confirm-modal .modal-body p {
-    font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1rem;
-    font-style: italic;
-  }
+  .confirm-modal .modal-body p { color: var(--text-muted); line-height: 1.6; font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-style: italic; }
 
-  /* ── FOOTER ── */
-  footer {
-    text-align: center;
-    padding: 2rem;
-    border-top: 1px solid var(--border);
-    font-size: 0.7rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--sepia-light);
-  }
+  footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--sepia-light); }
 
-  /* ── SCROLLBAR ── */
   ::-webkit-scrollbar { width: 6px; }
   ::-webkit-scrollbar-track { background: var(--paper-dark); }
   ::-webkit-scrollbar-thumb { background: var(--sepia-light); border-radius: 3px; }
 
-  /* ── TOAST ── */
-  .toast {
-    position: fixed;
-    bottom: 2rem; right: 2rem;
-    background: var(--ink);
-    color: var(--paper);
-    padding: 0.75rem 1.2rem;
-    border-radius: 3px;
-    font-size: 0.8rem;
-    letter-spacing: 0.05em;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
-    z-index: 200;
-    animation: toastIn 0.3s ease;
-    display: flex; align-items: center; gap: 0.5rem;
-  }
+  .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--ink); color: var(--paper); padding: 0.75rem 1.2rem; border-radius: 3px; font-size: 0.8rem; letter-spacing: 0.05em; box-shadow: 0 4px 20px rgba(0,0,0,0.25); z-index: 200; animation: toastIn 0.3s ease; display: flex; align-items: center; gap: 0.5rem; }
   .toast.hidden { display: none; }
-  @keyframes toastIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+  @keyframes toastIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
   @media (max-width: 600px) {
     .form-row { grid-template-columns: 1fr; }
     .toolbar { flex-direction: column; align-items: stretch; }
     .toolbar-left, .toolbar-right { flex-wrap: wrap; }
-    .book-card { grid-template-columns: 2.5rem 1fr auto; }
+    .book-card { grid-template-columns: 2.5rem 44px 1fr auto; }
     .book-notes-row { padding-left: 2.5rem; }
   }
 </style>
 </head>
 <body>
+
 <!-- TELA DE LOGIN -->
 <div id="loginScreen" style="display:none;position:fixed;inset:0;background:var(--paper);z-index:500;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;background-image:radial-gradient(ellipse at 10% 0%,rgba(201,168,76,0.07) 0%,transparent 60%),radial-gradient(ellipse at 90% 100%,rgba(139,58,58,0.05) 0%,transparent 60%);">
   <span style="font-size:0.7rem;letter-spacing:0.35em;text-transform:uppercase;color:var(--sepia-light)">✦ registro pessoal ✦</span>
@@ -602,15 +439,10 @@
 <!-- CONTEÚDO DO APP -->
 <div id="appContent" style="display:none">
 
-
 <header>
   <span class="header-ornament">✦ registro pessoal ✦</span>
   <h1>Diário de <em>Leituras</em></h1>
-  <div class="header-line">
-    <span></span>
-    <p>uma vida em livros</p>
-    <span></span>
-  </div>
+  <div class="header-line"><span></span><p>uma vida em livros</p><span></span></div>
   <p class="header-name">Marina Risther Razzo</p>
   <div id="userBadge" style="margin-top:1rem;display:flex;align-items:center;justify-content:center;gap:0.6rem;">
     <img id="userAvatar" src="" style="width:22px;height:22px;border-radius:50%;display:none;border:1px solid var(--border)">
@@ -619,12 +451,8 @@
   </div>
 </header>
 
-<!-- INSIGHTS -->
-<div class="insights" id="insightsBar">
-  <!-- rendered by JS -->
-</div>
+<div class="insights" id="insightsBar"></div>
 
-<!-- MAIN -->
 <div class="container">
   <div class="toolbar">
     <div class="toolbar-left">
@@ -632,19 +460,15 @@
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
         <input type="text" id="searchInput" placeholder="buscar título, autor…">
       </div>
-      <select class="filter-select" id="filterYear">
-        <option value="">Todos os anos</option>
-      </select>
-      <select class="filter-select" id="filterGenre">
-        <option value="">Todos os gêneros</option>
-      </select>
+      <select class="filter-select" id="filterYear"><option value="">Todos os anos</option></select>
+      <select class="filter-select" id="filterGenre"><option value="">Todos os gêneros</option></select>
       <select class="filter-select" id="filterFav">
         <option value="">Todos</option>
         <option value="fav">❤ Favoritos</option>
       </select>
     </div>
     <div class="toolbar-right">
-      <button class="btn" onclick="window.exportCSV()" title="Exportar CSV">
+      <button class="btn" onclick="window.exportCSV()">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
         Exportar CSV
       </button>
@@ -654,14 +478,10 @@
       </button>
     </div>
   </div>
-
-  <!-- BOOK GRID -->
   <div id="bookGrid"></div>
 </div>
 
 <footer>Diário de Leituras &mdash; Dados salvos na nuvem via Firebase</footer>
-
-<!-- TOAST -->
 <div class="toast hidden" id="toast"></div>
 
 <!-- ADD/EDIT MODAL -->
@@ -674,6 +494,22 @@
     <div class="modal-body">
       <input type="hidden" id="editId">
 
+      <!-- ISBN -->
+      <div class="form-group">
+        <label>ISBN <span style="font-size:0.65rem;opacity:0.7">(opcional — preenche capa e dados automaticamente)</span></label>
+        <div class="isbn-wrap">
+          <input type="text" id="fIsbn" placeholder="ex: 9788535909555" maxlength="17">
+          <span class="isbn-status" id="isbnStatus"></span>
+        </div>
+        <div class="cover-preview-wrap" id="coverPreview">
+          <img id="coverPreviewImg" src="" alt="capa">
+          <div class="cover-preview-info">
+            <strong id="coverPreviewTitle"></strong>
+            <span id="coverPreviewAuthor"></span>
+          </div>
+        </div>
+      </div>
+
       <div class="form-row">
         <div class="form-group">
           <label>Título *</label>
@@ -684,7 +520,6 @@
           <input type="text" id="fAuthor" placeholder="Patrick Rothfuss">
         </div>
       </div>
-
       <div class="form-row">
         <div class="form-group">
           <label>Gênero / Categoria</label>
@@ -698,16 +533,12 @@
 
       <div class="form-group">
         <label>Avaliação</label>
-        <div style="display:flex; align-items:center; gap: 0.5rem;">
+        <div style="display:flex;align-items:center;gap:0.5rem;">
           <div class="star-picker" id="starPicker">
-            <span data-v="1">★</span>
-            <span data-v="1.5">½</span>
-            <span data-v="2">★</span>
-            <span data-v="2.5">½</span>
-            <span data-v="3">★</span>
-            <span data-v="3.5">½</span>
-            <span data-v="4">★</span>
-            <span data-v="4.5">½</span>
+            <span data-v="1">★</span><span data-v="1.5">½</span>
+            <span data-v="2">★</span><span data-v="2.5">½</span>
+            <span data-v="3">★</span><span data-v="3.5">½</span>
+            <span data-v="4">★</span><span data-v="4.5">½</span>
             <span data-v="5">★</span>
           </div>
           <span class="rating-val" id="ratingVal">sem avaliação</span>
@@ -734,16 +565,14 @@
   </div>
 </div>
 
-<!-- CONFIRM DELETE MODAL -->
+<!-- CONFIRM DELETE -->
 <div class="modal-overlay hidden confirm-modal" id="confirmOverlay">
   <div class="modal">
     <div class="modal-header">
       <h2>Remover Livro</h2>
       <button class="modal-close" onclick="window.closeConfirm()">×</button>
     </div>
-    <div class="modal-body">
-      <p id="confirmMsg">Tem certeza que deseja remover este livro do diário?</p>
-    </div>
+    <div class="modal-body"><p id="confirmMsg">Tem certeza?</p></div>
     <div class="modal-footer">
       <button class="btn" onclick="window.closeConfirm()">Cancelar</button>
       <button class="btn btn-primary" id="confirmBtn">Remover</button>
@@ -751,8 +580,6 @@
   </div>
 </div>
 
-
-<!-- loading bar -->
 <div id="loadingBar" style="position:fixed;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--gold),var(--sepia-light));z-index:999;display:none;animation:loadPulse 1s ease infinite alternate;"></div>
 <style>@keyframes loadPulse{from{opacity:1}to{opacity:0.4}}</style>
 
@@ -775,23 +602,21 @@ const db  = getFirestore(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-let booksCol = null;
-let unsubscribe = null;
+let booksCol = null, unsubscribe = null;
+let books = [], currentRating = 0, isFavorito = false, deleteTargetId = null;
+let currentCoverUrl = '';
 
 // ── AUTH ──────────────────────────────────────────────────
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    // Logado — mostra o diário, esconde a tela de login
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('appContent').style.display  = 'block';
     document.getElementById('userEmail').textContent = user.email;
     document.getElementById('userAvatar').src = user.photoURL || '';
     document.getElementById('userAvatar').style.display = user.photoURL ? 'inline-block' : 'none';
-    // Carrega apenas os livros desse usuário
     booksCol = collection(db, 'usuarios', user.uid, 'livros');
     startListening();
   } else {
-    // Deslogado — mostra tela de login
     if (unsubscribe) { unsubscribe(); unsubscribe = null; }
     books = [];
     document.getElementById('loginScreen').style.display = 'flex';
@@ -800,196 +625,231 @@ onAuthStateChanged(auth, (user) => {
 });
 
 async function login() {
-  try {
-    await signInWithPopup(auth, provider);
-  } catch(e) {
-    showToast('⚠ Erro ao fazer login: ' + e.message);
-  }
+  try { await signInWithPopup(auth, provider); }
+  catch(e) { showToast('⚠ Erro ao fazer login: ' + e.message); }
 }
 window.login = login;
-
-async function logout() {
-  await signOut(auth);
-}
+async function logout() { await signOut(auth); }
 window.logout = logout;
 
-// ── DATA ──────────────────────────────────────────────────
-let books = [];
-let currentRating = 0;
-let isFavorito = false;
-let deleteTargetId = null;
-
-function genId() {
-  return Date.now().toString(36) + Math.random().toString(36).slice(2,7);
-}
-
-function setLoading(on) {
-  document.getElementById('loadingBar').style.display = on ? 'block' : 'none';
-}
+// ── FIREBASE ──────────────────────────────────────────────
+function setLoading(on) { document.getElementById('loadingBar').style.display = on ? 'block' : 'none'; }
 
 function startListening() {
   setLoading(true);
-  unsubscribe = onSnapshot(booksCol, (snapshot) => {
-    books = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+  unsubscribe = onSnapshot(booksCol, (snap) => {
+    books = snap.docs.map(d => ({ id: d.id, ...d.data() }));
     setLoading(false);
     render();
-  }, (err) => {
-    console.error(err);
-    setLoading(false);
-    showToast('⚠ Erro ao conectar com a nuvem.');
-  });
+  }, (err) => { console.error(err); setLoading(false); showToast('⚠ Erro ao conectar com a nuvem.'); });
 }
 
-async function saveBookToDb(bookData) {
+async function saveBookToDb(data) {
   setLoading(true);
-  try { await setDoc(doc(booksCol, bookData.id), bookData); }
-  finally { setLoading(false); }
+  try { await setDoc(doc(booksCol, data.id), data); } finally { setLoading(false); }
 }
-
 async function deleteBookFromDb(id) {
   setLoading(true);
-  try { await deleteDoc(doc(booksCol, id)); }
-  finally { setLoading(false); }
+  try { await deleteDoc(doc(booksCol, id)); } finally { setLoading(false); }
+}
+
+// ── ISBN / OPEN LIBRARY ───────────────────────────────────
+let isbnTimer = null;
+
+document.getElementById('fIsbn').addEventListener('input', function() {
+  clearTimeout(isbnTimer);
+  const isbn = this.value.replace(/[-\s]/g, '');
+  if (isbn.length < 10) {
+    setIsbnStatus('');
+    hideCoverPreview();
+    return;
+  }
+  if (isbn.length === 10 || isbn.length === 13) {
+    setIsbnStatus('⏳');
+    isbnTimer = setTimeout(() => fetchIsbn(isbn), 600);
+  }
+});
+
+function setIsbnStatus(s) { document.getElementById('isbnStatus').textContent = s; }
+
+async function fetchIsbn(isbn) {
+  try {
+    const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
+    const data = await res.json();
+    const key = `ISBN:${isbn}`;
+    if (!data[key]) {
+      setIsbnStatus('✗');
+      hideCoverPreview();
+      return;
+    }
+    const book = data[key];
+    const title  = book.title || '';
+    const author = book.authors?.[0]?.name || '';
+    const coverUrl = `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg`;
+
+    // Preenche campos se estiverem vazios
+    if (title  && !document.getElementById('fTitle').value)  document.getElementById('fTitle').value  = title;
+    if (author && !document.getElementById('fAuthor').value) document.getElementById('fAuthor').value = author;
+
+    // Verifica se a capa existe de fato
+    const img = new Image();
+    img.onload = () => {
+      if (img.width < 5) { // Open Library retorna imagem 1px quando não tem capa
+        setIsbnStatus('✓');
+        currentCoverUrl = '';
+        hideCoverPreview();
+      } else {
+        setIsbnStatus('✓');
+        currentCoverUrl = coverUrl;
+        showCoverPreview(coverUrl, title, author);
+      }
+    };
+    img.onerror = () => { setIsbnStatus('✓'); currentCoverUrl = ''; hideCoverPreview(); };
+    img.src = coverUrl;
+  } catch(e) {
+    setIsbnStatus('✗');
+    hideCoverPreview();
+  }
+}
+
+function showCoverPreview(url, title, author) {
+  document.getElementById('coverPreviewImg').src   = url;
+  document.getElementById('coverPreviewTitle').textContent  = title;
+  document.getElementById('coverPreviewAuthor').textContent = author ? 'por ' + author : '';
+  document.getElementById('coverPreview').classList.add('visible');
+}
+function hideCoverPreview() {
+  document.getElementById('coverPreview').classList.remove('visible');
+  currentCoverUrl = '';
 }
 
 // ── INSIGHTS ──────────────────────────────────────────────
-function getYear(dateStr) {
-  if (!dateStr) return null;
-  const m = dateStr.match(/\d{4}/);
-  return m ? parseInt(m[0]) : null;
-}
+function getYear(d) { if (!d) return null; const m = d.match(/\d{4}/); return m ? +m[0] : null; }
 
 function renderInsights() {
-  const currentYear = new Date().getFullYear();
-  const booksThisYear = books.filter(b => getYear(b.date) === currentYear);
-  const favs = books.filter(b => b.favorito);
+  const cy = new Date().getFullYear();
+  const thisYear = books.filter(b => getYear(b.date) === cy);
+  const favs  = books.filter(b => b.favorito);
   const rated = books.filter(b => b.rating > 0);
-  const avgRating = rated.length ? (rated.reduce((s,b) => s+b.rating,0)/rated.length).toFixed(1) : '—';
-  const genreCounts = {};
-  books.forEach(b => { if(b.genre) { genreCounts[b.genre] = (genreCounts[b.genre]||0)+1; } });
-  const topGenre = Object.keys(genreCounts).sort((a,b)=>genreCounts[b]-genreCounts[a])[0] || '—';
+  const avg   = rated.length ? (rated.reduce((s,b)=>s+b.rating,0)/rated.length).toFixed(1) : '—';
+  const gc = {}; books.forEach(b => { if(b.genre) gc[b.genre] = (gc[b.genre]||0)+1; });
+  const top = Object.keys(gc).sort((a,b)=>gc[b]-gc[a])[0] || '—';
   document.getElementById('insightsBar').innerHTML = `
     <div class="insight-item"><span class="insight-num">${books.length}</span><span class="insight-label">Total lidos</span><span class="insight-sub">na coleção</span></div>
-    <div class="insight-item"><span class="insight-num">${booksThisYear.length}</span><span class="insight-label">Em ${currentYear}</span><span class="insight-sub">este ano</span></div>
+    <div class="insight-item"><span class="insight-num">${thisYear.length}</span><span class="insight-label">Em ${cy}</span><span class="insight-sub">este ano</span></div>
     <div class="insight-item"><span class="insight-num">${favs.length}</span><span class="insight-label">Favoritos</span><span class="insight-sub">❤ marcados</span></div>
-    <div class="insight-item"><span class="insight-num">${avgRating}</span><span class="insight-label">Média</span><span class="insight-sub">avaliação geral</span></div>
-    <div class="insight-item"><span class="insight-num" style="font-size:1rem;padding-top:0.4rem">${topGenre==='—'?'—':topGenre.substring(0,12)}</span><span class="insight-label">Gênero fav.</span><span class="insight-sub">mais lido</span></div>
+    <div class="insight-item"><span class="insight-num">${avg}</span><span class="insight-label">Média</span><span class="insight-sub">avaliação geral</span></div>
+    <div class="insight-item"><span class="insight-num" style="font-size:1rem;padding-top:0.4rem">${top==='—'?'—':top.substring(0,12)}</span><span class="insight-label">Gênero fav.</span><span class="insight-sub">mais lido</span></div>
   `;
 }
 
 // ── FILTERS & RENDER ──────────────────────────────────────
 function updateFilters() {
-  const years  = [...new Set(books.map(b => getYear(b.date)).filter(Boolean))].sort((a,b)=>b-a);
-  const genres = [...new Set(books.map(b => b.genre).filter(Boolean))].sort();
-  const selYear = document.getElementById('filterYear');
-  const selGenre = document.getElementById('filterGenre');
-  const pY = selYear.value, pG = selGenre.value;
-  selYear.innerHTML  = '<option value="">Todos os anos</option>'   + years.map(y=>`<option value="${y}">${y}</option>`).join('');
-  selGenre.innerHTML = '<option value="">Todos os gêneros</option>' + genres.map(g=>`<option value="${encodeURIComponent(g)}">${g}</option>`).join('');
-  selYear.value = pY; selGenre.value = pG;
+  const years  = [...new Set(books.map(b=>getYear(b.date)).filter(Boolean))].sort((a,b)=>b-a);
+  const genres = [...new Set(books.map(b=>b.genre).filter(Boolean))].sort();
+  const sY = document.getElementById('filterYear'), sG = document.getElementById('filterGenre');
+  const pY = sY.value, pG = sG.value;
+  sY.innerHTML = '<option value="">Todos os anos</option>'    + years.map(y=>`<option value="${y}">${y}</option>`).join('');
+  sG.innerHTML = '<option value="">Todos os gêneros</option>' + genres.map(g=>`<option value="${encodeURIComponent(g)}">${g}</option>`).join('');
+  sY.value = pY; sG.value = pG;
 }
 
 function getFiltered() {
-  const q     = document.getElementById('searchInput').value.toLowerCase().trim();
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
   const year  = document.getElementById('filterYear').value;
   const genre = decodeURIComponent(document.getElementById('filterGenre').value);
   const fav   = document.getElementById('filterFav').value;
   return books.filter(b => {
     if (q && !b.title.toLowerCase().includes(q) && !(b.author||'').toLowerCase().includes(q)) return false;
-    if (year  && getYear(b.date) !== parseInt(year)) return false;
+    if (year  && getYear(b.date) !== +year) return false;
     if (genre && b.genre !== genre) return false;
     if (fav === 'fav' && !b.favorito) return false;
     return true;
   });
 }
 
-function renderStars(rating) {
-  if (!rating) return '<span style="color:#ccc;font-size:0.75rem;font-style:italic">sem avaliação</span>';
-  let html = '<div class="star-display">';
-  for (let i = 1; i <= 5; i++) {
-    if (rating >= i) html += '<span class="s full">★</span>';
-    else if (rating >= i-0.5) html += '<span class="s half">½</span>';
-    else html += '<span class="s empty">☆</span>';
-  }
-  return html + '</div>';
+function renderStars(r) {
+  if (!r) return '<span style="color:#ccc;font-size:0.75rem;font-style:italic">sem avaliação</span>';
+  let h = '<div class="star-display">';
+  for (let i=1;i<=5;i++) h += r>=i ? '<span class="s full">★</span>' : r>=i-0.5 ? '<span class="s half">½</span>' : '<span class="s empty">☆</span>';
+  return h + '</div>';
 }
 
-function parseDate(dateStr) {
-  if (!dateStr) return null;
-  const full = dateStr.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
-  if (full) return new Date(+full[3], +full[2]-1, +full[1]);
-  const my = dateStr.match(/^(\d{2})\/(\d{4})$/);
-  if (my) return new Date(+my[2], +my[1]-1, 1);
-  const y = dateStr.match(/^(\d{4})$/);
-  if (y) return new Date(+y[1], 0, 1);
+function parseDate(d) {
+  if (!d) return null;
+  const f = d.match(/^(\d{2})\/(\d{2})\/(\d{4})$/); if (f) return new Date(+f[3],+f[2]-1,+f[1]);
+  const m = d.match(/^(\d{2})\/(\d{4})$/);           if (m) return new Date(+m[2],+m[1]-1,1);
+  const y = d.match(/^(\d{4})$/);                    if (y) return new Date(+y[1],0,1);
   return null;
 }
 
 function sortByDate(arr) {
   return [...arr].sort((a,b) => {
-    const da = parseDate(a.date), db = parseDate(b.date);
-    if (!da && !db) return 0;
-    if (!da) return 1; if (!db) return -1;
-    return db - da;
+    const da=parseDate(a.date), db=parseDate(b.date);
+    if (!da&&!db) return 0; if (!da) return 1; if (!db) return -1;
+    return db-da;
   });
+}
+
+function coverCell(b) {
+  if (b.coverUrl) {
+    return `<div class="book-cover-cell"><img class="book-cover-img" src="${esc(b.coverUrl)}" alt="capa" onerror="this.parentElement.innerHTML='<div class=\\"book-cover-placeholder\\">${esc(b.title.charAt(0))}</div>'"></div>`;
+  }
+  return `<div class="book-cover-cell"><div class="book-cover-placeholder">${esc(b.title.charAt(0))}</div></div>`;
 }
 
 function renderGrid() {
   const grid = document.getElementById('bookGrid');
   const filtered = sortByDate(getFiltered());
-  if (filtered.length === 0) {
-    grid.innerHTML = `<div class="empty-state">
-      <span class="big-icon">📖</span>
-      <h3>${books.length === 0 ? 'Seu diário está vazio' : 'Nenhum livro encontrado'}</h3>
-      <p>${books.length === 0 ? 'Adicione seu primeiro livro usando o botão acima.' : 'Tente ajustar os filtros de busca.'}</p>
-    </div>`;
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="empty-state"><span class="big-icon">📖</span><h3>${books.length===0?'Seu diário está vazio':'Nenhum livro encontrado'}</h3><p>${books.length===0?'Adicione seu primeiro livro usando o botão acima.':'Tente ajustar os filtros de busca.'}</p></div>`;
     return;
   }
   grid.innerHTML = filtered.map((b,i) => `
     <div class="book-card ${b.favorito?'favorito':''} ${b.notes?'has-notes':''}"
          style="animation-delay:${Math.min(i*0.03,0.25)}s"
-         ${b.notes ? `onclick="window._toggleNotes(this)"` : ''}>
+         ${b.notes?'onclick="window._toggleNotes(this)"':''}>
       <div class="book-index">${i+1}</div>
+      ${coverCell(b)}
       <div class="book-main">
         <div class="book-row-top">
           <span class="book-title">${esc(b.title)}</span>
-          ${b.author ? `<span class="book-author">— ${esc(b.author)}</span>` : ''}
+          ${b.author?`<span class="book-author">— ${esc(b.author)}</span>`:''}
         </div>
         <div class="book-row-bottom">
           ${renderStars(b.rating)}
-          ${b.date  ? `<span class="book-date">${esc(b.date)}</span>`   : ''}
-          ${b.genre ? `<span class="book-genre">${esc(b.genre)}</span>` : ''}
-          ${b.notes ? `<span class="notes-indicator" onclick="event.stopPropagation();window._toggleNotes(this.closest('.book-card'))">✎ notas</span>` : ''}
+          ${b.date?`<span class="book-date">${esc(b.date)}</span>`:''}
+          ${b.genre?`<span class="book-genre">${esc(b.genre)}</span>`:''}
+          ${b.notes?`<span class="notes-indicator" onclick="event.stopPropagation();window._toggleNotes(this.closest('.book-card'))">✎ notas</span>`:''}
         </div>
       </div>
       <div class="card-actions" onclick="event.stopPropagation()">
         <button class="fav-btn ${b.favorito?'active':''}" onclick="window._toggleFavCard('${b.id}')" title="Favorito">♥</button>
-        <button onclick="window._openModal('${b.id}')" title="Editar">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="13" height="13"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
-        </button>
-        <button onclick="window._confirmDelete('${b.id}','${esc(b.title)}')" title="Remover">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="13" height="13"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-        </button>
+        <button onclick="window._openModal('${b.id}')" title="Editar"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="13" height="13"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg></button>
+        <button onclick="window._confirmDelete('${b.id}','${esc(b.title)}')" title="Remover"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="13" height="13"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
       </div>
-      ${b.notes ? `<div class="book-notes-row">${esc(b.notes)}</div>` : ''}
+      ${b.notes?`<div class="book-notes-row">${esc(b.notes)}</div>`:''}
     </div>
   `).join('');
 }
 
 function render() { renderInsights(); updateFilters(); renderGrid(); }
 
-function esc(str) {
-  if (!str) return '';
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+function esc(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
 // ── MODAL ─────────────────────────────────────────────────
 function openModal(id) {
-  currentRating = 0; isFavorito = false;
+  currentRating = 0; isFavorito = false; currentCoverUrl = '';
   document.getElementById('editId').value = '';
+  document.getElementById('fIsbn').value  = '';
+  setIsbnStatus('');
+  hideCoverPreview();
   document.getElementById('modalTitle').textContent = id ? 'Editar Livro' : 'Adicionar Livro';
   if (id) {
-    const b = books.find(x => x.id === id);
+    const b = books.find(x=>x.id===id);
     if (!b) return;
     document.getElementById('editId').value  = b.id;
     document.getElementById('fTitle').value  = b.title  || '';
@@ -997,14 +857,17 @@ function openModal(id) {
     document.getElementById('fGenre').value  = b.genre  || '';
     document.getElementById('fDate').value   = b.date   || '';
     document.getElementById('fNotes').value  = b.notes  || '';
-    currentRating = b.rating  || 0;
+    document.getElementById('fIsbn').value   = b.isbn   || '';
+    currentRating = b.rating   || 0;
     isFavorito    = b.favorito || false;
+    currentCoverUrl = b.coverUrl || '';
+    if (b.coverUrl) showCoverPreview(b.coverUrl, b.title, b.author);
   } else {
-    ['fTitle','fAuthor','fGenre','fDate','fNotes'].forEach(id => document.getElementById(id).value = '');
+    ['fTitle','fAuthor','fGenre','fDate','fNotes'].forEach(f => document.getElementById(f).value = '');
   }
   updateStarUI(); updateFavUI();
   document.getElementById('modalOverlay').classList.remove('hidden');
-  document.getElementById('fTitle').focus();
+  document.getElementById('fIsbn').focus();
 }
 window._openModal = openModal;
 
@@ -1015,51 +878,48 @@ async function saveBook() {
   const title = document.getElementById('fTitle').value.trim();
   if (!title) { showToast('⚠ Título é obrigatório.'); document.getElementById('fTitle').focus(); return; }
   const existingId = document.getElementById('editId').value;
-  const id = existingId || genId();
+  const id = existingId || (Date.now().toString(36) + Math.random().toString(36).slice(2,7));
   const bookData = {
     id, title,
     author:   document.getElementById('fAuthor').value.trim(),
     genre:    document.getElementById('fGenre').value.trim(),
     date:     document.getElementById('fDate').value.trim(),
     notes:    document.getElementById('fNotes').value.trim(),
+    isbn:     document.getElementById('fIsbn').value.replace(/[-\s]/g,''),
+    coverUrl: currentCoverUrl,
     rating:   currentRating,
     favorito: isFavorito,
     addedAt:  books.find(b=>b.id===id)?.addedAt || Date.now(),
   };
-  const isEdit = !!existingId;
   closeModal();
   await saveBookToDb(bookData);
-  showToast(isEdit ? '✓ Livro atualizado.' : '✓ Livro adicionado.');
+  showToast(existingId ? '✓ Livro atualizado.' : '✓ Livro adicionado.');
 }
 window.saveBook = saveBook;
 
 function toggleFav() { isFavorito = !isFavorito; updateFavUI(); }
 window.toggleFav = toggleFav;
-function updateFavUI() {
-  document.getElementById('favToggle').classList.toggle('on', isFavorito);
-}
+function updateFavUI() { document.getElementById('favToggle').classList.toggle('on', isFavorito); }
 
 async function toggleFavCard(id) {
-  const b = books.find(x => x.id === id);
-  if (b) await saveBookToDb({ ...b, favorito: !b.favorito });
+  const b = books.find(x=>x.id===id);
+  if (b) await saveBookToDb({...b, favorito: !b.favorito});
 }
 window._toggleFavCard = toggleFavCard;
 
 document.getElementById('starPicker').addEventListener('click', function(e) {
-  const span = e.target.closest('span[data-v]');
-  if (!span) return;
-  const v = parseFloat(span.dataset.v);
-  currentRating = currentRating === v ? 0 : v;
+  const s = e.target.closest('span[data-v]'); if (!s) return;
+  const v = parseFloat(s.dataset.v);
+  currentRating = currentRating===v ? 0 : v;
   updateStarUI();
 });
-
 function updateStarUI() {
   document.querySelectorAll('#starPicker span').forEach(s => {
     s.classList.toggle('full', currentRating >= parseFloat(s.dataset.v));
     s.classList.remove('half');
   });
-  const labels = {0:'sem avaliação',0.5:'½',1:'★',1.5:'★½',2:'★★',2.5:'★★½',3:'★★★',3.5:'★★★½',4:'★★★★',4.5:'★★★★½',5:'★★★★★'};
-  document.getElementById('ratingVal').textContent = currentRating ? `${currentRating} — ${labels[currentRating]}` : 'sem avaliação';
+  const L = {0:'sem avaliação',0.5:'½',1:'★',1.5:'★½',2:'★★',2.5:'★★½',3:'★★★',3.5:'★★★½',4:'★★★★',4.5:'★★★★½',5:'★★★★★'};
+  document.getElementById('ratingVal').textContent = currentRating ? `${currentRating} — ${L[currentRating]}` : 'sem avaliação';
 }
 
 function confirmDelete(id, title) {
@@ -1073,34 +933,25 @@ function confirmDelete(id, title) {
   document.getElementById('confirmOverlay').classList.remove('hidden');
 }
 window._confirmDelete = confirmDelete;
-
 function closeConfirm() { document.getElementById('confirmOverlay').classList.add('hidden'); deleteTargetId = null; }
 window.closeConfirm = closeConfirm;
 
 function exportCSV() {
   if (!books.length) { showToast('⚠ Nenhum livro para exportar.'); return; }
-  const headers = ['Título','Autor','Gênero','Data de Leitura','Avaliação','Favorito','Notas'];
-  const rows = books.map(b => [
-    b.title, b.author||'', b.genre||'', b.date||'',
-    b.rating||'', b.favorito?'Sim':'Não', (b.notes||'').replace(/\n/g,' ')
-  ].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(','));
-  const csv = '\uFEFF' + [headers.join(','), ...rows].join('\r\n');
-  const a = Object.assign(document.createElement('a'), {
-    href: URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'})),
-    download: 'diario_leituras.csv'
-  });
+  const h = ['Título','Autor','Gênero','Data','Avaliação','Favorito','ISBN','Notas'];
+  const r = books.map(b=>[b.title,b.author||'',b.genre||'',b.date||'',b.rating||'',b.favorito?'Sim':'Não',b.isbn||'',(b.notes||'').replace(/\n/g,' ')].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(','));
+  const a = Object.assign(document.createElement('a'),{href:URL.createObjectURL(new Blob(['\uFEFF'+[h.join(','),...r].join('\r\n')],{type:'text/csv;charset=utf-8;'})),download:'diario_leituras.csv'});
   a.click();
-  showToast('✓ CSV exportado com sucesso!');
+  showToast('✓ CSV exportado!');
 }
 window.exportCSV = exportCSV;
 
 let toastTimer;
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.remove('hidden');
+  t.textContent = msg; t.classList.remove('hidden');
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.add('hidden'), 2600);
+  toastTimer = setTimeout(()=>t.classList.add('hidden'), 2600);
 }
 
 window._toggleNotes = card => card.classList.toggle('expanded');
@@ -1112,7 +963,6 @@ document.addEventListener('keydown', e => {
   if (e.key==='Enter' && !document.getElementById('modalOverlay').classList.contains('hidden'))
     if (document.activeElement.tagName !== 'TEXTAREA') saveBook();
 });
-
 document.getElementById('searchInput').addEventListener('input',  render);
 document.getElementById('filterYear').addEventListener('change',  render);
 document.getElementById('filterGenre').addEventListener('change', render);
