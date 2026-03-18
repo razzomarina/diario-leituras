@@ -653,7 +653,7 @@ async function deleteBookFromDb(id) {
   try { await deleteDoc(doc(booksCol, id)); } finally { setLoading(false); }
 }
 
-// ── ISBN / OPEN LIBRARY ───────────────────────────────────
+// ── ISBN / GOOGLE BOOKS ───────────────────────────────────
 let isbnTimer = null;
 
 document.getElementById('fIsbn').addEventListener('input', function() {
@@ -674,38 +674,39 @@ function setIsbnStatus(s) { document.getElementById('isbnStatus').textContent = 
 
 async function fetchIsbn(isbn) {
   try {
-    const res = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`);
+    const res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
     const data = await res.json();
-    const key = `ISBN:${isbn}`;
-    if (!data[key]) {
+
+    if (!data.items || data.items.length === 0) {
       setIsbnStatus('✗');
       hideCoverPreview();
       return;
     }
-    const book = data[key];
-    const title  = book.title || '';
-    const author = book.authors?.[0]?.name || '';
-    const coverUrl = `https://covers.openlibrary.org/b/isbn/${isbn}-M.jpg`;
+
+    const info = data.items[0].volumeInfo;
+    const title  = info.title || '';
+    const author = info.authors?.[0] || '';
+
+    // Google Books fornece a capa diretamente — troca http por https e pede tamanho maior
+    let coverUrl = info.imageLinks?.thumbnail || info.imageLinks?.smallThumbnail || '';
+    if (coverUrl) {
+      coverUrl = coverUrl.replace('http://', 'https://').replace('&zoom=1', '&zoom=2');
+    }
 
     // Preenche campos se estiverem vazios
     if (title  && !document.getElementById('fTitle').value)  document.getElementById('fTitle').value  = title;
     if (author && !document.getElementById('fAuthor').value) document.getElementById('fAuthor').value = author;
 
-    // Verifica se a capa existe de fato
-    const img = new Image();
-    img.onload = () => {
-      if (img.width < 5) { // Open Library retorna imagem 1px quando não tem capa
-        setIsbnStatus('✓');
-        currentCoverUrl = '';
-        hideCoverPreview();
-      } else {
-        setIsbnStatus('✓');
-        currentCoverUrl = coverUrl;
-        showCoverPreview(coverUrl, title, author);
-      }
-    };
-    img.onerror = () => { setIsbnStatus('✓'); currentCoverUrl = ''; hideCoverPreview(); };
-    img.src = coverUrl;
+    if (coverUrl) {
+      setIsbnStatus('✓');
+      currentCoverUrl = coverUrl;
+      showCoverPreview(coverUrl, title, author);
+    } else {
+      setIsbnStatus('✓');
+      currentCoverUrl = '';
+      hideCoverPreview();
+      showToast('Dados encontrados, mas sem capa disponível.');
+    }
   } catch(e) {
     setIsbnStatus('✗');
     hideCoverPreview();
