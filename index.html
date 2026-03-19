@@ -1073,6 +1073,181 @@ body.dark .dash-bottom-card { background: var(--cream-mid); }
   .dashboard-reading-cards { grid-template-columns: 1fr; }
 }
 
+
+/* ══ RELEITURA ══ */
+.reread-badge {
+  display:inline-flex;align-items:center;gap:.28rem;
+  background:linear-gradient(135deg,rgba(107,31,46,.12),rgba(184,151,90,.10));
+  border:1px solid rgba(184,151,90,.3);color:var(--gold);
+  padding:.06rem .44rem;border-radius:20px;font-size:.58rem;
+  letter-spacing:.08em;font-family:'Jost',sans-serif;
+}
+.reread-history {
+  margin-top:.55rem;padding:.5rem .75rem;
+  border-left:2px solid var(--gold-pale);
+  background:rgba(184,151,90,.04);
+}
+.reread-history-title {
+  font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--stone-light);margin-bottom:.3rem;display:block;
+}
+.reread-history-item {
+  display:flex;align-items:baseline;gap:.55rem;
+  font-family:'Cormorant Garamond',serif;font-size:.88rem;
+  color:var(--stone);padding:.18rem 0;border-bottom:1px solid var(--border);
+}
+.reread-history-item:last-child{border-bottom:none;}
+.reread-history-date{color:var(--stone-light);font-size:.75rem;flex-shrink:0;}
+
+/* ══ HUMOR DE LEITURA ══ */
+.mood-picker {
+  display:flex;gap:.55rem;flex-wrap:wrap;margin-top:.25rem;
+}
+.mood-btn {
+  width:40px;height:40px;border-radius:50%;border:2px solid transparent;
+  background:var(--cream-mid);cursor:pointer;font-size:1.2rem;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;line-height:1;
+}
+.mood-btn:hover{transform:scale(1.18);border-color:var(--border-strong);}
+.mood-btn.selected{border-color:var(--gold);background:var(--gold-pale);transform:scale(1.12);}
+.mood-dot {
+  width:8px;height:8px;border-radius:50%;
+  display:inline-block;margin-right:.35rem;flex-shrink:0;
+}
+
+/* ══ CAPA GERADA ══ */
+.generated-cover {
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  border-radius:1px;position:relative;overflow:hidden;
+}
+.generated-cover::after {
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(160deg,rgba(255,255,255,.12) 0%,transparent 60%);
+  pointer-events:none;
+}
+.generated-cover-title {
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  text-align:center;color:white;line-height:1.2;z-index:1;
+  text-shadow:0 1px 4px rgba(0,0,0,.4);padding:0 6px;
+}
+.generated-cover-line {
+  width:60%;height:1px;background:rgba(255,255,255,.4);margin:5px 0;z-index:1;
+}
+.generated-cover-author {
+  font-family:'Jost',sans-serif;font-size:.55rem;letter-spacing:.12em;
+  text-transform:uppercase;color:rgba(255,255,255,.65);z-index:1;
+  text-align:center;padding:0 4px;
+}
+
+/* ══ VELOCIDADE DE LEITURA ══ */
+.reading-speed-badge {
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:.78rem;color:var(--stone-light);margin-top:.2rem;display:block;
+}
+
+/* ══ INTENÇÃO DE LEITURA ══ */
+.intention-group {
+  background:linear-gradient(135deg,rgba(107,31,46,.05),rgba(184,151,90,.04));
+  border:1px solid rgba(107,31,46,.14);border-left:3px solid var(--wine);
+  padding:.8rem 1rem;margin-bottom:1rem;
+}
+.intention-label {
+  display:flex;align-items:center;gap:.42rem;
+  font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--wine);margin-bottom:.38rem;
+}
+.intention-label svg{width:12px;height:12px;}
+.intention-text {
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:.95rem;color:var(--stone);line-height:1.6;
+}
+
+/* ══ CARTA PARA O LIVRO FUTURO ══ */
+.letter-group {
+  background:linear-gradient(135deg,rgba(184,151,90,.05),rgba(107,31,46,.03));
+  border:1px solid rgba(184,151,90,.18);border-left:3px solid var(--gold-light);
+  padding:.8rem 1rem;margin-top:.65rem;
+}
+.letter-label {
+  display:flex;align-items:center;gap:.42rem;
+  font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--stone-light);margin-bottom:.38rem;
+}
+.letter-textarea {
+  width:100%;padding:.5rem .75rem;border:1px solid rgba(184,151,90,.2);
+  background:rgba(255,255,255,.55);font-family:'Cormorant Garamond',serif;
+  font-style:italic;font-size:.95rem;color:var(--ink);resize:vertical;
+  min-height:62px;transition:border-color .18s;border-radius:0;line-height:1.6;
+}
+.letter-textarea:focus{outline:none;border-color:var(--gold);background:white;}
+.letter-textarea::placeholder{color:var(--stone-pale);font-style:italic;}
+body.dark .letter-textarea{background:rgba(42,36,32,.55);}
+
+/* ══ CONEXÕES ENTRE LIVROS ══ */
+.connections-section {margin-top:.6rem;}
+.connections-tags {display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.35rem;}
+.connection-chip {
+  display:inline-flex;align-items:center;gap:.3rem;
+  background:rgba(107,31,46,.08);border:1px solid rgba(107,31,46,.2);
+  color:var(--wine);padding:.08rem .45rem;border-radius:20px;font-size:.66rem;
+  font-family:'Cormorant Garamond',serif;font-style:italic;cursor:pointer;
+  transition:background .15s;
+}
+.connection-chip:hover{background:rgba(107,31,46,.14);}
+.connection-chip button{background:none;border:none;cursor:pointer;color:var(--wine);font-size:.68rem;padding:0;line-height:1;}
+
+/* ══ FRASE DE ABERTURA ══ */
+.opening-line-display {
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  font-size:.9rem;color:var(--stone);line-height:1.65;
+  padding:.45rem .65rem;border-left:2px solid var(--stone-pale);
+  margin-top:.3rem;
+}
+
+/* ══ MOSAICO ══ */
+#mosaicPane{display:none;padding:2.5rem 0 3rem;}
+.mosaic-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem;}
+.mosaic-header h2{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:300;color:var(--ink);}
+.mosaic-year-sel{font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--wine);background:transparent;border:none;border-bottom:1px solid var(--wine);cursor:pointer;padding:.2rem .4rem;}
+.mosaic-year-sel:focus{outline:none;}
+.mosaic-grid-wrap{background:var(--ink);padding:2rem;box-shadow:0 4px 24px var(--shadow);}
+.mosaic-month-section{margin-bottom:1.8rem;}
+.mosaic-month-label{font-family:'Jost',sans-serif;font-size:.55rem;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:.7rem;display:block;}
+.mosaic-covers{display:flex;flex-wrap:wrap;gap:6px;}
+.mosaic-cover{width:64px;height:96px;object-fit:cover;border-radius:1px;box-shadow:1px 2px 8px rgba(0,0,0,.35);transition:transform .2s;}
+.mosaic-cover:hover{transform:scale(1.06);}
+.mosaic-cover-ph{width:64px;height:96px;border-radius:1px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:white;font-style:italic;box-shadow:1px 2px 8px rgba(0,0,0,.35);}
+.mosaic-empty{text-align:center;padding:4rem;color:var(--stone-light);font-family:'Cormorant Garamond',serif;font-style:italic;}
+
+/* ══ HORA DA LEITURA ══ */
+.reading-time-chart{display:flex;align-items:flex-end;gap:8px;height:70px;margin-top:.8rem;}
+.reading-time-bar-w{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.reading-time-bar{width:100%;background:linear-gradient(180deg,var(--wine),var(--gold));border-radius:2px 2px 0 0;min-height:2px;}
+.reading-time-lbl{font-size:.52rem;color:var(--stone-light);letter-spacing:.04em;}
+.reading-time-picker{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.3rem;}
+.time-btn{padding:.3rem .65rem;border:1px solid var(--border-strong);background:transparent;border-radius:20px;font-family:'Jost',sans-serif;font-size:.65rem;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;color:var(--stone);transition:all .15s;}
+.time-btn:hover,.time-btn.selected{background:var(--wine);border-color:var(--wine);color:white;}
+
+/* ══ PRÓXIMO LIVRO SUGERIDO ══ */
+.next-book-suggestions{display:flex;flex-direction:column;gap:.55rem;margin-top:.8rem;}
+.next-book-sug{display:flex;align-items:center;gap:.8rem;padding:.55rem .8rem;background:var(--cream-mid);border:1px solid var(--border);cursor:pointer;transition:background .15s;border-radius:1px;}
+.next-book-sug:hover{background:var(--cream-dark);border-color:var(--gold);}
+.next-book-sug-cover{width:32px;height:46px;object-fit:cover;border-radius:1px;box-shadow:1px 2px 6px var(--shadow);flex-shrink:0;}
+.next-book-sug-ph{width:32px;height:46px;border-radius:1px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:.9rem;color:white;font-style:italic;flex-shrink:0;}
+.next-book-sug-info{flex:1;min-width:0;}
+.next-book-sug-title{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:500;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.next-book-sug-reason{font-size:.6rem;color:var(--gold);letter-spacing:.06em;font-style:italic;font-family:'Cormorant Garamond',serif;}
+
+/* ══ SURPRESA: pergunta + frase ══ */
+.surprise-question{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.92rem;color:var(--wine);line-height:1.6;padding:.5rem .75rem;border-left:2px solid var(--wine-pale);margin-top:.35rem;}
+.surprise-opening{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.88rem;color:var(--stone);line-height:1.6;margin-top:.3rem;opacity:.85;}
+
+@media(max-width:650px){
+  .mosaic-covers{gap:4px;}
+  .mosaic-cover,.mosaic-cover-ph{width:52px;height:78px;}
+}
+
 </style>
 </head>
 <body>
@@ -1160,6 +1335,10 @@ body.dark .dash-bottom-card { background: var(--cream-mid); }
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
     Ano em Livros
   </button>
+  <button class="nav-tab" id="tab-mosaic" onclick="window.switchTab('mosaic')">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/></svg>
+    Mosaico
+  </button>
 </div>
 
 <div class="insights" id="insightsBar"></div>
@@ -1245,6 +1424,7 @@ body.dark .dash-bottom-card { background: var(--cream-mid); }
     <div class="stats-grid">
       <div class="chart-card"><span class="chart-title">Leituras por mês — <span id="chartMonthYear"></span></span><div class="chart-wrap"><canvas id="chartMonth"></canvas></div></div>
       <div class="chart-card"><span class="chart-title">Distribuição de avaliações</span><div class="chart-wrap"><canvas id="chartRating"></canvas></div></div>
+      <div class="chart-card"><span class="chart-title">Quando você lê</span><div id="readingTimeChart" style="padding-top:.5rem"></div></div>
     </div>
   </div>
 </div>
@@ -1375,6 +1555,26 @@ body.dark .dash-bottom-card { background: var(--cream-mid); }
 <!-- PRINT REPORT (hidden, shown only on print) -->
 <div class="print-report" id="printReport"></div>
 
+<!-- MOSAICO PANE -->
+<div id="mosaicPane">
+  <div class="container">
+    <div class="mosaic-header">
+      <h2>Mosaico de Capas</h2>
+      <div style="display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:.5rem;">
+          <span style="font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--stone-light);">Ano:</span>
+          <select class="mosaic-year-sel" id="mosaicYearSel" onchange="window.renderMosaic(+this.value)"></select>
+        </div>
+        <button class="btn btn-gold" onclick="window.exportMosaic()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          Exportar imagem
+        </button>
+      </div>
+    </div>
+    <div id="mosaicContent"></div>
+  </div>
+</div>
+
 <footer>Diário de Leituras · Marina Risther Razzo · Dados salvos na nuvem via Firebase<br><span style="opacity:.5;font-size:.55rem;">Dica: use Ctrl+N para adicionar um livro rapidamente</span></footer>
 <div class="toast hidden" id="toast"></div>
 
@@ -1446,6 +1646,35 @@ body.dark .dash-bottom-card { background: var(--cream-mid); }
           <option value="quero">♡ Quero ler</option>
         </select>
       </div>
+      <!-- Humor de leitura -->
+      <div class="form-group" id="moodGroup">
+        <label>Humor durante a leitura</label>
+        <div class="mood-picker" id="moodPicker">
+          <button type="button" class="mood-btn" data-mood="😌" title="Em paz">😌</button>
+          <button type="button" class="mood-btn" data-mood="🥰" title="Apaixonada">🥰</button>
+          <button type="button" class="mood-btn" data-mood="🤔" title="Pensativa">🤔</button>
+          <button type="button" class="mood-btn" data-mood="😢" title="Emocionada">😢</button>
+          <button type="button" class="mood-btn" data-mood="😤" title="Frustrada">😤</button>
+          <button type="button" class="mood-btn" data-mood="😴" title="Cansada">😴</button>
+          <button type="button" class="mood-btn" data-mood="🤩" title="Deslumbrada">🤩</button>
+          <button type="button" class="mood-btn" data-mood="😰" title="Ansiosa">😰</button>
+          <button type="button" class="mood-btn" data-mood="🙃" title="Ambivalente">🙃</button>
+          <button type="button" class="mood-btn" data-mood="✨" title="Inspirada">✨</button>
+        </div>
+      </div>
+
+      <!-- Intenção de leitura — só para lendo -->
+      <div class="form-group" id="intentionGroup" style="display:none">
+        <label>Por que quero ler este livro agora?</label>
+        <textarea id="fIntention" style="min-height:54px" placeholder="Uma curiosidade, uma indicação, um momento de vida…"></textarea>
+      </div>
+
+      <!-- Datas de início -->
+      <div class="form-row" id="dateStartGroup" style="display:none">
+        <div class="form-group"><label>Data de início</label><input type="text" id="fDateStart" placeholder="dd/mm/aaaa" maxlength="10"></div>
+        <div class="form-group"></div>
+      </div>
+
       <div id="progressGroup" class="form-row" style="display:none">
         <div class="form-group"><label>Página atual</label><input type="number" id="fPageCurrent" placeholder="142" min="0"></div>
         <div class="form-group"><label>Total de páginas</label><input type="number" id="fPageTotal" placeholder="320" min="1"></div>
@@ -1468,6 +1697,40 @@ body.dark .dash-bottom-card { background: var(--cream-mid); }
         </div>
       </div>
       <div class="form-group"><label>Notas &amp; Impressões</label><textarea id="fNotes" placeholder="Impressões gerais sobre o livro…"></textarea></div>
+      <!-- Frase de abertura -->
+      <div class="form-group">
+        <label>Primeira frase do livro <span style="opacity:.6">(opcional)</span></label>
+        <textarea id="fOpeningLine" placeholder="A frase que abre o livro…" style="min-height:52px;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:.95rem;"></textarea>
+      </div>
+
+      <!-- Diálogo com o livro -->
+      <div class="form-group">
+        <label>Perguntas que o livro me fez <span style="opacity:.6">(opcional)</span></label>
+        <textarea id="fQuestion" placeholder="Que perguntas este livro levantou em você?" style="min-height:54px;font-style:italic;font-family:'Cormorant Garamond',serif;font-size:.95rem;"></textarea>
+      </div>
+
+      <!-- Hora favorita de leitura -->
+      <div class="form-group">
+        <label>Quando você leu este livro?</label>
+        <div class="reading-time-picker" id="readingTimePicker">
+          <button type="button" class="time-btn" data-time="manhã">🌅 Manhã</button>
+          <button type="button" class="time-btn" data-time="tarde">☀ Tarde</button>
+          <button type="button" class="time-btn" data-time="noite">🌙 Noite</button>
+          <button type="button" class="time-btn" data-time="madrugada">🌌 Madrugada</button>
+        </div>
+      </div>
+
+      <!-- Conexões entre livros -->
+      <div class="form-group">
+        <label>Me fez pensar em… <span style="opacity:.6">(vincular outro livro)</span></label>
+        <div style="display:flex;gap:.5rem;align-items:center">
+          <input type="text" id="fConnectionInput" list="connectionBooksList" placeholder="Título de outro livro do acervo…" style="flex:1">
+          <datalist id="connectionBooksList"></datalist>
+          <button type="button" onclick="window._addConnection()" style="padding:.48rem .8rem;border:1px solid var(--border-strong);background:var(--cream-mid);font-family:'DM Sans',sans-serif;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;cursor:pointer;color:var(--ink);white-space:nowrap">+ Adicionar</button>
+        </div>
+        <div class="connections-tags" id="connectionTags"></div>
+      </div>
+
       <div class="momento-group" id="momentoGroup" style="display:none">
         <div class="momento-label">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
@@ -1486,6 +1749,15 @@ body.dark .dash-bottom-card { background: var(--cream-mid); }
           <input type="number" id="fSeriesOrder" placeholder="1" min="1" max="999">
         </div>
       </div>
+      <!-- Carta para o livro futuro — só para quero ler -->
+      <div class="letter-group" id="letterGroup" style="display:none">
+        <div class="letter-label">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          carta para este livro
+        </div>
+        <textarea class="letter-textarea" id="fLetter" placeholder="O que te espera nessas páginas? Que expectativa você guarda antes de abrir?"></textarea>
+      </div>
+
       <div class="section-divider">✦ Citações deste livro</div>
       <div id="bookQuotesList" style="margin-bottom:.75rem;display:flex;flex-direction:column;gap:.55rem;"></div>
       <div class="form-group">
@@ -1578,6 +1850,8 @@ body.dark .dash-bottom-card { background: var(--cream-mid); }
       <div class="celebration-author" id="celebAuthor"></div>
       <div class="celebration-stars" id="celebStars"></div>
       <div class="celebration-msg" id="celebMsg"></div>
+      <div id="celebLetterWrap" style="display:none"></div>
+      <div id="celebNextBooks" style="margin-bottom:.8rem"></div>
       <div class="momento-group" id="celebMomentoGroup">
         <div class="momento-label">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
@@ -1963,7 +2237,11 @@ window._removeTag = function(i) { currentTags.splice(i, 1); renderTagChips(); };
 
 // ── STATUS ───────────────────────────────────────────────
 document.getElementById('fStatus').addEventListener('change', function() {
-  document.getElementById('progressGroup').style.display = this.value === 'lendo' ? 'grid' : 'none';
+  const v = this.value;
+  document.getElementById('progressGroup').style.display  = v === 'lendo' ? 'grid' : 'none';
+  document.getElementById('intentionGroup').style.display = v === 'lendo' ? 'block' : 'none';
+  document.getElementById('dateStartGroup').style.display = v === 'lendo' ? 'grid' : 'none';
+  document.getElementById('letterGroup').style.display    = v === 'quero' ? 'block' : 'none';
 });
 
 // ── INLINE QUOTES ─────────────────────────────────────────
@@ -2038,7 +2316,7 @@ window.addEventListener('beforeunload', e => {
 
 // ── TABS ─────────────────────────────────────────────────
 function switchTab(tab) {
-  ['books','stats','quotes','tbr','goals','series','year'].forEach(t => {
+  ['books','stats','quotes','tbr','goals','series','year','mosaic'].forEach(t => {
     const tabEl = document.getElementById('tab-' + t);
     if (tabEl) tabEl.classList.toggle('active', t === tab);
     const paneEl = document.getElementById(t === 'books' ? 'booksPane' : t + 'Pane');
@@ -2051,6 +2329,7 @@ function switchTab(tab) {
   if (tab === 'goals')  renderGoals();
   if (tab === 'series') renderSeries();
   if (tab === 'year')   { populateYearSelect(); renderYearInBooks(+document.getElementById('yearSelect').value || new Date().getFullYear()); }
+  if (tab === 'mosaic') { populateMosaicYearSel(); renderMosaic(+document.getElementById('mosaicYearSel').value || new Date().getFullYear()); }
 }
 window.switchTab = switchTab;
 
@@ -2306,13 +2585,18 @@ function renderListView(filtered) {
       coverCell(b) +
       '<div class="book-main">' +
         '<div class="book-row-top"><span class="book-title">' + esc(b.title) + '</span>' + (b.author ? '<span class="book-author">— ' + esc(b.author) + '</span>' : '') + '</div>' +
-        '<div class="book-row-bottom">' + renderStars(b.rating) + (b.date ? '<span class="book-date">' + esc(b.date) + '</span>' : '') + pubTag + tagHtml + originHtml +
+        '<div class="book-row-bottom">' +
+          (b.mood ? '<span class="mood-dot" style="background:' + _moodColor(b.mood) + '" title="' + esc(b.mood) + '"></span>' : '') +
+          renderStars(b.rating) + (b.date ? '<span class="book-date">' + esc(b.date) + '</span>' : '') + pubTag + tagHtml + originHtml +
+          (b.readCount > 1 ? '<span class="reread-badge">↺ ' + b.readCount + '× lido</span>' : '') +
+          _readingSpeedBadge(b) +
           (qCount ? '<span style="font-size:.6rem;color:var(--gold);cursor:pointer;border-bottom:1px dotted rgba(184,151,90,.4)" onclick="event.stopPropagation();window.switchTab(\'quotes\')">✦ ' + qCount + ' cit.</span>' : '') +
           (b.notes ? '<span style="font-size:.6rem;color:var(--stone-light);border-bottom:1px dotted var(--stone-pale);cursor:pointer" onclick="event.stopPropagation();window._toggleNotes(this.closest(\'.book-card\'))">✎ notas</span>' : '') +
         '</div>' +
       '</div>' +
       '<div class="card-actions" onclick="event.stopPropagation()">' +
         '<button class="fav-btn ' + (b.favorito ? 'active' : '') + '" onclick="window._toggleFavCard(\'' + b.id + '\')" title="Favorito">♥</button>' +
+        ((!b.status || b.status==='lido') ? '<button onclick="window._rereadBook(\'' + b.id + '\')" title="Reler" style="font-size:.75rem;color:var(--stone-light)">↺</button>' : '') +
         '<button onclick="window._openModal(\'' + b.id + '\')" title="Editar"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="12" height="12"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg></button>' +
         '<button onclick="window.generateBookCard(\'' + b.id + '\')" title="Gerar card" style="color:var(--gold)">◈</button>' +
         '<button onclick="window._confirmDelete(\'' + b.id + '\',\'' + esc(b.title) + '\')" title="Remover"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="12" height="12"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>' +
@@ -2374,6 +2658,7 @@ function renderCharts() {
   const rv = {'5★':0,'4½':0,'4★':0,'3½':0,'3★':0,'<3':0};
   rb.forEach(b => { if (!b.rating) return; if (b.rating===5) rv['5★']++; else if (b.rating===4.5) rv['4½']++; else if (b.rating===4) rv['4★']++; else if (b.rating===3.5) rv['3½']++; else if (b.rating===3) rv['3★']++; else rv['<3']++; });
   charts['rating'] = new Chart(document.getElementById('chartRating').getContext('2d'), { type:'bar', data:{ labels:Object.keys(rv), datasets:[{label:'Livros', data:Object.values(rv), backgroundColor:'rgba(184,151,90,.65)', borderColor:'#b8975a', borderWidth:1, borderRadius:2}] }, options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{y:{ticks:{stepSize:1},grid:{color:'rgba(120,110,90,.08)'}},x:{grid:{display:false}}} } });
+  renderReadingTimeChart();
 }
 
 // ── MELHORIA 3: Quotes com busca ──────────────────────────
@@ -2567,6 +2852,50 @@ function openModal(id, defaultStatus) {
   }
   updateStarUI(); updateFavUI();
   // Populate series datalist
+  // Novos campos
+  document.getElementById('fOpeningLine').value  = '';
+  document.getElementById('fQuestion').value     = '';
+  document.getElementById('fIntention').value    = '';
+  document.getElementById('fDateStart').value    = '';
+  document.getElementById('fLetter').value       = '';
+  document.getElementById('fConnectionInput').value = '';
+  _currentConnections = [];
+  renderConnectionTags();
+  _currentMood = ''; _currentReadingTime = '';
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
+  // Lista de conexões (outros livros)
+  document.getElementById('connectionBooksList').innerHTML =
+    books.map(b => '<option value="'+esc(b.title)+'">').join('');
+  if (id) {
+    const b2 = books.find(x => x.id === id);
+    if (b2) {
+      document.getElementById('fOpeningLine').value  = b2.openingLine  || '';
+      document.getElementById('fQuestion').value     = b2.question     || '';
+      document.getElementById('fIntention').value    = b2.intention    || '';
+      document.getElementById('fDateStart').value    = b2.dateStart    || '';
+      document.getElementById('fLetter').value       = b2.letter       || '';
+      _currentConnections = [...(b2.connections || [])];
+      renderConnectionTags();
+      _currentMood        = b2.mood        || '';
+      _currentReadingTime = b2.readingTime || '';
+      if (_currentMood) {
+        const mb = document.querySelector('.mood-btn[data-mood="'+_currentMood+'"]');
+        if (mb) mb.classList.add('selected');
+      }
+      if (_currentReadingTime) {
+        const tb = document.querySelector('.time-btn[data-time="'+_currentReadingTime+'"]');
+        if (tb) tb.classList.add('selected');
+      }
+    }
+  }
+  // Mostrar/esconder campos condicionais
+  const _st = document.getElementById('fStatus').value;
+  document.getElementById('progressGroup').style.display  = _st === 'lendo' ? 'grid'  : 'none';
+  document.getElementById('intentionGroup').style.display = _st === 'lendo' ? 'block' : 'none';
+  document.getElementById('dateStartGroup').style.display = _st === 'lendo' ? 'grid'  : 'none';
+  document.getElementById('letterGroup').style.display    = _st === 'quero' ? 'block' : 'none';
+
   // Campo "nesse momento" — só para diário vivo (2026+)
   const _editBook = id ? books.find(x => x.id === id) : null;
   const _editYear = _editBook ? getYear(_editBook.date) : null;
@@ -2624,6 +2953,14 @@ async function saveBook() {
     coverUrl:  currentCoverUrl, rating: currentRating, favorito: isFavorito,
     tags: currentTags, status,
     series:      document.getElementById('fSeries').value.trim(),
+    openingLine: document.getElementById('fOpeningLine').value.trim() || null,
+    question:    document.getElementById('fQuestion').value.trim()    || null,
+    intention:   document.getElementById('fIntention').value.trim()   || null,
+    dateStart:   document.getElementById('fDateStart').value.trim()   || null,
+    letter:      document.getElementById('fLetter').value.trim()      || null,
+    mood:        _currentMood        || null,
+    readingTime: _currentReadingTime || null,
+    connections: _currentConnections.length ? _currentConnections : null,
     momento:     document.getElementById('fMomento').value.trim() || null,
     seriesOrder: document.getElementById('fSeriesOrder').value ? +document.getElementById('fSeriesOrder').value : null,
     pageCurrent: status === 'lendo' ? parseInt(document.getElementById('fPageCurrent').value)||0 : null,
@@ -3737,6 +4074,17 @@ function openCelebration(bookId) {
   document.getElementById('celebAuthor').textContent = b.author || '';
   document.getElementById('celebStars').textContent  = stars;
   document.getElementById('celebMsg').textContent    = CELEB_MSGS[Math.floor(Math.random()*CELEB_MSGS.length)];
+  // Mostrar carta de expectativa se havia
+  const celebLetterWrap = document.getElementById('celebLetterWrap');
+  if (celebLetterWrap) {
+    if (b.letter) {
+      celebLetterWrap.innerHTML = '<div class="surprise-section-title" style="margin-top:.8rem">o que você esperava deste livro</div>' +
+        '<div class="surprise-opening">&ldquo;'+esc(b.letter)+'&rdquo;</div>';
+      celebLetterWrap.style.display = 'block';
+    } else { celebLetterWrap.style.display = 'none'; }
+  }
+  // Sugestão de próximo livro
+  _renderNextBookSuggestions(b);
   document.getElementById('celebMomento').value      = b.momento || '';
   document.getElementById('celebrationOverlay').classList.remove('hidden');
 }
@@ -3794,6 +4142,20 @@ window.openSurprise = function() {
   if (isLive && b.momento) {
     html += '<div class="surprise-section-title">nesse momento...</div>' +
             '<div class="surprise-momento">'+esc(b.momento)+'</div>';
+  }
+  if (b.question) {
+    html += '<div class="surprise-section-title">perguntas que o livro fez</div>' +
+            '<div class="surprise-question">'+esc(b.question)+'</div>';
+  }
+  if (b.openingLine) {
+    html += '<div class="surprise-section-title">primeira frase</div>' +
+            '<div class="surprise-opening">&ldquo;'+esc(b.openingLine)+'&rdquo;</div>';
+  }
+  if (b.mood || b.readingTime) {
+    html += '<div class="surprise-section-title">como foi esta leitura</div>' +
+            '<div style="font-size:.88rem;color:var(--stone);font-family:\'Cormorant Garamond\',serif;font-style:italic;">' +
+            (b.mood ? b.mood + ' ' : '') +
+            (b.readingTime ? '· leitura de ' + b.readingTime : '') + '</div>';
   }
 
   document.getElementById('surpriseBody').innerHTML = html;
@@ -3914,6 +4276,274 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('celebrationOverlay')?.addEventListener('click', e => { if (e.target.id==='celebrationOverlay') window.closeCelebration(); });
   document.getElementById('surpriseOverlay')?.addEventListener('click',    e => { if (e.target.id==='surpriseOverlay')    window.closeSurprise(); });
 });
+
+
+// ══════════════════════════════════════════════════════════════════════════
+// NOVAS FUNCIONALIDADES v7
+// ══════════════════════════════════════════════════════════════════════════
+
+// ── Estado dos novos campos ───────────────────────────────────────────────
+let _currentMood = '', _currentReadingTime = '', _currentConnections = [];
+
+// Mood picker
+document.getElementById('moodPicker').addEventListener('click', function(e) {
+  const btn = e.target.closest('.mood-btn'); if (!btn) return;
+  const mood = btn.dataset.mood;
+  _currentMood = _currentMood === mood ? '' : mood;
+  document.querySelectorAll('.mood-btn').forEach(b => b.classList.toggle('selected', b.dataset.mood === _currentMood));
+});
+
+// Time picker
+document.getElementById('readingTimePicker').addEventListener('click', function(e) {
+  const btn = e.target.closest('.time-btn'); if (!btn) return;
+  const t = btn.dataset.time;
+  _currentReadingTime = _currentReadingTime === t ? '' : t;
+  document.querySelectorAll('.time-btn').forEach(b => b.classList.toggle('selected', b.dataset.time === _currentReadingTime));
+});
+
+// Conexões entre livros
+function renderConnectionTags() {
+  const wrap = document.getElementById('connectionTags'); if (!wrap) return;
+  wrap.innerHTML = _currentConnections.map((c, i) =>
+    '<span class="connection-chip" onclick="window._openModalByTitle(\''+esc(c)+'\')">' +
+    esc(c) + '<button onclick="event.stopPropagation();window._removeConnection('+i+')" title="remover">×</button></span>'
+  ).join('');
+}
+window._addConnection = function() {
+  const inp = document.getElementById('fConnectionInput');
+  const val = inp.value.trim(); if (!val) return;
+  if (!_currentConnections.includes(val)) { _currentConnections.push(val); renderConnectionTags(); }
+  inp.value = '';
+};
+window._removeConnection = function(i) { _currentConnections.splice(i,1); renderConnectionTags(); };
+window._openModalByTitle = function(title) {
+  const b = books.find(x => x.title === title); if (b) { window.closeModal(); setTimeout(() => window._openModal(b.id), 150); }
+};
+
+// ── Helpers visuais ───────────────────────────────────────────────────────
+const MOOD_COLORS = {
+  '😌':'#8fbc8f','🥰':'#e8799a','🤔':'#b8975a','😢':'#7a9abf',
+  '😤':'#bf7a7a','😴':'#9a8fbf','🤩':'#e8c040','😰':'#bf9a7a',
+  '🙃':'#9abf8f','✨':'#c8a96a',
+};
+function _moodColor(mood) { return MOOD_COLORS[mood] || '#b8975a'; }
+
+function _readingSpeedBadge(b) {
+  if (!b.dateStart || !b.date || !b.pageTotal) return '';
+  const d1 = parseDate(b.dateStart), d2 = parseDate(b.date);
+  if (!d1 || !d2 || d2 <= d1) return '';
+  const days = Math.round((d2-d1)/86400000);
+  if (days < 1) return '';
+  const pagesPerDay = Math.round(b.pageTotal / days);
+  const desc = days === 1 ? 'lido em 1 dia' : days <= 7 ? 'lido em ' + days + ' dias' : days <= 30 ? 'lido em ' + Math.round(days/7) + ' semana(s)' : 'lido em ' + Math.round(days/30) + ' mês(es)';
+  return '<span class="reading-speed-badge" style="font-size:.6rem;color:var(--stone-light);font-family:\'Cormorant Garamond\',serif;font-style:italic;margin-left:.2rem">· '+desc+', ~'+pagesPerDay+' p/dia</span>';
+}
+
+// ── Capa gerada ───────────────────────────────────────────────────────────
+const GENRE_PALETTES = {
+  'fantasia':    ['#2d3f52','#3d5068','#5a7a9a'],
+  'romance':     ['#6b2038','#8b3050','#b05070'],
+  'ficção':      ['#2d4a3f','#3d6050','#5a8a70'],
+  'terror':      ['#1a1a2e','#2d2d4a','#404060'],
+  'biografia':   ['#4a3820','#6a5030','#8a7050'],
+  'filosofia':   ['#3d3d3d','#555555','#707070'],
+  'poesia':      ['#4a2d5a','#6a3d7a','#8a5a9a'],
+  'história':    ['#4a3820','#5a4830','#7a6850'],
+  'default':     ['#3d3528','#524838','#6a5e4a'],
+};
+function _genrePalette(genre) {
+  if (!genre) return GENRE_PALETTES.default;
+  const g = genre.toLowerCase();
+  for (const [key, pal] of Object.entries(GENRE_PALETTES))
+    if (g.includes(key)) return pal;
+  return GENRE_PALETTES.default;
+}
+function makeCoverElement(b, w, h_px, cls) {
+  if (b.coverUrl) {
+    const safe = b.coverUrl.replace(/"/g,'').replace(/'/g,'');
+    return '<img class="' + cls + '" src="' + safe + '" alt="' + esc(b.title) + '">';
+  }
+  const [c1, c2] = _genrePalette(b.genre);
+  const fSize = b.title.length > 20 ? '0.65rem' : b.title.length > 12 ? '0.75rem' : '0.9rem';
+  const shortTitle = b.title.length > 28 ? b.title.substring(0,26)+'…' : b.title;
+  const shortAuthor = b.author ? (b.author.length > 20 ? b.author.substring(0,18)+'…' : b.author) : '';
+  return '<div class="' + cls + ' generated-cover" style="width:'+w+'px;height:'+h_px+'px;background:linear-gradient(160deg,'+c1+','+c2+');">' +
+    '<div class="generated-cover-title" style="font-size:'+fSize+'">'+esc(shortTitle)+'</div>' +
+    '<div class="generated-cover-line"></div>' +
+    (shortAuthor ? '<div class="generated-cover-author">'+esc(shortAuthor)+'</div>' : '') +
+    '</div>';
+}
+
+// ── RELEITURA ─────────────────────────────────────────────────────────────
+window._rereadBook = async function(id) {
+  const b = books.find(x => x.id === id); if (!b) return;
+  if (!confirm('"' + b.title + '" — confirmar nova leitura?\nA data atual e o "nesse momento" serão salvos no histórico.')) return;
+  const today = new Date();
+  const ds = String(today.getDate()).padStart(2,'0')+'/'+String(today.getMonth()+1).padStart(2,'0')+'/'+today.getFullYear();
+  // Guardar histórico
+  const prevReads = b.readHistory || [];
+  if (b.date) prevReads.push({ date: b.date, momento: b.momento || null, rating: b.rating || null });
+  await saveBookToDb({
+    ...b, status:'lendo', date:'', momento:null,
+    readHistory: prevReads, readCount: (b.readCount||1) + 1,
+    pageCurrent:0, progressUpdatedAt: Date.now(),
+  });
+  showToast('✓ Releitura iniciada! Boas leituras 📖');
+};
+
+// Mostrar histórico de releituras no modal
+function _renderRereadsInModal(b) {
+  const history = b.readHistory;
+  if (!history || !history.length) return '';
+  return '<div class="reread-history"><span class="reread-history-title">Leituras anteriores</span>' +
+    history.map((r, i) =>
+      '<div class="reread-history-item">' +
+      '<span class="reread-history-date">'+(r.date||'—')+'</span>' +
+      (r.rating ? '<span>'+('★'.repeat(Math.floor(r.rating))+(r.rating%1?'½':''))+'</span>' : '') +
+      (r.momento ? '<span style="font-style:italic;color:var(--stone-light);font-size:.78rem;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(r.momento)+'</span>' : '') +
+      '</div>'
+    ).join('') + '</div>';
+}
+
+// ── MOSAICO ───────────────────────────────────────────────────────────────
+function populateMosaicYearSel() {
+  const sel = document.getElementById('mosaicYearSel'); if (!sel) return;
+  const cy = new Date().getFullYear();
+  const years = [...new Set([cy, ...books.map(b=>getYear(b.date)).filter(Boolean)])].sort((a,b)=>b-a);
+  const prev = sel.value;
+  sel.innerHTML = years.map(y=>'<option value="'+y+'"'+(+prev===y||(!prev&&y===cy)?' selected':'')+'>'+y+'</option>').join('');
+}
+
+window.renderMosaic = function(year) {
+  const el = document.getElementById('mosaicContent'); if (!el) return;
+  const rb = books.filter(b=>(!b.status||b.status==='lido')&&getYear(b.date)===year);
+  if (!rb.length) { el.innerHTML='<div class="mosaic-empty">Nenhum livro lido em '+year+'.</div>'; return; }
+  const MONTHS_F=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  const grouped = {};
+  rb.forEach(b=>{
+    const d=parseDate(b.date);
+    const k = d ? d.getMonth() : 12;
+    if(!grouped[k]) grouped[k]=[];
+    grouped[k].push(b);
+  });
+  const keys = Object.keys(grouped).sort((a,b)=>+a-+b);
+  el.innerHTML = '<div class="mosaic-grid-wrap" id="mosaicGrid">' +
+    keys.map(k=>{
+      const month = +k;
+      const bks = grouped[k];
+      const coversHtml = bks.map(b=>{
+        if(b.coverUrl) return '<img class="mosaic-cover" src="'+b.coverUrl.replace(/"/g,'')+'" alt="'+esc(b.title)+'" title="'+esc(b.title)+'">';
+        const [c1,c2]=_genrePalette(b.genre);
+        return '<div class="mosaic-cover-ph" style="background:linear-gradient(160deg,'+c1+','+c2+')" title="'+esc(b.title)+'">'+esc(b.title.charAt(0))+'</div>';
+      }).join('');
+      return '<div class="mosaic-month-section">' +
+        '<span class="mosaic-month-label">'+(month<12?MONTHS_F[month]:'Sem data')+'</span>' +
+        '<div class="mosaic-covers">'+coversHtml+'</div></div>';
+    }).join('') + '</div>';
+};
+
+window.exportMosaic = function() {
+  const grid = document.getElementById('mosaicGrid'); if (!grid) { showToast('⚠ Gere o mosaico primeiro.'); return; }
+  const year = document.getElementById('mosaicYearSel').value;
+  const W = 1200, COVER_W = 64, COVER_H = 96, GAP = 6, PAD = 40, MONTH_H = 28;
+  const rb = books.filter(b=>(!b.status||b.status==='lido')&&getYear(b.date)===+year);
+  const MONTHS_F=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  const grouped={};
+  rb.forEach(b=>{const d=parseDate(b.date);const k=d?d.getMonth():12;if(!grouped[k])grouped[k]=[];grouped[k].push(b);});
+  const keys=Object.keys(grouped).sort((a,b)=>+a-+b);
+  // Estimate height
+  let H=PAD*2+60; // header
+  keys.forEach(k=>{
+    const n=grouped[k].length;
+    const cols=Math.floor((W-PAD*2+GAP)/(COVER_W+GAP));
+    const rows=Math.ceil(n/cols);
+    H+=MONTH_H+rows*(COVER_H+GAP)+20;
+  });
+  const cv=document.createElement('canvas'); cv.width=W; cv.height=H;
+  const ctx=cv.getContext('2d');
+  ctx.fillStyle='#1c1814'; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#b8975a'; ctx.fillRect(0,0,W,4);
+  ctx.font='300 48px "Georgia",serif'; ctx.fillStyle='#c8a96a'; ctx.textAlign='center';
+  ctx.fillText(String(year), W/2, 60);
+  ctx.font='22px "Jost",Arial,sans-serif'; ctx.fillStyle='rgba(200,170,130,.45)';
+  ctx.fillText('DIÁRIO DE LEITURAS · MARINA RISTHER RAZZO', W/2, 88);
+  let curY=PAD+70;
+  const cols=Math.floor((W-PAD*2+GAP)/(COVER_W+GAP));
+  // For canvas export, draw colored placeholders for all (image loading async is complex)
+  keys.forEach(k=>{
+    const month=+k; const bks=grouped[k];
+    ctx.font='16px "Jost",Arial,sans-serif'; ctx.fillStyle='rgba(200,170,130,.35)';
+    ctx.textAlign='left'; ctx.letterSpacing='4px';
+    ctx.fillText((month<12?MONTHS_F[month].toUpperCase():'SEM DATA'), PAD, curY+18);
+    ctx.letterSpacing='0px'; curY+=MONTH_H;
+    bks.forEach((b,i)=>{
+      const col=i%cols; const row=Math.floor(i/cols);
+      const bx=PAD+col*(COVER_W+GAP); const by=curY+row*(COVER_H+GAP);
+      const [c1,c2]=_genrePalette(b.genre);
+      const grd=ctx.createLinearGradient(bx,by,bx+COVER_W,by+COVER_H);
+      grd.addColorStop(0,c1); grd.addColorStop(1,c2);
+      ctx.fillStyle=grd; ctx.fillRect(bx,by,COVER_W,COVER_H);
+      ctx.font='italic '+(b.title.length>12?'10':'12')+'px "Georgia",serif';
+      ctx.fillStyle='rgba(255,255,255,.7)'; ctx.textAlign='center';
+      const t=b.title.length>12?b.title.substring(0,10)+'…':b.title;
+      ctx.fillText(t, bx+COVER_W/2, by+COVER_H/2+4);
+    });
+    const rows=Math.ceil(bks.length/cols); curY+=rows*(COVER_H+GAP)+12;
+  });
+  ctx.fillStyle='#b8975a'; ctx.fillRect(0,H-4,W,4);
+  const a=document.createElement('a'); a.download='mosaico-'+year+'.png';
+  a.href=cv.toDataURL('image/png'); a.click();
+  showToast('✓ Mosaico exportado!');
+};
+
+// ── HORA DA LEITURA — chart em stats ─────────────────────────────────────
+function renderReadingTimeChart() {
+  const el = document.getElementById('readingTimeChart'); if (!el) return;
+  const times = ['manhã','tarde','noite','madrugada'];
+  const labels = ['🌅 Manhã','☀ Tarde','🌙 Noite','🌌 Madrugada'];
+  const counts = times.map(t => books.filter(b=>b.readingTime===t).length);
+  const max = Math.max(1,...counts);
+  el.innerHTML = '<div class="reading-time-chart">' +
+    counts.map((c,i)=>'<div class="reading-time-bar-w"><span style="font-size:.62rem;color:var(--stone-light)">'+c+'</span><div class="reading-time-bar" style="height:'+Math.max(c>0?4:0,c/max*55)+'px"></div><span class="reading-time-lbl">'+labels[i]+'</span></div>').join('') +
+    '</div><p style="font-size:.65rem;color:var(--stone-light);margin-top:.6rem;font-style:italic;font-family:\'Cormorant Garamond\',serif">Baseado nos livros com horário registrado.</p>';
+}
+
+// ── PRÓXIMO LIVRO SUGERIDO ────────────────────────────────────────────────
+function _renderNextBookSuggestions(finishedBook) {
+  const el = document.getElementById('celebNextBooks'); if (!el) return;
+  const tbr = books.filter(b => b.status === 'quero');
+  if (!tbr.length) { el.innerHTML = ''; return; }
+  // Score: match por gênero (+3), autor (+2), tags (+1 cada)
+  const scored = tbr.map(b => {
+    let score = 0;
+    if (finishedBook.genre && b.genre && finishedBook.genre.toLowerCase()===b.genre.toLowerCase()) score+=3;
+    if (finishedBook.author && b.author && finishedBook.author.toLowerCase()===b.author.toLowerCase()) score+=2;
+    (finishedBook.tags||[]).forEach(t=>{ if((b.tags||[]).includes(t)) score++; });
+    return {b, score, random: Math.random()};
+  }).sort((a,z)=> z.score!==a.score ? z.score-a.score : z.random-a.random).slice(0,3);
+  if (!scored.length) { el.innerHTML=''; return; }
+  const reason = (s) => s.score >= 3 ? 'mesmo gênero' : s.score >= 2 ? 'mesmo autor' : s.score >= 1 ? 'tags semelhantes' : 'da sua lista';
+  el.innerHTML = '<div style="font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--stone-light);margin-bottom:.55rem">Que tal continuar com…</div>' +
+    '<div class="next-book-suggestions">' +
+    scored.map(({b,score}) => {
+      const safe = b.coverUrl ? b.coverUrl.replace(/"/g,'') : '';
+      const [c1,c2] = _genrePalette(b.genre);
+      return '<div class="next-book-sug" onclick="window.closeCelebration();window._startReadingBook(\''+b.id+'\')">' +
+        (safe ? '<img class="next-book-sug-cover" src="'+safe+'" alt="">' : '<div class="next-book-sug-ph" style="background:linear-gradient(160deg,'+c1+','+c2+')">'+esc(b.title.charAt(0))+'</div>') +
+        '<div class="next-book-sug-info"><div class="next-book-sug-title">'+esc(b.title)+'</div><div class="next-book-sug-reason">'+reason({score})+' · clique para começar a ler</div></div>' +
+      '</div>';
+    }).join('') + '</div>';
+}
+
+// ── RENDERCHARTS: adicionar reading time ──────────────────────────────────
+const _origRenderCharts = renderCharts;
+// Patch via override after definition — done by appending call below
+
+// ══════════════════════════════════════════════════════════════════════════
+// Patch renderListView para incluir histórico de releituras
+// ══════════════════════════════════════════════════════════════════════════
+// (rereadHistory mostrado ao expandir notas — já coberto pelo book-notes-row)
+
 
 // ── DARK MODE TOGGLE ──────────────────────────────────────────────────────
 (function() {
