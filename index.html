@@ -1248,6 +1248,283 @@ body.dark .letter-textarea{background:rgba(42,36,32,.55);}
   .mosaic-cover,.mosaic-cover-ph{width:52px;height:78px;}
 }
 
+
+/* ══ DESAFIOS — NYT 100 ══════════════════════════════════════════════════ */
+#desafiosPane { display:none; padding:2rem 0 3rem; }
+
+.desafios-hero {
+  background: white; border:1px solid var(--border);
+  border-top:3px solid var(--wine);
+  padding:2rem 2rem 1.5rem;
+  box-shadow:0 2px 16px var(--shadow-soft);
+  margin-bottom:1.5rem; position:relative; overflow:hidden;
+}
+body.dark .desafios-hero { background:var(--cream-mid); }
+.desafios-hero::before {
+  content:''; position:absolute; top:0; right:0;
+  width:220px; height:220px;
+  background:radial-gradient(circle at 100% 0%, rgba(184,151,90,.07) 0%, transparent 70%);
+  pointer-events:none;
+}
+.desafios-hero-top {
+  display:flex; align-items:flex-start; justify-content:space-between;
+  flex-wrap:wrap; gap:1rem; margin-bottom:1.4rem;
+}
+.desafios-title-block h2 {
+  font-family:'Cormorant Garamond',serif; font-size:1.9rem;
+  font-weight:300; color:var(--ink); letter-spacing:-.01em; line-height:1.1;
+}
+.desafios-title-block p {
+  font-size:.68rem; color:var(--stone-light); margin-top:.3rem;
+  font-style:italic; font-family:'Cormorant Garamond',serif;
+}
+.desafios-subtitle {
+  font-size:.58rem; letter-spacing:.28em; text-transform:uppercase;
+  color:var(--wine); display:block; margin-bottom:.4rem;
+}
+.desafios-stats-row {
+  display:flex; gap:1.5rem; flex-wrap:wrap; align-items:center;
+}
+.desafios-stat {
+  display:flex; flex-direction:column; align-items:center;
+  min-width:60px;
+}
+.desafios-stat-num {
+  font-family:'Cormorant Garamond',serif; font-size:2.2rem;
+  font-weight:300; line-height:1; color:var(--wine);
+}
+.desafios-stat-lbl {
+  font-size:.55rem; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--stone-light); margin-top:.15rem; text-align:center;
+}
+.desafios-progress-bar-bg {
+  height:5px; background:var(--cream-dark); border-radius:3px;
+  overflow:hidden; margin:.6rem 0 .3rem; flex:1;
+}
+.desafios-progress-bar-fill {
+  height:5px; border-radius:3px;
+  background:linear-gradient(90deg,var(--wine),var(--gold));
+  transition:width 1.2s cubic-bezier(.4,0,.2,1);
+}
+.desafios-progress-row {
+  display:flex; align-items:center; gap:.8rem;
+}
+.desafios-progress-pct {
+  font-family:'Cormorant Garamond',serif; font-size:.88rem;
+  font-style:italic; color:var(--stone-light); white-space:nowrap;
+}
+
+/* Sub-tabs Oficial / Leitores */
+.desafios-subtabs {
+  display:flex; gap:0; border-bottom:1px solid var(--border);
+  margin-bottom:1.4rem;
+}
+.desafios-subtab {
+  padding:.6rem 1.3rem; font-family:'Jost',sans-serif;
+  font-size:.62rem; letter-spacing:.16em; text-transform:uppercase;
+  background:none; border:none; border-bottom:2px solid transparent;
+  cursor:pointer; color:var(--stone-light); transition:all .18s;
+}
+.desafios-subtab:hover { color:var(--gold); }
+.desafios-subtab.active { color:var(--wine); border-bottom-color:var(--wine); }
+
+/* Toolbar de filtros */
+.desafios-toolbar {
+  display:flex; align-items:center; flex-wrap:wrap;
+  gap:.6rem; margin-bottom:1.2rem;
+}
+.desafios-filter-btn {
+  padding:.32rem .75rem; border:1px solid var(--border-strong);
+  background:transparent; border-radius:20px;
+  font-family:'Jost',sans-serif; font-size:.6rem;
+  letter-spacing:.1em; text-transform:uppercase;
+  cursor:pointer; color:var(--stone); transition:all .15s;
+}
+.desafios-filter-btn:hover { border-color:var(--gold); color:var(--gold); }
+.desafios-filter-btn.active { background:var(--wine); border-color:var(--wine); color:white; }
+.desafios-search {
+  padding:.34rem .75rem; border:1px solid var(--border-strong);
+  background:transparent; font-family:'Jost',sans-serif;
+  font-size:.72rem; color:var(--ink); width:190px; border-radius:20px;
+  transition:border-color .18s;
+}
+.desafios-search:focus { outline:none; border-color:var(--gold); }
+.desafios-search::placeholder { color:var(--stone-pale); }
+.desafios-view-toggle {
+  display:flex; border:1px solid var(--border-strong);
+  border-radius:1px; overflow:hidden; margin-left:auto;
+}
+.desafios-view-btn {
+  padding:.32rem .55rem; background:transparent; border:none;
+  cursor:pointer; color:var(--stone-light); transition:all .15s;
+  display:flex; align-items:center;
+}
+.desafios-view-btn:first-child { border-right:1px solid var(--border-strong); }
+.desafios-view-btn.active { background:var(--ink); color:var(--cream); }
+.desafios-view-btn svg { width:13px; height:13px; }
+
+/* Grade 10×10 */
+.nyt-grid {
+  display:grid; grid-template-columns:repeat(10,1fr);
+  gap:5px; margin-bottom:1.5rem;
+}
+.nyt-cell {
+  aspect-ratio:2/3; border-radius:2px; cursor:pointer;
+  position:relative; overflow:hidden; transition:transform .18s, box-shadow .18s;
+  display:flex; align-items:flex-end;
+}
+.nyt-cell:hover { transform:scale(1.08); z-index:2; box-shadow:0 4px 16px var(--shadow); }
+.nyt-cell.status-read    { background:linear-gradient(160deg,#6b1f2e,#8b3040); }
+.nyt-cell.status-reading { background:linear-gradient(160deg,#8a7010,#b8975a); }
+.nyt-cell.status-want    { background:linear-gradient(160deg,#2d3f52,#3d5068); }
+.nyt-cell.status-unread  { background:var(--cream-dark); }
+body.dark .nyt-cell.status-unread { background:var(--stone-pale); }
+.nyt-cell.no-br::after {
+  content:'★'; position:absolute; top:3px; right:4px;
+  font-size:.45rem; color:rgba(255,255,255,.5);
+}
+.nyt-cell-rank {
+  position:absolute; top:3px; left:4px; font-size:.48rem;
+  color:rgba(255,255,255,.55); font-family:'Jost',sans-serif;
+  font-weight:500; line-height:1;
+}
+.nyt-cell-check {
+  position:absolute; inset:0; display:flex; align-items:center;
+  justify-content:center; font-size:.9rem; opacity:.7;
+}
+.nyt-cell-cover {
+  width:100%; height:100%; object-fit:cover;
+  position:absolute; inset:0;
+}
+.nyt-cell-overlay {
+  position:absolute; inset:0;
+  background:linear-gradient(180deg,transparent 40%,rgba(0,0,0,.6));
+}
+
+/* Lista */
+.nyt-list { display:flex; flex-direction:column; border:1px solid var(--border); background:white; }
+body.dark .nyt-list { background:var(--cream-mid); }
+.nyt-list-item {
+  display:grid; grid-template-columns:2.5rem 1fr auto;
+  align-items:center; border-bottom:1px solid var(--border);
+  padding:0; min-height:58px; cursor:pointer; transition:background .14s;
+  animation:fadeSlide .25s ease both;
+}
+.nyt-list-item:last-child { border-bottom:none; }
+.nyt-list-item:hover { background:var(--cream); }
+body.dark .nyt-list-item:hover { background:var(--cream-dark); }
+.nyt-list-rank {
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Cormorant Garamond',serif; font-size:.8rem;
+  font-style:italic; color:var(--stone-pale);
+  border-right:1px solid var(--border); height:100%;
+}
+.nyt-list-info { padding:.65rem 1rem; min-width:0; }
+.nyt-list-title {
+  font-family:'Cormorant Garamond',serif; font-size:1rem;
+  font-weight:500; color:var(--ink); white-space:nowrap;
+  overflow:hidden; text-overflow:ellipsis;
+}
+.nyt-list-author {
+  font-size:.68rem; color:var(--stone); font-style:italic;
+  font-family:'Cormorant Garamond',serif; margin-top:.1rem;
+}
+.nyt-list-meta { display:flex; align-items:center; gap:.4rem; margin-top:.22rem; flex-wrap:wrap; }
+.nyt-list-editora {
+  font-size:.58rem; color:var(--stone-light); letter-spacing:.06em;
+  background:var(--cream-mid); border:1px solid var(--border);
+  padding:.05rem .38rem; border-radius:20px;
+}
+.nyt-no-br-badge {
+  font-size:.55rem; color:rgba(107,31,46,.65); letter-spacing:.08em;
+  background:rgba(107,31,46,.07); border:1px solid rgba(107,31,46,.15);
+  padding:.05rem .38rem; border-radius:20px;
+}
+.nyt-list-actions {
+  display:flex; flex-direction:column; align-items:center;
+  justify-content:center; gap:.15rem; padding:.5rem .7rem;
+  border-left:1px solid var(--border); height:100%; flex-shrink:0;
+}
+.nyt-status-pill {
+  font-size:.55rem; letter-spacing:.1em; text-transform:uppercase;
+  padding:.2rem .5rem; border-radius:20px; font-family:'Jost',sans-serif;
+  white-space:nowrap; cursor:pointer; border:none; transition:all .15s;
+}
+.nyt-status-pill.read    { background:rgba(107,31,46,.12); color:var(--wine); }
+.nyt-status-pill.reading { background:rgba(184,151,90,.15); color:var(--gold); }
+.nyt-status-pill.want    { background:rgba(45,63,82,.1); color:#3d5068; }
+.nyt-status-pill.unread  { background:var(--cream-dark); color:var(--stone-light); }
+.nyt-stars-mini { font-size:.65rem; color:var(--gold); }
+.nyt-diary-link {
+  font-size:.55rem; color:var(--stone-light); letter-spacing:.08em;
+  text-decoration:underline; cursor:pointer; font-family:'Jost',sans-serif;
+  background:none; border:none; transition:color .14s;
+}
+.nyt-diary-link:hover { color:var(--gold); }
+
+/* Modal detalhe NYT */
+.nyt-detail-modal .modal { max-width:520px; }
+.nyt-detail-rank-badge {
+  font-family:'Cormorant Garamond',serif; font-size:.78rem;
+  font-style:italic; color:var(--stone-light); display:block; margin-bottom:.4rem;
+}
+.nyt-detail-cover-row { display:flex; gap:1.4rem; margin-bottom:1.2rem; align-items:flex-start; }
+.nyt-detail-cover { width:80px; height:118px; object-fit:cover; border-radius:1px; box-shadow:3px 5px 14px var(--shadow); flex-shrink:0; }
+.nyt-detail-cover-ph { width:80px; height:118px; border-radius:1px; display:flex; align-items:center; justify-content:center; font-family:'Cormorant Garamond',serif; font-size:2rem; color:white; font-style:italic; box-shadow:3px 5px 14px var(--shadow); flex-shrink:0; }
+.nyt-detail-title { font-family:'Cormorant Garamond',serif; font-size:1.45rem; font-weight:500; color:var(--ink); line-height:1.2; margin-bottom:.25rem; }
+.nyt-detail-author { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:.95rem; color:var(--stone); margin-bottom:.4rem; }
+.nyt-detail-editora { font-size:.65rem; color:var(--stone-light); letter-spacing:.1em; }
+.nyt-status-picker { display:flex; gap:.5rem; flex-wrap:wrap; margin:1rem 0; }
+.nyt-status-pick-btn {
+  padding:.38rem .85rem; border-radius:20px; border:1px solid var(--border-strong);
+  background:transparent; font-family:'Jost',sans-serif; font-size:.62rem;
+  letter-spacing:.1em; text-transform:uppercase; cursor:pointer;
+  transition:all .18s; color:var(--stone);
+}
+.nyt-status-pick-btn.active.read    { background:var(--wine); border-color:var(--wine); color:white; }
+.nyt-status-pick-btn.active.reading { background:var(--gold); border-color:var(--gold); color:white; }
+.nyt-status-pick-btn.active.want    { background:#3d5068; border-color:#3d5068; color:white; }
+.nyt-status-pick-btn:hover { border-color:var(--gold); }
+.nyt-rating-row { display:flex; align-items:center; gap:.5rem; margin:.6rem 0; }
+.nyt-rating-stars { display:flex; gap:2px; }
+.nyt-rating-stars span { font-size:1.3rem; cursor:pointer; color:var(--stone-pale); transition:color .1s; user-select:none; }
+.nyt-rating-stars span.on { color:var(--gold); }
+.nyt-diary-match {
+  background:linear-gradient(135deg,rgba(107,31,46,.06),rgba(184,151,90,.04));
+  border:1px solid rgba(184,151,90,.2); border-left:3px solid var(--gold);
+  padding:.65rem .9rem; margin:.9rem 0;
+  font-family:'Cormorant Garamond',serif; font-size:.9rem;
+}
+.nyt-diary-match-title { font-weight:500; color:var(--ink); display:block; margin-bottom:.2rem; }
+.nyt-diary-match-notes { font-style:italic; color:var(--stone); font-size:.88rem; line-height:1.55; }
+
+/* Legenda + compartilhar */
+.nyt-legend {
+  display:flex; gap:1rem; flex-wrap:wrap; align-items:center;
+  margin-bottom:1rem; font-size:.6rem; color:var(--stone-light); letter-spacing:.08em;
+}
+.nyt-legend-dot { width:10px; height:10px; border-radius:2px; flex-shrink:0; }
+
+/* Surpresa lista NYT */
+.nyt-surprise-btn {
+  display:inline-flex; align-items:center; gap:.4rem;
+  padding:.42rem .9rem; border:1px solid rgba(107,31,46,.3);
+  background:rgba(107,31,46,.05); border-radius:20px;
+  font-family:'Jost',sans-serif; font-size:.62rem;
+  letter-spacing:.1em; text-transform:uppercase;
+  cursor:pointer; color:var(--wine); transition:all .18s;
+}
+.nyt-surprise-btn:hover { background:rgba(107,31,46,.12); }
+
+/* Compartilhar grade */
+.share-grid-modal .modal { max-width:460px; }
+
+@media(max-width:650px) {
+  .nyt-grid { grid-template-columns:repeat(10,1fr); gap:3px; }
+  .desafios-stats-row { gap:1rem; }
+  .desafios-hero { padding:1.2rem; }
+}
+
 </style>
 </head>
 <body>
@@ -1338,6 +1615,10 @@ body.dark .letter-textarea{background:rgba(42,36,32,.55);}
   <button class="nav-tab" id="tab-mosaic" onclick="window.switchTab('mosaic')">
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zm10 0a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"/></svg>
     Mosaico
+  </button>
+  <button class="nav-tab" id="tab-desafios" onclick="window.switchTab('desafios')">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+    NYT 100
   </button>
 </div>
 
@@ -1572,6 +1853,93 @@ body.dark .letter-textarea{background:rgba(42,36,32,.55);}
       </div>
     </div>
     <div id="mosaicContent"></div>
+  </div>
+</div>
+
+
+<!-- DESAFIOS — NYT 100 -->
+<div id="desafiosPane">
+  <div class="container">
+
+    <!-- Hero com stats -->
+    <div class="desafios-hero" id="desafiosHero"></div>
+
+    <!-- Sub-tabs -->
+    <div class="desafios-subtabs">
+      <button class="desafios-subtab active" id="subtab-oficial"  onclick="window.switchNytTab('oficial')">Críticos &amp; Escritores</button>
+      <button class="desafios-subtab"         id="subtab-leitores" onclick="window.switchNytTab('leitores')">Leitores NYT</button>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="desafios-toolbar">
+      <button class="desafios-filter-btn active" data-filter="all"     onclick="window.setNytFilter('all')">Todos</button>
+      <button class="desafios-filter-btn"         data-filter="read"    onclick="window.setNytFilter('read')">✓ Lidos</button>
+      <button class="desafios-filter-btn"         data-filter="reading" onclick="window.setNytFilter('reading')">▶ Lendo</button>
+      <button class="desafios-filter-btn"         data-filter="want"    onclick="window.setNytFilter('want')">♡ Quero ler</button>
+      <button class="desafios-filter-btn"         data-filter="unread"  onclick="window.setNytFilter('unread')">Não lidos</button>
+      <button class="desafios-filter-btn"         data-filter="no-br"   onclick="window.setNytFilter('no-br')">Sem ed. BR</button>
+      <input  class="desafios-search" id="nytSearch" placeholder="buscar título ou autor…" oninput="window.renderNytList()">
+      <button class="nyt-surprise-btn" onclick="window.nytSurprise()">✦ Me surpreenda</button>
+      <div class="desafios-view-toggle">
+        <button class="desafios-view-btn active" id="nytViewGrid" onclick="window.setNytView('grid')" title="Grade">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+        </button>
+        <button class="desafios-view-btn" id="nytViewList" onclick="window.setNytView('list')" title="Lista">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Legenda -->
+    <div class="nyt-legend">
+      <div class="nyt-legend-dot" style="background:linear-gradient(135deg,#6b1f2e,#8b3040)"></div> Lido
+      <div class="nyt-legend-dot" style="background:linear-gradient(135deg,#8a7010,#b8975a)"></div> Lendo
+      <div class="nyt-legend-dot" style="background:linear-gradient(135deg,#2d3f52,#3d5068)"></div> Quero ler
+      <div class="nyt-legend-dot" style="background:var(--cream-dark);border:1px solid var(--border)"></div> Não lido
+      <span style="opacity:.6">★ = sem edição BR</span>
+    </div>
+
+    <!-- Conteúdo (grade ou lista) -->
+    <div id="nytContent"></div>
+
+    <!-- Compartilhar -->
+    <div style="text-align:center;margin-top:1.4rem">
+      <button class="wrapped-share-btn" onclick="window.shareNytGrid()">✦ Compartilhar minha grade</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL DETALHE NYT -->
+<div class="modal-overlay hidden nyt-detail-modal" id="nytDetailOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="nytDetailHeading">Livro</h2>
+      <button class="modal-close" onclick="window.closeNytDetail()">×</button>
+    </div>
+    <div class="modal-body" id="nytDetailBody"></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="window.closeNytDetail()">Fechar</button>
+      <button class="btn btn-gold" id="nytDetailSaveBtn" onclick="window.saveNytDetail()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL COMPARTILHAR GRADE -->
+<div class="modal-overlay hidden share-grid-modal" id="shareGridOverlay">
+  <div class="modal">
+    <div class="modal-header"><h2>Compartilhar grade</h2><button class="modal-close" onclick="window.closeShareGrid()">×</button></div>
+    <div class="modal-body" style="padding:1rem 1.5rem 1.2rem">
+      <p style="font-size:.72rem;color:var(--stone-light);margin-bottom:.8rem">Clique com o botão direito para salvar · Toque e segure no celular.</p>
+      <canvas id="shareGridCanvas" style="width:100%;border-radius:2px;box-shadow:0 4px 20px var(--shadow);display:block"></canvas>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="window.closeShareGrid()">Fechar</button>
+      <button class="btn btn-gold" onclick="window._downloadShareGrid()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        Baixar
+      </button>
+    </div>
   </div>
 </div>
 
@@ -1980,12 +2348,16 @@ onAuthStateChanged(auth, user => {
     const av = document.getElementById('userAvatar');
     if (user.photoURL) { av.src = user.photoURL; av.style.display = 'inline-block'; }
     booksCol  = collection(db, 'usuarios', user.uid, 'livros');
+    _initNytFirestore(user.uid);
     quotesCol = collection(db, 'usuarios', user.uid, 'citacoes');
     goalsCol  = collection(db, 'usuarios', user.uid, 'metas');
     startListening();
   } else {
     [unsubBooks, unsubQuotes, unsubGoals].forEach(u => u && u());
     books = []; quotes = []; goals = {};
+    _nytState = { oficial: {}, leitores: {} };
+    if (_unsubNyt) { _unsubNyt(); _unsubNyt = null; }
+    _nytCol = null;
     document.getElementById('loginScreen').style.display = 'flex';
     document.getElementById('appContent').style.display = 'none';
   }
@@ -2316,7 +2688,7 @@ window.addEventListener('beforeunload', e => {
 
 // ── TABS ─────────────────────────────────────────────────
 function switchTab(tab) {
-  ['books','stats','quotes','tbr','goals','series','year','mosaic'].forEach(t => {
+  ['books','stats','quotes','tbr','goals','series','year','mosaic','desafios'].forEach(t => {
     const tabEl = document.getElementById('tab-' + t);
     if (tabEl) tabEl.classList.toggle('active', t === tab);
     const paneEl = document.getElementById(t === 'books' ? 'booksPane' : t + 'Pane');
@@ -2329,7 +2701,8 @@ function switchTab(tab) {
   if (tab === 'goals')  renderGoals();
   if (tab === 'series') renderSeries();
   if (tab === 'year')   { populateYearSelect(); renderYearInBooks(+document.getElementById('yearSelect').value || new Date().getFullYear()); }
-  if (tab === 'mosaic') { populateMosaicYearSel(); renderMosaic(+document.getElementById('mosaicYearSel').value || new Date().getFullYear()); }
+  if (tab === 'mosaic')   { populateMosaicYearSel(); renderMosaic(+document.getElementById('mosaicYearSel').value || new Date().getFullYear()); }
+  if (tab === 'desafios') { renderDesafiosHero(); renderNytList(); }
 }
 window.switchTab = switchTab;
 
@@ -4544,6 +4917,429 @@ const _origRenderCharts = renderCharts;
 // ══════════════════════════════════════════════════════════════════════════
 // (rereadHistory mostrado ao expandir notas — já coberto pelo book-notes-row)
 
+
+
+// ══════════════════════════════════════════════════════════════════════════
+// NYT 100 — DADOS EMBUTIDOS
+// ══════════════════════════════════════════════════════════════════════════
+const NYT_DATA = {
+  oficial:  [{"rank": 1, "title": "A amiga genial", "author": "Elena Ferrante", "editora": "Biblioteca Azul", "status": "read", "noBR": false}, {"rank": 2, "title": "The Warmth of Other Suns", "author": "Isabel Wilkerson", "editora": "Vintage Books", "status": "unread", "noBR": true}, {"rank": 3, "title": "Wolf Hall", "author": "Hilary Mantel", "editora": "Todavia", "status": "unread", "noBR": false}, {"rank": 4, "title": "O mundo conhecido", "author": "Edward P. Jones", "editora": "José Olympio", "status": "unread", "noBR": false}, {"rank": 5, "title": "As correções", "author": "Jonathan Franzen", "editora": "Companhia das Letras", "status": "read", "noBR": false}, {"rank": 6, "title": "2666", "author": "Roberto Bolaño", "editora": "Companhia das Letras", "status": "read", "noBR": false}, {"rank": 7, "title": "Os caminhos para a liberdade", "author": "Colson Whitehead", "editora": "HarperCollins", "status": "unread", "noBR": false}, {"rank": 8, "title": "Austerlitz", "author": "W.G. Sebald", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 9, "title": "Não me abandone jamais", "author": "Kazuo Ishiguro", "editora": "Companhia das Letras", "status": "read", "noBR": false}, {"rank": 10, "title": "Gilead", "author": "Marilynne Robinson", "editora": "Edições Vida Nova", "status": "unread", "noBR": false}, {"rank": 11, "title": "A fantástica vida breve de Oscar Wao", "author": "Junot Díaz", "editora": "Record", "status": "unread", "noBR": false}, {"rank": 12, "title": "O ano do pensamento mágico", "author": "Joan Didion", "editora": "HarperCollins", "status": "unread", "noBR": false}, {"rank": 13, "title": "A estrada", "author": "Cormac McCarthy", "editora": "Alfaguara", "status": "read", "noBR": false}, {"rank": 14, "title": "Esboço", "author": "Rachel Cusk", "editora": "Todavia", "status": "unread", "noBR": false}, {"rank": 15, "title": "Pachinko", "author": "Min Jin Lee", "editora": "Intrínseca", "status": "read", "noBR": false}, {"rank": 16, "title": "As incríveis aventuras de Kavalier e Clay", "author": "Michael Chabon", "editora": "Record", "status": "unread", "noBR": false}, {"rank": 17, "title": "O vendido", "author": "Paul Beatty", "editora": "Todavia", "status": "unread", "noBR": false}, {"rank": 18, "title": "Lincoln no limbo", "author": "George Saunders", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 19, "title": "Say Nothing", "author": "Patrick Radden Keefe", "editora": "William Collins", "status": "unread", "noBR": true}, {"rank": 20, "title": "Erasure", "author": "Percival Everett", "editora": "Faber & Faber", "status": "unread", "noBR": true}, {"rank": 21, "title": "Evicted", "author": "Matthew Desmond", "editora": "Crown", "status": "unread", "noBR": true}, {"rank": 22, "title": "Em busca de um final feliz", "author": "Katherine Boo", "editora": "Novo Conceito", "status": "unread", "noBR": false}, {"rank": 23, "title": "Ódio, amizade, namoro, amor, casamento", "author": "Alice Munro", "editora": "Biblioteca Azul", "status": "unread", "noBR": false}, {"rank": 24, "title": "The Overstory", "author": "Richard Powers", "editora": "W. W. Norton & Company", "status": "unread", "noBR": true}, {"rank": 25, "title": "Random Family", "author": "Adrian Nicole LeBlanc", "editora": "Scribner", "status": "unread", "noBR": true}, {"rank": 26, "title": "Reparação", "author": "Ian McEwan", "editora": "Companhia das Letras", "status": "read", "noBR": false}, {"rank": 27, "title": "Americanah", "author": "Chimamanda Ngozi Adichie", "editora": "Companhia das Letras", "status": "read", "noBR": false}, {"rank": 28, "title": "Atlas de nuvens", "author": "David Mitchell", "editora": "Companhia das Letras", "status": "read", "noBR": false}, {"rank": 29, "title": "O último samurai", "author": "Helen DeWitt", "editora": "Rocco", "status": "unread", "noBR": false}, {"rank": 30, "title": "Sing, Unburied, Sing", "author": "Jesmyn Ward", "editora": "Scribner", "status": "unread", "noBR": true}, {"rank": 31, "title": "Dentes brancos", "author": "Zadie Smith", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 32, "title": "A linha da beleza", "author": "Alan Hollinghurst", "editora": "Nova Fronteira", "status": "unread", "noBR": false}, {"rank": 33, "title": "Salvage the Bones", "author": "Jesmyn Ward", "editora": "Bloomsbury", "status": "unread", "noBR": true}, {"rank": 34, "title": "Cidadã: uma lírica americana", "author": "Claudia Rankine", "editora": "Jabuticaba", "status": "unread", "noBR": false}, {"rank": 35, "title": "Fun Home: uma tragicomédia em família", "author": "Alison Bechdel", "editora": "Todavia", "status": "unread", "noBR": false}, {"rank": 36, "title": "Entre o mundo e eu", "author": "Ta-Nehisi Coates", "editora": "Objetiva", "status": "unread", "noBR": false}, {"rank": 37, "title": "Os anos", "author": "Annie Ernaux", "editora": "Fósforo", "status": "unread", "noBR": false}, {"rank": 38, "title": "Os detetives selvagens", "author": "Roberto Bolaño", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 39, "title": "A visita cruel do tempo", "author": "Jennifer Egan", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 40, "title": "F de falcão", "author": "Helen Macdonald", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 41, "title": "Small Things Like These", "author": "Claire Keegan", "editora": "Faber & Faber", "status": "unread", "noBR": true}, {"rank": 42, "title": "Breve história de sete assassinatos", "author": "Marlon James", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 43, "title": "Pós-guerra: História da Europa desde 1945", "author": "Tony Judt", "editora": "Objetiva", "status": "unread", "noBR": false}, {"rank": 44, "title": "A quinta estação", "author": "N.K. Jemisin", "editora": "Morro Branco", "status": "unread", "noBR": false}, {"rank": 45, "title": "Argonautas", "author": "Maggie Nelson", "editora": "Autêntica", "status": "unread", "noBR": false}, {"rank": 46, "title": "O pintassilgo", "author": "Donna Tartt", "editora": "Companhia das Letras", "status": "read", "noBR": false}, {"rank": 47, "title": "Compaixão", "author": "Toni Morrison", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 48, "title": "Persépolis", "author": "Marjane Satrapi", "editora": "Quadrinhos na Cia", "status": "read", "noBR": false}, {"rank": 49, "title": "A vegetariana", "author": "Han Kang", "editora": "Todavia", "status": "unread", "noBR": false}, {"rank": 50, "title": "Confiança", "author": "Hernan Diaz", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 51, "title": "O fio da vida", "author": "Kate Atkinson", "editora": "Globo Livros", "status": "unread", "noBR": false}, {"rank": 52, "title": "Sonhos de trem", "author": "Denis Johnson", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 53, "title": "Fugitiva", "author": "Alice Munro", "editora": "Biblioteca Azul", "status": "unread", "noBR": false}, {"rank": 54, "title": "Dez de dezembro", "author": "George Saunders", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 55, "title": "O vulto das torres", "author": "Lawrence Wright", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 56, "title": "Os lança-chamas", "author": "Rachel Kushner", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 57, "title": "Nickel and Dimed", "author": "Barbara Ehrenreich", "editora": "Metropolitan Books", "status": "unread", "noBR": true}, {"rank": 58, "title": "Stay True", "author": "Hua Hsu", "editora": "Doubleday Books", "status": "unread", "noBR": true}, {"rank": 59, "title": "Middlesex", "author": "Jeffrey Eugenides", "editora": "Companhia das Letras", "status": "read", "noBR": false}, {"rank": 60, "title": "Pesado", "author": "Kiese Laymon", "editora": "Dublinense", "status": "unread", "noBR": false}, {"rank": 61, "title": "Demon Copperhead", "author": "Barbara Kingsolver", "editora": "HarperCollins", "status": "unread", "noBR": false}, {"rank": 62, "title": "10:04", "author": "Ben Lerner", "editora": "Rocco", "status": "unread", "noBR": true}, {"rank": 63, "title": "Veronica", "author": "Mary Gaitskill", "editora": "Serpent's Tail", "status": "unread", "noBR": true}, {"rank": 64, "title": "The Great Believers", "author": "Rebecca Makkai", "editora": "Penguin Books", "status": "unread", "noBR": true}, {"rank": 65, "title": "Complô contra a América", "author": "Philip Roth", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 66, "title": "We the Animals", "author": "Justin Torres", "editora": "Mariner Books", "status": "unread", "noBR": true}, {"rank": 67, "title": "Longe da árvore", "author": "Andrew Solomon", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 68, "title": "O amigo", "author": "Sigrid Nunez", "editora": "Instante", "status": "unread", "noBR": false}, {"rank": 69, "title": "A nova segregação", "author": "Michelle Alexander", "editora": "Boitempo", "status": "unread", "noBR": false}, {"rank": 70, "title": "All Aunt Hagar's Children", "author": "Edward P. Jones", "editora": "Amistad", "status": "unread", "noBR": true}, {"rank": 71, "title": "Trilogia de Copenhague", "author": "Tove Ditlevsen", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 72, "title": "O fim do homem soviético", "author": "Svetlana Aleksiévitch", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 73, "title": "The Passage of Power", "author": "Robert Caro", "editora": "Vintage", "status": "unread", "noBR": true}, {"rank": 74, "title": "Olive Kitteridge", "author": "Elizabeth Strout", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 75, "title": "Passagem para o Ocidente", "author": "Mohsin Hamid", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 76, "title": "Amanhã, amanhã, e ainda outro amanhã", "author": "Gabrielle Zevin", "editora": "Rocco", "status": "unread", "noBR": false}, {"rank": 77, "title": "Um casamento americano", "author": "Tayari Jones", "editora": "Arqueiro", "status": "unread", "noBR": false}, {"rank": 78, "title": "Septology", "author": "Jon Fosse", "editora": "Transit Books", "status": "unread", "noBR": true}, {"rank": 79, "title": "Manual da faxineira", "author": "Lucia Berlin", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 80, "title": "História da menina perdida", "author": "Elena Ferrante", "editora": "Biblioteca Azul", "status": "unread", "noBR": false}, {"rank": 81, "title": "Pulphead", "author": "John Jeremiah Sullivan", "editora": "Companhia das Letras", "status": "unread", "noBR": true}, {"rank": 82, "title": "Temporada de furacões", "author": "Fernanda Melchor", "editora": "Mundaréu", "status": "unread", "noBR": false}, {"rank": 83, "title": "Quando deixamos de entender o mundo", "author": "Benjamín Labatut", "editora": "Todavia", "status": "unread", "noBR": false}, {"rank": 84, "title": "O imperador de todos os males", "author": "Siddhartha Mukherjee", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 85, "title": "Pastoralia", "author": "George Saunders", "editora": "Riverhead Books", "status": "unread", "noBR": true}, {"rank": 86, "title": "Frederick Douglass: Prophet of Freedom", "author": "David W. Blight", "editora": "Simon & Schuster", "status": "unread", "noBR": true}, {"rank": 87, "title": "Destransição, baby", "author": "Torrey Peters", "editora": "Tordesilhas", "status": "unread", "noBR": false}, {"rank": 88, "title": "The Collected Stories of Lydia Davis", "author": "Lydia Davis", "editora": "Picador USA", "status": "unread", "noBR": true}, {"rank": 89, "title": "O retorno", "author": "Hisham Matar", "editora": "jiné", "status": "unread", "noBR": false}, {"rank": 90, "title": "O simpatizante", "author": "Viet Thanh Nguyen", "editora": "Alfaguara", "status": "unread", "noBR": false}, {"rank": 91, "title": "A marca humana", "author": "Philip Roth", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 92, "title": "Dias de abandono", "author": "Elena Ferrante", "editora": "Biblioteca Azul", "status": "unread", "noBR": false}, {"rank": 93, "title": "Estação Onze", "author": "Emily St. John Mandel", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 94, "title": "Sobre a beleza", "author": "Zadie Smith", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 95, "title": "Tragam os corpos", "author": "Hilary Mantel", "editora": "Todavia", "status": "unread", "noBR": false}, {"rank": 96, "title": "Vidas rebeldes, belos experimentos", "author": "Saidiya Hartman", "editora": "Fósforo", "status": "unread", "noBR": false}, {"rank": 97, "title": "Men We Reaped", "author": "Jesmyn Ward", "editora": "Bloomsbury USA", "status": "unread", "noBR": true}, {"rank": 98, "title": "Bel Canto", "author": "Ann Patchett", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 99, "title": "Como ser as duas coisas", "author": "Ali Smith", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 100, "title": "Árvore de fumaça", "author": "Denis Johnson", "editora": "Companhia das Letras", "status": "unread", "noBR": false}],
+  leitores: [{"rank": 1, "title": "Demon Copperhead", "author": "Barbara Kingsolver", "editora": "HarperCollins", "status": "unread", "noBR": false}, {"rank": 2, "title": "Toda a luz que não podemos ver", "author": "Anthony Doerr", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 3, "title": "Um cavalheiro em Moscou", "author": "Amor Towles", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 4, "title": "O pintassilgo", "author": "Donna Tartt", "editora": "Companhia das Letras", "status": "read", "noBR": false}, {"rank": 5, "title": "Pachinko", "author": "Min Jin Lee", "editora": "Intrínseca", "status": "read", "noBR": false}, {"rank": 6, "title": "Educated", "author": "Tara Westover", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 7, "title": "Amanhã, amanhã, e ainda outro amanhã", "author": "Gabrielle Zevin", "editora": "Rocco", "status": "unread", "noBR": false}, {"rank": 8, "title": "Não me abandone jamais", "author": "Kazuo Ishiguro", "editora": "Companhia das Letras", "status": "read", "noBR": false}, {"rank": 9, "title": "A amiga genial", "author": "Elena Ferrante", "editora": "Biblioteca Azul", "status": "read", "noBR": false}, {"rank": 10, "title": "Estação Onze", "author": "Emily St. John Mandel", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 11, "title": "Uma vida pequena", "author": "Hanya Yanagihara", "editora": "Intrínseca", "status": "read", "noBR": false}, {"rank": 12, "title": "The Overstory", "author": "Richard Powers", "editora": "W. W. Norton & Company", "status": "unread", "noBR": true}, {"rank": 13, "title": "Os caminhos para a liberdade", "author": "Colson Whitehead", "editora": "HarperCollins", "status": "unread", "noBR": false}, {"rank": 14, "title": "Wolf Hall", "author": "Hilary Mantel", "editora": "Todavia", "status": "unread", "noBR": false}, {"rank": 15, "title": "A estrada", "author": "Cormac McCarthy", "editora": "Alfaguara", "status": "read", "noBR": false}, {"rank": 16, "title": "Reparação", "author": "Ian McEwan", "editora": "Companhia das Letras", "status": "read", "noBR": false}, {"rank": 17, "title": "Lincoln no limbo", "author": "George Saunders", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 18, "title": "As incríveis aventuras de Kavalier e Clay", "author": "Michael Chabon", "editora": "Record", "status": "unread", "noBR": false}, {"rank": 19, "title": "Americanah", "author": "Chimamanda Ngozi Adichie", "editora": "Companhia das Letras", "status": "read", "noBR": false}, {"rank": 20, "title": "Middlesex", "author": "Jeffrey Eugenides", "editora": "Companhia das Letras", "status": "read", "noBR": false}, {"rank": 21, "title": "O caminho de casa", "author": "Yaa Gyasi", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 22, "title": "Hamnet", "author": "Maggie O'Farrell", "editora": "Companhia das Letras", "status": "reading", "noBR": false}, {"rank": 23, "title": "The Warmth of Other Suns", "author": "Isabel Wilkerson", "editora": "Vintage Books", "status": "unread", "noBR": true}, {"rank": 24, "title": "Bel Canto", "author": "Ann Patchett", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 25, "title": "Gilead", "author": "Marilynne Robinson", "editora": "Edições Vida Nova", "status": "unread", "noBR": false}, {"rank": 26, "title": "As correções", "author": "Jonathan Franzen", "editora": "Companhia das Letras", "status": "read", "noBR": false}, {"rank": 27, "title": "Pessoas normais", "author": "Sally Rooney", "editora": "Companhia das Letras", "status": "read", "noBR": false}, {"rank": 28, "title": "Say Nothing", "author": "Patrick Radden Keefe", "editora": "William Collins", "status": "unread", "noBR": true}, {"rank": 29, "title": "A visita cruel do tempo", "author": "Jennifer Egan", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 30, "title": "O pacto da água", "author": "Abraham Verghese", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 31, "title": "Circe", "author": "Madeline Miller", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 32, "title": "Cidade nas nuvens", "author": "Anthony Doerr", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 33, "title": "A menina que roubava livros", "author": "Markus Zusak", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 34, "title": "Atlas de nuvens", "author": "David Mitchell", "editora": "Companhia das Letras", "status": "read", "noBR": false}, {"rank": 35, "title": "O décimo primeiro mandamento", "author": "Abraham Verghese", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 36, "title": "O ano do pensamento mágico", "author": "Joan Didion", "editora": "HarperCollins", "status": "unread", "noBR": false}, {"rank": 37, "title": "O reformatório Nickel", "author": "Colson Whitehead", "editora": "HarperCollins", "status": "unread", "noBR": false}, {"rank": 38, "title": "Os otimistas", "author": "Rebecca Makkai", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 39, "title": "O caçador de pipas", "author": "Khaled Hosseini", "editora": "Nova Fronteira", "status": "unread", "noBR": false}, {"rank": 40, "title": "Olive Kitteridge", "author": "Elizabeth Strout", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 41, "title": "O fio da vida", "author": "Kate Atkinson", "editora": "Globo Livros", "status": "unread", "noBR": false}, {"rank": 42, "title": "A fantástica vida breve de Oscar Wao", "author": "Junot Díaz", "editora": "Record", "status": "unread", "noBR": false}, {"rank": 43, "title": "Entre o mundo e eu", "author": "Ta-Nehisi Coates", "editora": "Objetiva", "status": "unread", "noBR": false}, {"rank": 44, "title": "The Heaven and Earth Grocery Store", "author": "James McBride", "editora": "Riverhead Books", "status": "unread", "noBR": true}, {"rank": 45, "title": "Lá não existe lá", "author": "Tommy Orange", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 46, "title": "A canção de Aquiles", "author": "Madeline Miller", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 47, "title": "Uma questão de química", "author": "Bonnie Garmus", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 48, "title": "Sobre a terra somos belos por um instante", "author": "Ocean Vuong", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 49, "title": "Garota exemplar", "author": "Gillian Flynn", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 50, "title": "James", "author": "Percival Everett", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 51, "title": "Casta", "author": "Isabel Wilkerson", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 52, "title": "O rouxinol", "author": "Kristin Hannah", "editora": "Arqueiro", "status": "unread", "noBR": false}, {"rank": 53, "title": "Confiança", "author": "Hernan Diaz", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 54, "title": "Novembro de 63", "author": "Stephen King", "editora": "Suma", "status": "unread", "noBR": false}, {"rank": 55, "title": "A maravilhosa trama das coisas", "author": "Robin Wall Kimmerer", "editora": "Editora Globo", "status": "unread", "noBR": false}, {"rank": 56, "title": "Jogos vorazes", "author": "Suzanne Collins", "editora": "Rocco", "status": "unread", "noBR": false}, {"rank": 57, "title": "Pequenas coisas como estas", "author": "Claire Keegan", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 58, "title": "Dentes brancos", "author": "Zadie Smith", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 59, "title": "Um lugar bem longe daqui", "author": "Delia Owens", "editora": "Record", "status": "unread", "noBR": false}, {"rank": 60, "title": "A casa holandesa", "author": "Ann Patchett", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 61, "title": "North Woods", "author": "Daniel Mason", "editora": "Random House", "status": "unread", "noBR": true}, {"rank": 62, "title": "O simpatizante", "author": "Viet Thanh Nguyen", "editora": "Alfaguara", "status": "unread", "noBR": false}, {"rank": 63, "title": "A quinta estação", "author": "N.K. Jemisin", "editora": "Morro Branco", "status": "unread", "noBR": false}, {"rank": 64, "title": "2666", "author": "Roberto Bolaño", "editora": "Companhia das Letras", "status": "read", "noBR": false}, {"rank": 65, "title": "Evicted", "author": "Matthew Desmond", "editora": "Crown", "status": "unread", "noBR": true}, {"rank": 66, "title": "Só garotos", "author": "Patti Smith", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 67, "title": "Piranesi", "author": "Susanna Clarke", "editora": "Intrínseca", "status": "read", "noBR": false}, {"rank": 68, "title": "O demônio na cidade branca", "author": "Erik Larson", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 69, "title": "Assassinos da lua das flores", "author": "David Grann", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 70, "title": "Eu tenho um nome", "author": "Chanel Miller", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 71, "title": "Sing, Unburied, Sing", "author": "Jesmyn Ward", "editora": "Scribner", "status": "unread", "noBR": true}, {"rank": 72, "title": "Aos prantos no mercado", "author": "Michelle Zauner", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 73, "title": "Harry Potter e as Relíquias da Morte", "author": "J.K. Rowling", "editora": "Rocco", "status": "read", "noBR": false}, {"rank": 74, "title": "Klara e o sol", "author": "Kazuo Ishiguro", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 75, "title": "A estrada Lincoln", "author": "Amor Towles", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 76, "title": "Compaixão (Just Mercy)", "author": "Bryan Stevenson", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 77, "title": "Sapiens", "author": "Yuval Noah Harari", "editora": "L&PM", "status": "unread", "noBR": false}, {"rank": 78, "title": "Kafka à beira-mar", "author": "Haruki Murakami", "editora": "Alfaguara", "status": "unread", "noBR": false}, {"rank": 79, "title": "1Q84", "author": "Haruki Murakami", "editora": "Alfaguara", "status": "unread", "noBR": false}, {"rank": 80, "title": "Diácono King Kong", "author": "James McBride", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 81, "title": "A vida imortal de Henrietta Lacks", "author": "Rebecca Skloot", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 82, "title": "Tom Lake", "author": "Ann Patchett", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 83, "title": "Deixe o grande mundo girar", "author": "Colum McCann", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 84, "title": "Dez de dezembro", "author": "George Saunders", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 85, "title": "O último sopro de vida", "author": "Paul Kalanithi", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 86, "title": "As aventuras de Pi", "author": "Yann Martel", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 87, "title": "Garota, mulher, outras", "author": "Bernardine Evaristo", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 88, "title": "Complô contra a América", "author": "Philip Roth", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 89, "title": "O castelo de vidro", "author": "Jeannette Walls", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 90, "title": "Na casa dos sonhos", "author": "Carmen Maria Machado", "editora": "Fósforo", "status": "unread", "noBR": false}, {"rank": 91, "title": "Devoradores de estrelas", "author": "Andy Weir", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 92, "title": "Sobre os ossos dos mortos", "author": "Olga Tokarczuk", "editora": "Todavia", "status": "unread", "noBR": false}, {"rank": 93, "title": "Criaturas extraordinariamente brilhantes", "author": "Shelby Van Pelt", "editora": "Intrínseca", "status": "unread", "noBR": false}, {"rank": 94, "title": "The Bee Sting", "author": "Paul Murray", "editora": "—", "status": "unread", "noBR": true}, {"rank": 95, "title": "A cidade do sol", "author": "Khaled Hosseini", "editora": "Nova Fronteira", "status": "unread", "noBR": false}, {"rank": 96, "title": "A metade perdida", "author": "Brit Bennett", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 97, "title": "Meu ano de descanso e relaxamento", "author": "Ottessa Moshfegh", "editora": "Todavia", "status": "unread", "noBR": false}, {"rank": 98, "title": "A história de Shuggie Bain", "author": "Douglas Stuart", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 99, "title": "Império da dor", "author": "Patrick Radden Keefe", "editora": "Companhia das Letras", "status": "unread", "noBR": false}, {"rank": 100, "title": "Um homem chamado Ove", "author": "Fredrik Backman", "editora": "Arqueiro", "status": "read", "noBR": false}],
+};
+
+// ── Estado NYT ────────────────────────────────────────────────────────────
+let _nytTab     = 'oficial'; // 'oficial' | 'leitores'
+let _nytFilter  = 'all';
+let _nytView    = 'grid';   // 'grid' | 'list'
+let _nytState   = {         // status e avaliações salvas pelo usuário
+  oficial:  {},
+  leitores: {},
+};
+let _nytDetailBook   = null;
+let _nytDetailRating = 0;
+let _nytDetailStatus = 'unread';
+
+// ── Persistência NYT no Firestore ────────────────────────────────────────
+let _nytCol = null; // definido após login
+let _unsubNyt = null;
+
+function _initNytFirestore(uid) {
+  _nytCol = doc(db, 'usuarios', uid, 'config', 'nytState');
+  // Listener em tempo real
+  if (_unsubNyt) _unsubNyt();
+  _unsubNyt = onSnapshot(_nytCol, snap => {
+    if (snap.exists()) {
+      const d = snap.data();
+      if (d.oficial)  _nytState.oficial  = d.oficial;
+      if (d.leitores) _nytState.leitores = d.leitores;
+      // Re-render se aba ativa
+      if (document.getElementById('desafiosPane')?.style.display !== 'none') {
+        renderDesafiosHero();
+        renderNytList();
+      }
+    }
+  }, err => console.warn('nytState listener:', err));
+}
+
+async function _saveNytState() {
+  if (!_nytCol) return;
+  try {
+    await setDoc(_nytCol, {
+      oficial:  _nytState.oficial  || {},
+      leitores: _nytState.leitores || {},
+      updatedAt: Date.now(),
+    });
+  } catch(e) { console.warn('NYT save error:', e); }
+}
+
+// _loadNytState é substituída pelo listener acima — mantida como no-op por compatibilidade
+function _loadNytState() {}
+// Sem chamada inicial — o listener cuida disso
+
+// ── Helper: dados combinados (base + estado salvo) ────────────────────────
+function _nytBooks(tab) {
+  const base  = NYT_DATA[tab];
+  const state = _nytState[tab] || {};
+  return base.map(b => ({
+    ...b,
+    status:  state[b.rank]?.status  ?? b.status,
+    rating:  state[b.rank]?.rating  ?? null,
+    notes:   state[b.rank]?.notes   ?? '',
+    wantPriority: state[b.rank]?.wantPriority ?? false,
+  }));
+}
+
+// ── Match com diário ──────────────────────────────────────────────────────
+function _matchDiary(nytBook) {
+  const tl = nytBook.title.toLowerCase();
+  return books.find(b =>
+    b.title.toLowerCase() === tl ||
+    b.title.toLowerCase().includes(tl.substring(0, Math.min(tl.length, 25))) ||
+    tl.includes(b.title.toLowerCase().substring(0, Math.min(b.title.length, 25)))
+  ) || null;
+}
+
+// ── switchNytTab ──────────────────────────────────────────────────────────
+window.switchNytTab = function(tab) {
+  _nytTab = tab;
+  document.getElementById('subtab-oficial').classList.toggle('active',  tab==='oficial');
+  document.getElementById('subtab-leitores').classList.toggle('active', tab==='leitores');
+  _nytFilter = 'all';
+  document.querySelectorAll('.desafios-filter-btn').forEach(b => b.classList.toggle('active', b.dataset.filter==='all'));
+  document.getElementById('nytSearch').value = '';
+  renderDesafiosHero();
+  renderNytList();
+};
+
+// ── setNytFilter ──────────────────────────────────────────────────────────
+window.setNytFilter = function(f) {
+  _nytFilter = f;
+  document.querySelectorAll('.desafios-filter-btn').forEach(b => b.classList.toggle('active', b.dataset.filter===f));
+  renderNytList();
+};
+
+// ── setNytView ────────────────────────────────────────────────────────────
+window.setNytView = function(v) {
+  _nytView = v;
+  document.getElementById('nytViewGrid').classList.toggle('active', v==='grid');
+  document.getElementById('nytViewList').classList.toggle('active', v==='list');
+  renderNytList();
+};
+
+// ── Hero com stats ────────────────────────────────────────────────────────
+function renderDesafiosHero() {
+  const hero = document.getElementById('desafiosHero'); if (!hero) return;
+  const tabs = [
+    { id:'oficial',  label:'Críticos', total:100 },
+    { id:'leitores', label:'Leitores', total:100 },
+  ];
+  let html = '<div class="desafios-hero-top"><div class="desafios-title-block">' +
+    '<span class="desafios-subtitle">✦ Desafio de leitura</span>' +
+    '<h2>NYT 100 Melhores Livros<br>do Século XXI</h2>' +
+    '<p>The New York Times · 2024 · Críticos, escritores e leitores</p>' +
+    '</div>';
+  html += '<div style="display:flex;gap:1.4rem;">';
+  tabs.forEach(t => {
+    const bks   = _nytBooks(t.id);
+    const read  = bks.filter(b=>b.status==='read').length;
+    const rdng  = bks.filter(b=>b.status==='reading').length;
+    const want  = bks.filter(b=>b.status==='want').length;
+    const pct   = Math.round(read / t.total * 100);
+    html += '<div style="min-width:140px">' +
+      '<span style="font-size:.55rem;letter-spacing:.2em;text-transform:uppercase;color:var(--stone-light);display:block;margin-bottom:.4rem">' + t.label + '</span>' +
+      '<div class="desafios-progress-row">' +
+        '<div class="desafios-progress-bar-bg" style="flex:1"><div class="desafios-progress-bar-fill" style="width:'+pct+'%"></div></div>' +
+        '<span class="desafios-progress-pct">'+read+'/'+t.total+'</span>' +
+      '</div>' +
+      '<div class="desafios-stats-row" style="margin-top:.5rem">' +
+        '<div class="desafios-stat"><span class="desafios-stat-num">'+read+'</span><span class="desafios-stat-lbl">Lidos</span></div>' +
+        (rdng ? '<div class="desafios-stat"><span class="desafios-stat-num">'+rdng+'</span><span class="desafios-stat-lbl">Lendo</span></div>' : '') +
+        (want ? '<div class="desafios-stat"><span class="desafios-stat-num">'+want+'</span><span class="desafios-stat-lbl">Na fila</span></div>' : '') +
+        '<div class="desafios-stat"><span class="desafios-stat-num" style="font-size:1.2rem">'+pct+'%</span><span class="desafios-stat-lbl">Concluído</span></div>' +
+      '</div></div>';
+  });
+  html += '</div></div>';
+  hero.innerHTML = html;
+}
+
+// ── renderNytList ─────────────────────────────────────────────────────────
+window.renderNytList = function() {
+  const el = document.getElementById('nytContent'); if (!el) return;
+  const search = (document.getElementById('nytSearch').value || '').toLowerCase().trim();
+  let bks = _nytBooks(_nytTab);
+
+  // Filtros
+  if (_nytFilter === 'read')    bks = bks.filter(b=>b.status==='read');
+  else if (_nytFilter === 'reading') bks = bks.filter(b=>b.status==='reading');
+  else if (_nytFilter === 'want')    bks = bks.filter(b=>b.status==='want');
+  else if (_nytFilter === 'unread')  bks = bks.filter(b=>b.status==='unread');
+  else if (_nytFilter === 'no-br')   bks = bks.filter(b=>b.noBR);
+
+  if (search) bks = bks.filter(b=>
+    b.title.toLowerCase().includes(search) ||
+    b.author.toLowerCase().includes(search)
+  );
+
+  if (_nytView === 'grid') _renderNytGrid(bks);
+  else _renderNytListView(bks);
+};
+
+// ── Grade 10×10 ───────────────────────────────────────────────────────────
+function _renderNytGrid(bks) {
+  const el = document.getElementById('nytContent');
+  if (!bks.length) { el.innerHTML='<div class="mosaic-empty">Nenhum livro encontrado.</div>'; return; }
+
+  // Se filtrado, mostrar em grade flexível; se todos, forçar 10×10
+  const isAll = _nytFilter==='all' && !document.getElementById('nytSearch').value;
+  const gridStyle = isAll
+    ? 'grid-template-columns:repeat(10,1fr)'
+    : 'grid-template-columns:repeat(auto-fill,minmax(52px,1fr))';
+
+  el.innerHTML = '<div class="nyt-grid" style="'+gridStyle+'">' +
+    bks.map(b => {
+      const dMatch  = _matchDiary(b);
+      const cls     = 'status-' + (b.status==='unread'?'unread':b.status==='read'?'read':b.status==='reading'?'reading':'want');
+      const hasCover= dMatch && dMatch.coverUrl;
+      let inner = '';
+      if (hasCover) {
+        const safe = dMatch.coverUrl.replace(/"/g,'');
+        inner += '<img class="nyt-cell-cover" src="'+safe+'" alt="" loading="lazy">';
+        inner += '<div class="nyt-cell-overlay"></div>';
+      }
+      inner += '<span class="nyt-cell-rank">'+b.rank+'</span>';
+      if (b.status==='read')    inner += '<span class="nyt-cell-check">✓</span>';
+      if (b.status==='reading') inner += '<span class="nyt-cell-check">▶</span>';
+      if (b.status==='want')    inner += '<span class="nyt-cell-check">♡</span>';
+      return '<div class="nyt-cell '+cls+(b.noBR?' no-br':'')+'" title="'+esc(b.rank)+'. '+esc(b.title)+'\n'+esc(b.author)+'" onclick="window.openNytDetail('+b.rank+')">'+inner+'</div>';
+    }).join('') +
+  '</div>';
+}
+
+// ── Lista detalhada ───────────────────────────────────────────────────────
+function _renderNytListView(bks) {
+  const el = document.getElementById('nytContent');
+  if (!bks.length) { el.innerHTML='<div class="mosaic-empty">Nenhum livro encontrado.</div>'; return; }
+
+  el.innerHTML = '<div class="nyt-list">' +
+    bks.map((b, i) => {
+      const dMatch = _matchDiary(b);
+      const statusLabel = {read:'✓ Lido',reading:'▶ Lendo',want:'♡ Quero ler',unread:'Não lido'}[b.status]||'Não lido';
+      const stars = b.rating ? '★'.repeat(Math.floor(b.rating))+(b.rating%1?'½':'') : '';
+      return '<div class="nyt-list-item" style="animation-delay:'+Math.min(i*.02,.3)+'s" onclick="window.openNytDetail('+b.rank+')">' +
+        '<div class="nyt-list-rank">'+b.rank+'</div>' +
+        '<div class="nyt-list-info">' +
+          '<div class="nyt-list-title">'+esc(b.title)+'</div>' +
+          '<div class="nyt-list-author">'+esc(b.author)+'</div>' +
+          '<div class="nyt-list-meta">' +
+            (b.editora ? '<span class="nyt-list-editora">'+esc(b.editora)+'</span>' : '') +
+            (b.noBR    ? '<span class="nyt-no-br-badge">sem ed. BR</span>' : '') +
+            (stars     ? '<span class="nyt-stars-mini">'+stars+'</span>' : '') +
+            (dMatch    ? '<button class="nyt-diary-link" data-did="'+dMatch.id+'" onclick="event.stopPropagation();window._openModal(this.dataset.did)">ver no diário →</button>' : '') +
+          '</div>' +
+        '</div>' +
+        '<div class="nyt-list-actions">' +
+          '<span class="nyt-status-pill '+b.status+'" onclick="event.stopPropagation();window.openNytDetail('+b.rank+')">'+statusLabel+'</span>' +
+        '</div>' +
+      '</div>';
+    }).join('') +
+  '</div>';
+}
+
+// ── Modal detalhe ─────────────────────────────────────────────────────────
+window.openNytDetail = function(rank) {
+  const bks  = _nytBooks(_nytTab);
+  const b    = bks.find(x=>x.rank===rank); if (!b) return;
+  _nytDetailBook   = b;
+  _nytDetailStatus = b.status;
+  _nytDetailRating = b.rating || 0;
+  const dMatch = _matchDiary(b);
+  const [c1,c2] = _genrePalette ? _genrePalette('') : ['#4a3f32','#3a3020'];
+
+  document.getElementById('nytDetailHeading').textContent = '#'+b.rank+' · '+(_nytTab==='oficial'?'Críticos':'Leitores');
+
+  let body = '<span class="nyt-detail-rank-badge">#'+b.rank+' — '+esc(b.author)+'</span>';
+  body += '<div class="nyt-detail-cover-row">';
+  if (dMatch && dMatch.coverUrl) {
+    body += '<img class="nyt-detail-cover" src="'+dMatch.coverUrl.replace(/"/g,'')+'" alt="">';
+  } else {
+    const pal = typeof _genrePalette==='function' ? _genrePalette('') : ['#4a3f32','#3a3020'];
+    body += '<div class="nyt-detail-cover-ph" style="background:linear-gradient(160deg,'+pal[0]+','+pal[1]+')">'+esc(b.title.charAt(0))+'</div>';
+  }
+  body += '<div>' +
+    '<div class="nyt-detail-title">'+esc(b.title)+'</div>' +
+    '<div class="nyt-detail-author">'+esc(b.author)+'</div>' +
+    (b.editora ? '<div class="nyt-detail-editora">'+esc(b.editora)+'</div>' : '') +
+    (b.noBR ? '<div class="nyt-no-br-badge" style="display:inline-block;margin-top:.4rem">sem edição brasileira</div>' : '') +
+  '</div></div>';
+
+  // Status picker
+  const statuses = [['read','✓ Lido'],['reading','▶ Lendo'],['want','♡ Quero ler'],['unread','Ainda não']];
+  body += '<div class="nyt-status-picker">' +
+    statuses.map(([v,l])=>'<button class="nyt-status-pick-btn'+(b.status===v?' active '+v:'')+'" data-sv="'+v+'" onclick="window._nytPickStatus(this.dataset.sv)">'+l+'</button>').join('') +
+  '</div>';
+
+  // Avaliação
+  body += '<div class="nyt-rating-row"><span style="font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--stone-light)">Avaliação</span>' +
+    '<div class="nyt-rating-stars" id="nytRatingStars">' +
+    [1,2,3,4,5].map(n=>'<span data-v="'+n+'" onclick="window._nytPickRating('+n+')" class="'+((_nytDetailRating>=n)?'on':'')+'">★</span>').join('') +
+    '</div>' +
+    '<span id="nytRatingVal" style="font-size:.72rem;color:var(--stone-light);font-style:italic;font-family:\'Cormorant Garamond\',serif">'+(_nytDetailRating||'sem avaliação')+'</span>' +
+    '</div>';
+
+  // Notas
+  body += '<div class="form-group" style="margin-top:.6rem"><label>Notas pessoais</label>' +
+    '<textarea id="nytDetailNotes" style="min-height:58px" placeholder="Impressões, por que é especial…">'+esc(b.notes||'')+'</textarea></div>';
+
+  // Match com diário
+  if (dMatch) {
+    body += '<div class="nyt-diary-match">' +
+      '<span class="nyt-diary-match-title">✦ Encontrado no seu diário: '+esc(dMatch.title)+'</span>' +
+      (dMatch.notes ? '<div class="nyt-diary-match-notes">'+esc(dMatch.notes.substring(0,180))+(dMatch.notes.length>180?'…':'')+'</div>' : '') +
+      '<button class="nyt-diary-link" style="margin-top:.4rem;display:inline-block" data-did="'+dMatch.id+'" onclick="window.closeNytDetail();window._openModal(this.dataset.did)">Abrir no diário →</button>' +
+    '</div>';
+  } else if (b.status==='read') {
+    body += '<div style="margin-top:.6rem"><button class="btn" onclick="window._createDiaryEntry()" style="font-size:.65rem">+ Criar entrada no diário para este livro</button></div>';
+  }
+
+  document.getElementById('nytDetailBody').innerHTML = body;
+  document.getElementById('nytDetailOverlay').classList.remove('hidden');
+};
+
+window._nytPickStatus = function(v) {
+  _nytDetailStatus = v;
+  document.querySelectorAll('.nyt-status-pick-btn').forEach(b => {
+    b.className = 'nyt-status-pick-btn' + (b.dataset.status===v?' active '+v:'');
+  });
+};
+
+window._nytPickRating = function(v) {
+  _nytDetailRating = _nytDetailRating===v ? 0 : v;
+  document.querySelectorAll('#nytRatingStars span').forEach(s => {
+    s.classList.toggle('on', +s.dataset.v <= _nytDetailRating);
+  });
+  document.getElementById('nytRatingVal').textContent = _nytDetailRating || 'sem avaliação';
+};
+
+window.saveNytDetail = function() {
+  if (!_nytDetailBook) return;
+  const rank  = _nytDetailBook.rank;
+  const notes = document.getElementById('nytDetailNotes')?.value.trim() || '';
+  if (!_nytState[_nytTab]) _nytState[_nytTab] = {};
+  _nytState[_nytTab][rank] = {
+    status: _nytDetailStatus,
+    rating: _nytDetailRating,
+    notes,
+  };
+  _saveNytState();
+  window.closeNytDetail();
+  renderDesafiosHero();
+  renderNytList();
+  showToast('✓ Salvo!');
+};
+
+window.closeNytDetail = function() {
+  document.getElementById('nytDetailOverlay').classList.add('hidden');
+  _nytDetailBook = null;
+};
+
+// Criar entrada no diário a partir da lista NYT
+window._createDiaryEntry = function() {
+  if (!_nytDetailBook) return;
+  window.closeNytDetail();
+  setTimeout(() => {
+    window._openModal('', 'lido');
+    setTimeout(() => {
+      document.getElementById('fTitle').value  = _nytDetailBook.title;
+      document.getElementById('fAuthor').value = _nytDetailBook.author;
+      if (_nytDetailBook.editora) document.getElementById('fPublisher').value = _nytDetailBook.editora;
+      if (_nytDetailRating) {
+        currentRating = _nytDetailRating;
+        if (typeof updateStarUI === 'function') updateStarUI();
+      }
+    }, 100);
+  }, 200);
+};
+
+// ── Me surpreenda ─────────────────────────────────────────────────────────
+window.nytSurprise = function() {
+  const unread = _nytBooks(_nytTab).filter(b=>b.status==='unread');
+  if (!unread.length) { showToast('Todos os livros desta lista já foram lidos!'); return; }
+  const b = unread[Math.floor(Math.random()*unread.length)];
+  openNytDetail(b.rank);
+};
+
+// ── Compartilhar grade ────────────────────────────────────────────────────
+window.shareNytGrid = function() {
+  const bks = _nytBooks(_nytTab);
+  const W = 1080, ROWS = 10, COLS = 10;
+  const PAD = 48, GAP = 6, HEADER = 160;
+  const cellW = (W - PAD*2 - GAP*(COLS-1)) / COLS;
+  const cellH = cellW * 1.55;
+  const H = HEADER + ROWS*cellH + (ROWS-1)*GAP + PAD;
+
+  const cv = document.getElementById('shareGridCanvas');
+  cv.width = W; cv.height = H;
+  const ctx = cv.getContext('2d');
+
+  // Background
+  ctx.fillStyle = '#1c1814'; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle = '#b8975a'; ctx.fillRect(0,0,W,4); ctx.fillRect(0,H-4,W,4);
+
+  // Header
+  ctx.textAlign='center';
+  ctx.font='300 34px "Jost",Arial,sans-serif'; ctx.fillStyle='rgba(200,170,130,.5)';
+  ctx.letterSpacing='10px'; ctx.fillText('NYT 100 MELHORES DO SÉCULO XXI', W/2, 52);
+  ctx.letterSpacing='0px';
+  ctx.font='italic 300 22px "Georgia",serif'; ctx.fillStyle='rgba(200,170,130,.4)';
+  ctx.fillText(_nytTab==='oficial'?'Lista Críticos & Escritores':'Lista Leitores', W/2, 82);
+
+  const colors = {
+    read:    ['#6b1f2e','#8b3040'],
+    reading: ['#8a7010','#b8975a'],
+    want:    ['#2d3f52','#3d5068'],
+    unread:  ['#2a2420','#353028'],
+  };
+
+  bks.forEach((b,i) => {
+    const col = i % COLS, row = Math.floor(i/COLS);
+    const x = PAD + col*(cellW+GAP);
+    const y = HEADER + row*(cellH+GAP);
+    const [c1,c2] = colors[b.status]||colors.unread;
+    const grd = ctx.createLinearGradient(x,y,x+cellW,y+cellH);
+    grd.addColorStop(0,c1); grd.addColorStop(1,c2);
+    ctx.fillStyle=grd; ctx.fillRect(x,y,cellW,cellH);
+    // Rank
+    ctx.font='bold 9px "Jost",Arial,sans-serif'; ctx.fillStyle='rgba(255,255,255,.4)';
+    ctx.textAlign='left'; ctx.fillText(String(b.rank), x+3, y+10);
+    // Check/icon
+    if (b.status!=='unread') {
+      ctx.font='11px serif'; ctx.fillStyle='rgba(255,255,255,.75)'; ctx.textAlign='center';
+      ctx.fillText(b.status==='read'?'✓':b.status==='reading'?'▶':'♡', x+cellW/2, y+cellH/2+4);
+    }
+  });
+
+  // Stats
+  const read = bks.filter(b=>b.status==='read').length;
+  const pct  = Math.round(read/100*100);
+  ctx.textAlign='center'; ctx.font='italic 300 28px "Georgia",serif';
+  ctx.fillStyle='rgba(200,170,130,.5)';
+  ctx.fillText('Marina Risther Razzo · '+read+'/100 lidos ('+pct+'%)', W/2, H-18);
+
+  document.getElementById('shareGridOverlay').classList.remove('hidden');
+};
+window.closeShareGrid = function() { document.getElementById('shareGridOverlay').classList.add('hidden'); };
+window._downloadShareGrid = function() {
+  const a=document.createElement('a');
+  a.download='nyt100-grade.png';
+  a.href=document.getElementById('shareGridCanvas').toDataURL('image/png');
+  a.click();
+};
+
+// Click fora dos modais NYT
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('nytDetailOverlay')?.addEventListener('click', e => { if(e.target.id==='nytDetailOverlay') window.closeNytDetail(); });
+  document.getElementById('shareGridOverlay')?.addEventListener('click', e => { if(e.target.id==='shareGridOverlay') window.closeShareGrid(); });
+});
 
 // ── DARK MODE TOGGLE ──────────────────────────────────────────────────────
 (function() {
