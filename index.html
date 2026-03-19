@@ -4062,16 +4062,12 @@ window.generateBookCard = function(id) {
     document.getElementById('bookCardOverlay').classList.remove('hidden');
   };
   if (b.coverUrl) {
-    fetch(b.coverUrl)
-      .then(r => r.blob())
-      .then(blob => {
-        const blobUrl = URL.createObjectURL(blob);
-        const img = new Image();
-        img.onload = () => { drawCard(img); URL.revokeObjectURL(blobUrl); };
-        img.onerror = () => drawCard(null);
-        img.src = blobUrl;
-      })
-      .catch(() => drawCard(null));
+    const proxyUrl = 'https://images.weserv.nl/?url=' + encodeURIComponent(b.coverUrl.replace(/^https?:\/\//, ''));
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => drawCard(img);
+    img.onerror = () => drawCard(null);
+    img.src = proxyUrl;
   } else drawCard(null);
 };
 window.closeBookCardModal = function() { document.getElementById('bookCardOverlay').classList.add('hidden'); };
@@ -4255,16 +4251,12 @@ window._generateWrappedCard = function(year) {
   };
 
   if (fav.coverUrl) {
-    fetch(fav.coverUrl)
-      .then(r => r.blob())
-      .then(blob => {
-        const blobUrl = URL.createObjectURL(blob);
-        const img = new Image();
-        img.onload = () => { drawFav(img); URL.revokeObjectURL(blobUrl); };
-        img.onerror = () => drawFav(null);
-        img.src = blobUrl;
-      })
-      .catch(() => drawFav(null));
+    const proxyUrl = 'https://images.weserv.nl/?url=' + encodeURIComponent(fav.coverUrl.replace(/^https?:\/\//, ''));
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => drawFav(img);
+    img.onerror = () => drawFav(null);
+    img.src = proxyUrl;
   } else drawFav(null);
 };
 function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();}
