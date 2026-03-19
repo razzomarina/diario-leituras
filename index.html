@@ -1601,6 +1601,43 @@ body.dark .nyt-list-item:hover { background:var(--cream-dark); }
 .story-style-btn:hover:not(.active), .story-fmt-btn:hover:not(.active) {
   border-color: var(--wine); color: var(--wine);
 }
+
+/* ── Quote filters ── */
+.quote-filters {
+  display: flex; gap: .5rem; align-items: center; flex-wrap: wrap;
+  margin-top: .7rem; padding-top: .7rem;
+  border-top: 1px solid var(--border);
+}
+.quote-filter-select {
+  padding: .3rem .65rem; border: 1px solid var(--border-strong);
+  background: white; border-radius: 2px; font-family: 'Jost', sans-serif;
+  font-size: .65rem; letter-spacing: .06em; color: var(--ink);
+  cursor: pointer; transition: border-color .15s;
+}
+.quote-filter-select:focus { outline: none; border-color: var(--wine); }
+.quote-filter-label {
+  font-family: 'Jost', sans-serif; font-size: .6rem;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--stone-light);
+}
+body.dark .quote-filter-select { background: var(--cream-mid); color: var(--ink); }
+
+/* ── Quote surprise modal ── */
+.quote-surprise-card {
+  background: var(--cream-mid); border-left: 3px solid var(--wine);
+  padding: 1.6rem 1.8rem; border-radius: 0;
+}
+.quote-surprise-text {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.35rem;
+  font-style: italic; color: var(--ink); line-height: 1.6;
+  margin-bottom: 1rem;
+}
+.quote-surprise-source {
+  font-family: 'Libre Baskerville', serif; font-size: .78rem;
+  font-style: italic; color: var(--stone); margin-bottom: .35rem;
+}
+.quote-surprise-page {
+  font-size: .7rem; color: var(--stone-light);
+}
 </style>
 </head>
 <body>
@@ -1807,6 +1844,25 @@ body.dark .nyt-list-item:hover { background:var(--cream-dark); }
           Nova citação
         </button>
       </div>
+    </div>
+    <!-- Filtros -->
+    <div class="quote-filters">
+      <span class="quote-filter-label">Filtrar</span>
+      <select class="quote-filter-select" id="quoteFilterBook" onchange="window._applyQuoteFilters()">
+        <option value="">Todos os livros</option>
+      </select>
+      <select class="quote-filter-select" id="quoteFilterAuthor" onchange="window._applyQuoteFilters()">
+        <option value="">Todos os autores</option>
+      </select>
+      <span class="quote-filter-label" style="margin-left:.3rem">Ordenar</span>
+      <select class="quote-filter-select" id="quoteSort" onchange="window._applyQuoteFilters()">
+        <option value="recent">Mais recentes</option>
+        <option value="book">Por livro</option>
+        <option value="random">Aleatória</option>
+      </select>
+      <button class="btn" style="margin-left:auto" onclick="window._surpriseQuote()" title="Citação aleatória em destaque">
+        ✦ Me surpreenda
+      </button>
     </div>
     <div class="quote-count" id="quoteCount"></div>
     <div id="quotesList" style="margin-top:1rem;"></div>
@@ -2233,6 +2289,30 @@ body.dark .nyt-list-item:hover { background:var(--cream-dark); }
     <div class="modal-footer">
       <button class="btn" onclick="window.closeShuffleModal()">Fechar</button>
       <button class="btn btn-gold" onclick="window._startReading()">Começar a ler</button>
+    </div>
+  </div>
+</div>
+
+<!-- QUOTE SURPRISE MODAL -->
+<div class="modal-overlay hidden" id="quoteSurpriseOverlay">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-header">
+      <h2>✦ Citação sorteada</h2>
+      <button class="modal-close" onclick="document.getElementById('quoteSurpriseOverlay').classList.add('hidden')">×</button>
+    </div>
+    <div class="modal-body">
+      <div id="quoteSurpriseCard" class="quote-surprise-card"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="document.getElementById('quoteSurpriseOverlay').classList.add('hidden')">Fechar</button>
+      <button class="btn" onclick="window._surpriseQuote()" style="gap:.35rem">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+        Outra
+      </button>
+      <button class="btn btn-gold" id="quoteSurpriseStoryBtn">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="14" height="14"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        Gerar post
+      </button>
     </div>
   </div>
 </div>
@@ -3168,43 +3248,99 @@ function renderCharts() {
 // ── MELHORIA 3: Quotes com busca ──────────────────────────
 window._filterQuotes = function(v) { quoteSearchTerm = v.trim().toLowerCase(); renderQuotes(); };
 
-function renderQuotes() {
-  const list = document.getElementById('quotesList'); if (!list) return;
-  const filtered = quoteSearchTerm
-    ? quotes.filter(q =>
-        q.text.toLowerCase().includes(quoteSearchTerm) ||
-        (q.book||'').toLowerCase().includes(quoteSearchTerm) ||
-        (q.author||'').toLowerCase().includes(quoteSearchTerm)
-      )
-    : quotes;
-  const sorted = [...filtered].sort((a, b) => (b.addedAt||0) - (a.addedAt||0));
-  window._quotesForStory = sorted;
+// Popula os selects de livro e autor com base nas citações existentes
+window._populateQuoteFilters = function() {
+  const books   = [...new Set(quotes.map(q => q.book).filter(Boolean))].sort();
+  const authors = [...new Set(quotes.map(q => q.author).filter(Boolean))].sort();
+  const bkEl = document.getElementById('quoteFilterBook');
+  const auEl = document.getElementById('quoteFilterAuthor');
+  if (!bkEl || !auEl) return;
+  const bkVal = bkEl.value; const auVal = auEl.value;
+  bkEl.innerHTML = '<option value="">Todos os livros</option>' +
+    books.map(b => '<option value="' + b.replace(/"/g,'&quot;') + '"' + (b===bkVal?' selected':'') + '>' + b + '</option>').join('');
+  auEl.innerHTML = '<option value="">Todos os autores</option>' +
+    authors.map(a => '<option value="' + a.replace(/"/g,'&quot;') + '"' + (a===auVal?' selected':'') + '>' + a + '</option>').join('');
+};
+
+window._applyQuoteFilters = function() {
+  const bk   = (document.getElementById('quoteFilterBook')?.value   || '').toLowerCase();
+  const au   = (document.getElementById('quoteFilterAuthor')?.value || '').toLowerCase();
+  const sort = document.getElementById('quoteSort')?.value || 'recent';
+  const search = quoteSearchTerm;
+
+  let filtered = quotes.filter(q => {
+    if (search && !q.text.toLowerCase().includes(search) &&
+        !(q.book||'').toLowerCase().includes(search) &&
+        !(q.author||'').toLowerCase().includes(search)) return false;
+    if (bk && (q.book||'').toLowerCase() !== bk) return false;
+    if (au && (q.author||'').toLowerCase() !== au) return false;
+    return true;
+  });
+
+  if (sort === 'recent') filtered.sort((a,b) => (b.addedAt||0)-(a.addedAt||0));
+  else if (sort === 'book') filtered.sort((a,b) => (a.book||'').localeCompare(b.book||''));
+  else if (sort === 'random') filtered.sort(() => Math.random()-.5);
+
+  window._quotesForStory = filtered;
   const countEl = document.getElementById('quoteCount');
-  if (countEl) countEl.innerHTML = sorted.length + ' citaç' + (sorted.length === 1 ? 'ão' : 'ões') + (quoteSearchTerm ? ' para "' + esc(quoteSearchTerm) + '"' : '');
-  if (!sorted.length) {
-    list.innerHTML = '<div class="no-quotes">' + (quoteSearchTerm ? 'Nenhuma citação encontrada para "' + esc(quoteSearchTerm) + '".' : 'Nenhuma citação ainda.<br>Adicione frases que te marcaram.') + '</div>';
-    return;
+  if (countEl) countEl.innerHTML = filtered.length + ' citaç' + (filtered.length===1?'ão':'ões');
+
+  const list = document.getElementById('quotesList'); if (!list) return;
+  if (!filtered.length) {
+    list.innerHTML = '<div class="no-quotes">Nenhuma citação encontrada.</div>'; return;
   }
-  const cards = sorted.map(function(q, i) {
-    const src = (q.book ? esc(q.book) : '') + (q.author ? ' — ' + esc(q.author) : '') + (q.page ? ', p.' + esc(q.page) : '');
+  const cards = filtered.map(function(q, i) {
+    const src = (q.book ? q.book : '') + (q.author ? ' — ' + q.author : '') + (q.page ? ', p.' + q.page : '');
     const d = document.createElement('div');
     d.className = 'quote-card';
-    d.style.animationDelay = Math.min(i * .04, .35) + 's';
+    d.style.animationDelay = Math.min(i*.04,.35)+'s';
     d.innerHTML =
       '<div class="quote-text">' + esc(q.text) + '</div>' +
-      '<div class="quote-source">' + src + '</div>' +
+      '<div class="quote-source">' + esc(src) + '</div>' +
       '<div class="quote-card-actions">' +
         '<button class="quote-story-btn" data-idx="' + i + '">✨ Gerar story</button>' +
         '<button class="quote-del" data-id="' + q.id + '">remover</button>' +
       '</div>';
+    d.querySelector('.quote-story-btn').addEventListener('click', function() { window._generateStory(+this.dataset.idx); });
+    d.querySelector('.quote-del').addEventListener('click', function() { window._deleteQuote(this.dataset.id); });
+    list.appendChild(d);
     return d;
   });
   list.innerHTML = '';
-  cards.forEach(function(card) {
-    list.appendChild(card);
-    card.querySelector('.quote-story-btn').addEventListener('click', function() { window._generateStory(+this.dataset.idx); });
-    card.querySelector('.quote-del').addEventListener('click', function() { window._deleteQuote(this.dataset.id); });
-  });
+  cards.forEach(c => list.appendChild(c));
+};
+
+// Citação surpresa
+window._surpriseQuote = function() {
+  if (!quotes.length) { window.showToast('Nenhuma citação cadastrada ainda.'); return; }
+  const q = quotes[Math.floor(Math.random()*quotes.length)];
+  const src = (q.book||'') + (q.author ? ' — '+q.author : '');
+  const card = document.getElementById('quoteSurpriseCard');
+  if (!card) return;
+  card.innerHTML =
+    '<div class="quote-surprise-text">' + esc(q.text) + '</div>' +
+    (src ? '<div class="quote-surprise-source">' + esc(src) + '</div>' : '') +
+    (q.page ? '<div class="quote-surprise-page">p. ' + esc(q.page) + '</div>' : '');
+
+  // Botão gerar post aponta para esta citação
+  const storyBtn = document.getElementById('quoteSurpriseStoryBtn');
+  if (storyBtn) {
+    // Encontrar índice nos _quotesForStory
+    const allQ = window._quotesForStory || quotes;
+    let idx = allQ.findIndex(x => x.id === q.id);
+    if (idx < 0) { window._quotesForStory = quotes; idx = quotes.indexOf(q); }
+    storyBtn.onclick = function() {
+      document.getElementById('quoteSurpriseOverlay').classList.add('hidden');
+      window._generateStory(idx);
+    };
+  }
+  document.getElementById('quoteSurpriseOverlay').classList.remove('hidden');
+};
+
+function renderQuotes() {
+  if (!document.getElementById('quotesList')) return;
+  window._populateQuoteFilters();
+  window._applyQuoteFilters();
 }
 
 function openQuoteModal() {
@@ -3599,101 +3735,118 @@ window._fmtDims = function(fmt) {
 
 // ── ESTILO: PÁGINA GRIFADA ────────────────────────────────────────────────
 window._drawPage = function(ctx, W, H, q) {
-  const FAKE_ABOVE = [
-    'chamava-se a atenção para o modo como as palavras se articulavam',
-    'no silêncio, construindo pontes entre o que foi dito e o que jamais',
-    'poderia ser expresso em voz alta. Havia ali uma linguagem secreta,',
-    'que não pertencia a nenhum dos dois, mas os atravessava como uma',
-    'corrente invisível. Era esse silêncio que os mantinha unidos,',
-  ];
-  const FAKE_BELOW = [
-    'Ele fechou o livro devagar, como se receasse acordar alguém. A luz',
-    'da tarde entrava oblíqua pela janela, desenhando formas douradas',
-    'no assoalho. Naquele instante, tudo parecia possível. A memória',
-    'guardaria aquilo para sempre, como se as palavras tivessem sido',
-    'escritas diretamente na alma. O silêncio que se seguiu era denso,',
-    'carregado de um significado que nenhuma palavra conseguiria.',
-  ];
+  const isSquare = W === H;
+  const isWide   = W > H;
+  const ML = Math.round(110*(W/1080));
+  const LINE_MAX = W - ML*2;
+  const FS = Math.round(isSquare ? 48 : isWide ? 44 : 38);
+  const BODY = FS+'px "Georgia",serif';
+  const LH = Math.round(FS*1.62);
+  const ATTR_FS = Math.round(FS*0.82);
+  const BRAND_FS = Math.round(FS*0.52);
 
-  // Escala relativa a 1080×1920 base
-  const scale = Math.min(W / 1080, H / 1920);
-  const ML = Math.round(110 * (W / 1080));
-  const MR = Math.round(110 * (W / 1080));
-  const LINE_MAX = W - ML - MR;
-  const FS = Math.round(38 * scale * (W < H ? 1 : 0.72));
-  const BODY = FS + 'px "Georgia", serif';
-  const LH = Math.round(FS * 1.62);
-
-  ctx.fillStyle = '#f7f1e3'; ctx.fillRect(0, 0, W, H);
+  // Fundo
+  ctx.fillStyle='#f7f1e3'; ctx.fillRect(0,0,W,H);
   const vign = ctx.createRadialGradient(W*.5,H*.48,H*.25,W*.5,H*.48,H*.72);
   vign.addColorStop(0,'rgba(0,0,0,0)'); vign.addColorStop(1,'rgba(60,38,10,0.13)');
-  ctx.fillStyle = vign; ctx.fillRect(0,0,W,H);
-  const sp = ctx.createLinearGradient(0,0,120*(W/1080),0);
+  ctx.fillStyle=vign; ctx.fillRect(0,0,W,H);
+  const sp = ctx.createLinearGradient(0,0,Math.round(120*(W/1080)),0);
   sp.addColorStop(0,'rgba(40,24,4,0.10)'); sp.addColorStop(0.08,'rgba(40,24,4,0.03)'); sp.addColorStop(1,'rgba(40,24,4,0)');
-  ctx.fillStyle = sp; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle=sp; ctx.fillRect(0,0,W,H);
 
-  // Dobra canto sup direito
-  const dc = Math.round(80*(W/1080));
-  ctx.save(); ctx.beginPath(); ctx.moveTo(W-dc,0); ctx.lineTo(W,0); ctx.lineTo(W,dc); ctx.closePath();
-  ctx.fillStyle='rgba(140,110,50,0.07)'; ctx.fill();
-  ctx.strokeStyle='rgba(140,110,50,0.18)'; ctx.lineWidth=1.5;
-  ctx.beginPath(); ctx.moveTo(W-dc,0); ctx.lineTo(W,dc); ctx.stroke(); ctx.restore();
-
-  // Nº de página
-  const pgY = Math.round(72*(H/1920));
-  ctx.font = 'italic ' + Math.round(30*scale) + 'px "Georgia", serif';
-  ctx.fillStyle='rgba(130,100,50,0.42)'; ctx.textAlign='center';
-  ctx.fillText('— ' + (Math.floor(Math.random()*280)+42) + ' —', W/2, pgY);
-
-  // Texto acima
-  ctx.font = BODY; ctx.fillStyle='rgba(28,18,6,0.20)'; ctx.textAlign='left';
-  let curY = Math.round(160*(H/1920));
-  FAKE_ABOVE.forEach(line => { ctx.fillText(line, ML, curY); curY += LH; });
-  curY += Math.round(10*(H/1920));
-
-  // Grifo + texto citação
+  // No story: texto simulado acima/abaixo + número de página
+  // No square/wide: só a citação centralizada
   const qLines = window._wrapText(ctx, q.text, BODY, LINE_MAX);
-  const hlColor = window._highlightColor(q.book || q.text);
-  const hlH = Math.round(LH * 0.88);
-  const hlOY = -Math.round(LH * 0.72);
-  const qStartY = curY;
-
-  qLines.forEach((line, i) => {
-    ctx.font = BODY;
-    const lw = i < qLines.length-1 ? LINE_MAX : ctx.measureText(line).width + 8;
-    ctx.fillStyle = hlColor;
-    ctx.fillRect(ML-4, qStartY + i*LH + hlOY, lw+8, hlH);
-  });
-  ctx.font = BODY; ctx.fillStyle='#1a1208'; ctx.textAlign='left';
-  qLines.forEach((line, i) => { ctx.fillText(line, ML, qStartY + i*LH); });
-
-  const afterQ = qStartY + qLines.length * LH + Math.round(10*(H/1920));
-
-  // Texto abaixo
-  ctx.font = BODY; ctx.fillStyle='rgba(28,18,6,0.20)'; ctx.textAlign='left';
-  curY = afterQ;
-  FAKE_BELOW.forEach(line => { ctx.fillText(line, ML, curY); curY += LH; });
-
-  // Atribuição
-  const aY = curY + Math.round(40*(H/1920));
-  ctx.strokeStyle='rgba(184,151,90,0.55)'; ctx.lineWidth=1.2;
-  ctx.beginPath(); ctx.moveTo(ML, aY-16); ctx.lineTo(ML+340*(W/1080), aY-16); ctx.stroke();
-  ctx.fillStyle='rgba(184,151,90,0.55)';
-  ctx.beginPath(); ctx.arc(ML, aY-16, 4, 0, Math.PI*2); ctx.fill();
   const src = [q.book, q.author].filter(Boolean).join(' — ');
-  if (src) { ctx.font='italic '+Math.round(34*scale)+'px "Georgia",serif'; ctx.fillStyle='rgba(46,28,8,0.80)'; ctx.textAlign='left'; ctx.fillText(src, ML, aY+10); }
-  if (q.page) { ctx.font=Math.round(28*scale)+'px "Georgia",serif'; ctx.fillStyle='rgba(100,75,30,0.55)'; ctx.fillText('p. '+q.page, ML, aY+52); }
+  const hasAttr = !!(src || q.page);
+  const qBlockH = qLines.length * LH;
+  const attrH = hasAttr ? Math.round(LH*2) : 0;
+  const totalContent = qBlockH + attrH + Math.round(50*(H/1080));
+
+  let qStartY;
+  if (!isSquare && !isWide) {
+    // Story — com texto simulado e número de página
+    const dc = Math.round(80*(W/1080));
+    ctx.save(); ctx.beginPath(); ctx.moveTo(W-dc,0); ctx.lineTo(W,0); ctx.lineTo(W,dc); ctx.closePath();
+    ctx.fillStyle='rgba(140,110,50,0.07)'; ctx.fill();
+    ctx.strokeStyle='rgba(140,110,50,0.18)'; ctx.lineWidth=1.5;
+    ctx.beginPath(); ctx.moveTo(W-dc,0); ctx.lineTo(W,dc); ctx.stroke(); ctx.restore();
+
+    ctx.font='italic '+Math.round(30*(H/1920))+'px "Georgia",serif';
+    ctx.fillStyle='rgba(130,100,50,0.42)'; ctx.textAlign='center';
+    ctx.fillText('— '+(Math.floor(Math.random()*280)+42)+' —', W/2, Math.round(72*(H/1920)));
+
+    const FAKE_ABOVE = [
+      'chamava-se a atenção para o modo como as palavras se articulavam',
+      'no silêncio, construindo pontes entre o que foi dito e o que jamais',
+      'poderia ser expresso em voz alta. Havia ali uma linguagem secreta,',
+      'que não pertencia a nenhum dos dois, mas os atravessava como uma',
+      'corrente invisível. Era esse silêncio que os mantinha unidos,',
+    ];
+    ctx.font=BODY; ctx.fillStyle='rgba(28,18,6,0.20)'; ctx.textAlign='left';
+    let cy = Math.round(160*(H/1920));
+    FAKE_ABOVE.forEach(l => { ctx.fillText(l, ML, cy); cy += LH; });
+    qStartY = cy + Math.round(10*(H/1920));
+  } else {
+    // Square / Wide — centralizado verticalmente
+    qStartY = Math.round((H - totalContent) / 2) + Math.round(FS * 0.8);
+  }
+
+  // Grifo
+  const hlColor = window._highlightColor(q.book || q.text);
+  const hlH = Math.round(LH*0.88);
+  const hlOY = -Math.round(LH*0.72);
+  qLines.forEach((line, i) => {
+    ctx.font=BODY;
+    const lw = i < qLines.length-1 ? LINE_MAX : ctx.measureText(line).width+8;
+    ctx.fillStyle=hlColor;
+    ctx.fillRect(ML-4, qStartY+i*LH+hlOY, lw+8, hlH);
+  });
+
+  // Texto
+  ctx.font=BODY; ctx.fillStyle='#1a1208'; ctx.textAlign='left';
+  qLines.forEach((line, i) => { ctx.fillText(line, ML, qStartY+i*LH); });
+
+  let curY = qStartY + qBlockH;
+
+  if (!isSquare && !isWide) {
+    // Texto simulado abaixo (só no story)
+    const FAKE_BELOW = [
+      'Ele fechou o livro devagar, como se receasse acordar alguém. A luz',
+      'da tarde entrava oblíqua pela janela, desenhando formas douradas',
+      'no assoalho. Naquele instante, tudo parecia possível. A memória',
+      'guardaria aquilo para sempre, como se as palavras tivessem sido',
+      'escritas diretamente na alma.',
+    ];
+    ctx.font=BODY; ctx.fillStyle='rgba(28,18,6,0.20)'; ctx.textAlign='left';
+    let by = curY + Math.round(10*(H/1920));
+    FAKE_BELOW.forEach(l => { ctx.fillText(l, ML, by); by += LH; });
+    curY = by + Math.round(30*(H/1920));
+  } else {
+    curY += Math.round(50*(H/1080));
+  }
+
+  // Separador + atribuição
+  ctx.strokeStyle='rgba(184,151,90,0.55)'; ctx.lineWidth=1.2;
+  ctx.beginPath(); ctx.moveTo(ML,curY-16); ctx.lineTo(ML+Math.round(340*(W/1080)),curY-16); ctx.stroke();
+  ctx.fillStyle='rgba(184,151,90,0.55)';
+  ctx.beginPath(); ctx.arc(ML,curY-16,4,0,Math.PI*2); ctx.fill();
+  if (src) {
+    ctx.font='italic '+ATTR_FS+'px "Georgia",serif'; ctx.fillStyle='rgba(46,28,8,0.80)'; ctx.textAlign='left';
+    ctx.fillText(src, ML, curY+10); curY += Math.round(ATTR_FS*1.5);
+  }
+  if (q.page) {
+    ctx.font=Math.round(ATTR_FS*0.8)+'px "Georgia",serif'; ctx.fillStyle='rgba(100,75,30,0.55)';
+    ctx.fillText('p.'+q.page, ML, curY);
+  }
 
   // Rodapé
-  const rY = H - Math.round(80*(H/1920));
+  const rY = H - Math.round(55*(H/1080));
   ctx.strokeStyle='rgba(184,151,90,0.45)'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(W/2-160*(W/1080),rY-18); ctx.lineTo(W/2+160*(W/1080),rY-18); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(W/2-Math.round(160*(W/1080)),rY-18); ctx.lineTo(W/2+Math.round(160*(W/1080)),rY-18); ctx.stroke();
   ctx.fillStyle='rgba(184,151,90,0.48)';
   ctx.beginPath(); ctx.arc(W/2,rY-18,5,0,Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.arc(W/2-160*(W/1080),rY-18,3.5,0,Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.arc(W/2+160*(W/1080),rY-18,3.5,0,Math.PI*2); ctx.fill();
-  ctx.font=Math.round(24*scale)+'px "Jost",Arial,sans-serif';
-  ctx.fillStyle='rgba(150,120,60,0.40)'; ctx.textAlign='center';
+  ctx.font=BRAND_FS+'px "Jost",Arial,sans-serif'; ctx.fillStyle='rgba(150,120,60,0.40)'; ctx.textAlign='center';
   ctx.letterSpacing='3px';
   ctx.fillText('DIÁRIO DE LEITURAS  ·  MARINA RISTHER RAZZO', W/2, rY+12);
   ctx.letterSpacing='0px';
@@ -3701,65 +3854,76 @@ window._drawPage = function(ctx, W, H, q) {
 
 // ── ESTILO: NOTURNO ───────────────────────────────────────────────────────
 window._drawDark = function(ctx, W, H, q) {
-  const scale = Math.min(W/1080, H/1920);
+  const isSquare = W === H;
+  const isWide   = W > H;
   const ML = Math.round(100*(W/1080));
-  const LINE_MAX = W - ML*2;
-  const FS = Math.round(42*scale*(W<H?1:0.72));
+  const MR = Math.round(100*(W/1080));
+  const LINE_MAX = W - ML - MR;
+  // Tamanho de fonte proporcional ao menor lado
+  const FS = Math.round(isSquare ? 52 : isWide ? 48 : 42);
   const BODY = FS+'px "Cormorant Garamond","Georgia",serif';
-  const LH = Math.round(FS*1.7);
+  const LH = Math.round(FS*1.68);
+  const ATTR_FS = Math.round(FS*0.72);
+  const BRAND_FS = Math.round(FS*0.46);
 
-  // Fundo escuro
+  // Fundo
   ctx.fillStyle='#100c09'; ctx.fillRect(0,0,W,H);
-  const bg2 = ctx.createRadialGradient(W*.65,.38*H,0,W*.5,H*.5,H*.75);
-  bg2.addColorStop(0,'rgba(155,70,35,0.18)'); bg2.addColorStop(1,'rgba(0,0,0,0)');
+  const bg2 = ctx.createRadialGradient(W*.65,H*.38,0,W*.5,H*.5,H*.75);
+  bg2.addColorStop(0,'rgba(155,70,35,0.22)'); bg2.addColorStop(1,'rgba(0,0,0,0)');
   ctx.fillStyle=bg2; ctx.fillRect(0,0,W,H);
-  const bg3 = ctx.createRadialGradient(W*.08,.12*H,0,W*.5,H*.5,H*.6);
-  bg3.addColorStop(0,'rgba(75,12,22,0.40)'); bg3.addColorStop(1,'rgba(0,0,0,0)');
+  const bg3 = ctx.createRadialGradient(W*.08,H*.12,0,W*.5,H*.5,H*.6);
+  bg3.addColorStop(0,'rgba(75,12,22,0.45)'); bg3.addColorStop(1,'rgba(0,0,0,0)');
   ctx.fillStyle=bg3; ctx.fillRect(0,0,W,H);
 
   // Linha dourada no topo
-  const topBarH = Math.round(4*(H/1920));
-  ctx.fillStyle='#b8975a'; ctx.fillRect(0,0,W,topBarH);
+  ctx.fillStyle='#b8975a'; ctx.fillRect(0,0,W,Math.round(4*(H/1080)));
 
-  // Ornamento topo
-  const ornY = Math.round(60*(H/1920));
-  ctx.strokeStyle='rgba(184,151,90,0.35)'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(ML,ornY); ctx.lineTo(W-ML,ornY); ctx.stroke();
-  ctx.fillStyle='rgba(184,151,90,0.45)';
-  ctx.beginPath(); ctx.arc(W/2,ornY,4,0,Math.PI*2); ctx.fill();
-
-  // Aspas abertas decorativas
-  const qY0 = Math.round(160*(H/1920));
-  ctx.font='italic '+Math.round(160*scale)+'px "Cormorant Garamond","Georgia",serif';
-  ctx.fillStyle='rgba(184,151,90,0.08)'; ctx.textAlign='left';
-  ctx.fillText('"', ML-20, qY0+120*scale);
-
-  // Texto da citação
+  // Calcular alturas para centralizar
   const qLines = window._wrapText(ctx, q.text, BODY, LINE_MAX);
-  let curY = Math.round(200*(H/1920));
+  const src = [q.book, q.author].filter(Boolean).join(' — ');
+  const hasAttr = !!(src || q.page);
+  const qBlockH = qLines.length * LH;
+  const sepH = Math.round(50*(H/1080));
+  const attrH = hasAttr ? Math.round(ATTR_FS*1.6) + (q.page ? Math.round(ATTR_FS*1.4) : 0) : 0;
+  const totalH = qBlockH + (hasAttr ? sepH + attrH : 0);
+  let curY = Math.round((H - totalH) / 2) + Math.round(FS * 0.8);
+
+  // Aspas decorativas
+  ctx.font='italic '+Math.round(FS*3.2)+'px "Cormorant Garamond","Georgia",serif';
+  ctx.fillStyle='rgba(184,151,90,0.07)'; ctx.textAlign='left';
+  ctx.fillText('"', ML-Math.round(FS*0.3), curY+Math.round(FS*1.5));
+
+  // Texto
   ctx.font=BODY; ctx.fillStyle='#e8dfc8'; ctx.textAlign='left';
   qLines.forEach(line => { ctx.fillText(line, ML, curY); curY += LH; });
-  curY += Math.round(60*(H/1920));
+  curY += sepH;
 
-  // Separador
-  ctx.strokeStyle='rgba(184,151,90,0.4)'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(ML,curY); ctx.lineTo(ML+200*(W/1080),curY); ctx.stroke();
-  ctx.fillStyle='rgba(184,151,90,0.5)';
-  ctx.beginPath(); ctx.arc(ML,curY,3,0,Math.PI*2); ctx.fill();
-  curY += Math.round(42*(H/1920));
+  if (hasAttr) {
+    // Separador
+    ctx.strokeStyle='rgba(184,151,90,0.4)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(ML,curY-Math.round(sepH*0.4)); ctx.lineTo(ML+Math.round(200*(W/1080)),curY-Math.round(sepH*0.4)); ctx.stroke();
+    ctx.fillStyle='rgba(184,151,90,0.5)';
+    ctx.beginPath(); ctx.arc(ML,curY-Math.round(sepH*0.4),3,0,Math.PI*2); ctx.fill();
 
-  // Atribuição
-  const src = [q.book, q.author].filter(Boolean).join(' — ');
-  if (src) { ctx.font='italic '+Math.round(34*scale)+'px "Cormorant Garamond","Georgia",serif'; ctx.fillStyle='rgba(200,170,120,0.75)'; ctx.textAlign='left'; ctx.fillText(src, ML, curY); curY += Math.round(50*(H/1920)); }
-  if (q.page) { ctx.font=Math.round(28*scale)+'px "Jost",Arial,sans-serif'; ctx.fillStyle='rgba(184,151,90,0.50)'; ctx.letterSpacing='2px'; ctx.fillText('P. '+q.page, ML, curY); ctx.letterSpacing='0px'; }
+    if (src) {
+      ctx.font='italic '+ATTR_FS+'px "Cormorant Garamond","Georgia",serif';
+      ctx.fillStyle='rgba(200,170,120,0.78)'; ctx.textAlign='left';
+      ctx.fillText(src, ML, curY); curY += Math.round(ATTR_FS*1.6);
+    }
+    if (q.page) {
+      ctx.font=Math.round(ATTR_FS*0.78)+'px "Jost",Arial,sans-serif';
+      ctx.fillStyle='rgba(184,151,90,0.50)'; ctx.letterSpacing='2px';
+      ctx.fillText('P. '+q.page, ML, curY); ctx.letterSpacing='0px';
+    }
+  }
 
   // Rodapé
-  const rY = H - Math.round(80*(H/1920));
+  const rY = H - Math.round(55*(H/1080));
   ctx.strokeStyle='rgba(184,151,90,0.30)'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(W/2-140*(W/1080),rY-20); ctx.lineTo(W/2+140*(W/1080),rY-20); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(W/2-Math.round(140*(W/1080)),rY-18); ctx.lineTo(W/2+Math.round(140*(W/1080)),rY-18); ctx.stroke();
   ctx.fillStyle='rgba(184,151,90,0.40)';
-  ctx.beginPath(); ctx.arc(W/2,rY-20,4,0,Math.PI*2); ctx.fill();
-  ctx.font=Math.round(22*scale)+'px "Jost",Arial,sans-serif';
+  ctx.beginPath(); ctx.arc(W/2,rY-18,4,0,Math.PI*2); ctx.fill();
+  ctx.font=BRAND_FS+'px "Jost",Arial,sans-serif';
   ctx.fillStyle='rgba(184,151,90,0.38)'; ctx.textAlign='center';
   ctx.letterSpacing='4px';
   ctx.fillText('DIÁRIO DE LEITURAS  ·  MARINA RISTHER RAZZO', W/2, rY+10);
@@ -3768,43 +3932,56 @@ window._drawDark = function(ctx, W, H, q) {
 
 // ── ESTILO: MINIMALISTA ────────────────────────────────────────────────────
 window._drawMinimal = function(ctx, W, H, q) {
-  const scale = Math.min(W/1080, H/1920);
   const ML = Math.round(120*(W/1080));
   const LINE_MAX = W - ML*2;
-  const FS = Math.round(48*scale*(W<H?1:0.72));
+  const isSquare = W === H;
+  const isWide   = W > H;
+  const FS = Math.round(isSquare ? 54 : isWide ? 50 : 48);
   const BODY = 'italic '+FS+'px "Cormorant Garamond","Georgia",serif';
   const LH = Math.round(FS*1.65);
+  const ATTR_FS = Math.round(FS*0.58);
+  const BRAND_FS = Math.round(FS*0.40);
 
   ctx.fillStyle='#faf7f2'; ctx.fillRect(0,0,W,H);
 
   // Linha vinho à esquerda
   ctx.fillStyle='rgba(107,31,46,0.7)';
-  ctx.fillRect(Math.round(70*(W/1080)), Math.round(H*.2), Math.round(3*(W/1080)), Math.round(H*.6));
+  ctx.fillRect(Math.round(70*(W/1080)), Math.round(H*.18), Math.round(3*(W/1080)), Math.round(H*.64));
 
-  // Texto citação centrado verticalmente
+  // Calcular posição vertical centralizada
   const qLines = window._wrapText(ctx, q.text, BODY, LINE_MAX);
-  const totalH = qLines.length * LH;
-  let curY = (H - totalH)/2 - Math.round(40*(H/1920));
+  const src = [q.book, q.author].filter(Boolean).join(' — ');
+  const hasAttr = !!(src || q.page);
+  const qBlockH = qLines.length * LH;
+  const attrH = hasAttr ? Math.round(ATTR_FS*1.6 + 50 + (q.page ? ATTR_FS*1.4 : 0)) : 0;
+  const totalH = qBlockH + attrH;
+  let curY = Math.round((H - totalH) / 2) + Math.round(FS*0.8);
 
+  // Texto
   ctx.font=BODY; ctx.fillStyle='#1c1410'; ctx.textAlign='left';
   qLines.forEach(line => { ctx.fillText(line, ML, curY); curY += LH; });
-  curY += Math.round(56*(H/1920));
+  curY += Math.round(56*(H/1080));
 
-  // Separador fino
-  ctx.strokeStyle='rgba(184,151,90,0.6)'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(ML,curY); ctx.lineTo(ML+180*(W/1080),curY); ctx.stroke();
-  curY += Math.round(38*(H/1920));
+  if (hasAttr) {
+    ctx.strokeStyle='rgba(184,151,90,0.6)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(ML,curY); ctx.lineTo(ML+Math.round(180*(W/1080)),curY); ctx.stroke();
+    curY += Math.round(38*(H/1080));
+    if (src) {
+      ctx.font='italic '+ATTR_FS+'px "Cormorant Garamond","Georgia",serif';
+      ctx.fillStyle='rgba(107,31,46,0.75)'; ctx.textAlign='left';
+      ctx.fillText(src, ML, curY); curY += Math.round(ATTR_FS*1.6);
+    }
+    if (q.page) {
+      ctx.font=Math.round(ATTR_FS*0.82)+'px "Jost",Arial,sans-serif';
+      ctx.fillStyle='rgba(120,95,55,0.55)'; ctx.letterSpacing='2px';
+      ctx.fillText('p.'+q.page, ML, curY); ctx.letterSpacing='0px';
+    }
+  }
 
-  // Atribuição
-  const src = [q.book, q.author].filter(Boolean).join(' — ');
-  if (src) { ctx.font='italic '+Math.round(30*scale)+'px "Cormorant Garamond","Georgia",serif'; ctx.fillStyle='rgba(107,31,46,0.75)'; ctx.textAlign='left'; ctx.fillText(src, ML, curY); curY += Math.round(46*(H/1920)); }
-  if (q.page) { ctx.font=Math.round(24*scale)+'px "Jost",Arial,sans-serif'; ctx.fillStyle='rgba(120,95,55,0.55)'; ctx.letterSpacing='2px'; ctx.fillText('p. '+q.page, ML, curY); ctx.letterSpacing='0px'; }
-
-  // Rodapé
-  ctx.font=Math.round(20*scale)+'px "Jost",Arial,sans-serif';
+  ctx.font=BRAND_FS+'px "Jost",Arial,sans-serif';
   ctx.fillStyle='rgba(150,120,60,0.38)'; ctx.textAlign='center';
   ctx.letterSpacing='3px';
-  ctx.fillText('DIÁRIO DE LEITURAS  ·  MARINA RISTHER RAZZO', W/2, H - Math.round(55*(H/1920)));
+  ctx.fillText('DIÁRIO DE LEITURAS  ·  MARINA RISTHER RAZZO', W/2, H-Math.round(50*(H/1080)));
   ctx.letterSpacing='0px';
 };
 
