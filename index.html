@@ -81,19 +81,25 @@ body { font-family: 'Jost', sans-serif; background: var(--cream); color: var(--i
 /* ── HEADER ── */
 header {
   text-align: center; padding: 4.5rem 2rem 4rem;
-  background-color: #100c09;
+  background-color: #f0e8d8;
   background-image:
-    radial-gradient(ellipse 90% 70% at 65% 38%, rgba(155,70,35,0.26) 0%, transparent 58%),
-    radial-gradient(ellipse 65% 55% at 8%  12%, rgba(75,12,22,0.55)  0%, transparent 52%),
-    radial-gradient(ellipse 100% 50% at 50% 105%, rgba(184,151,90,0.18) 0%, transparent 48%),
-    radial-gradient(ellipse 55% 45% at 100% 0%,   rgba(6,4,2,0.72)    0%, transparent 48%),
-    radial-gradient(ellipse 45% 40% at 0%   100%, rgba(6,4,2,0.60)    0%, transparent 45%),
+    radial-gradient(ellipse 85% 65% at 50% 0%,   rgba(215,185,130,0.55) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 55% at 10% 20%,  rgba(180,140,90,0.22)  0%, transparent 50%),
+    radial-gradient(ellipse 60% 50% at 90% 15%,  rgba(160,100,70,0.18)  0%, transparent 48%),
+    radial-gradient(ellipse 100% 45% at 50% 110%, rgba(120,80,40,0.20)  0%, transparent 50%),
+    radial-gradient(ellipse 50% 40% at 0%  100%, rgba(100,70,40,0.16)   0%, transparent 45%),
+    radial-gradient(ellipse 50% 40% at 100% 100%, rgba(100,70,40,0.14)  0%, transparent 45%),
     repeating-linear-gradient(
-      180deg,
-      transparent 0px, transparent 3px,
-      rgba(255,210,130,0.016) 3px, rgba(255,210,130,0.016) 4px
+      0deg,
+      transparent 0px, transparent 28px,
+      rgba(160,120,70,0.04) 28px, rgba(160,120,70,0.04) 29px
     ),
-    linear-gradient(155deg, #1c1108 0%, #100c0a 38%, #160a0e 68%, #0e0a08 100%);
+    repeating-linear-gradient(
+      90deg,
+      transparent 0px, transparent 48px,
+      rgba(160,120,70,0.025) 48px, rgba(160,120,70,0.025) 49px
+    ),
+    linear-gradient(170deg, #f5edd8 0%, #ede0c4 30%, #e8d8b8 60%, #f0e4cc 100%);
   background-size: cover;
   position: relative; border-bottom: none; overflow: hidden;
   min-height: 420px; display: flex; flex-direction: column;
@@ -107,8 +113,8 @@ header::before {
 header::after {
   content: ''; position: absolute; inset: 0;
   background:
-    radial-gradient(ellipse 75% 55% at 55% 42%, rgba(190,110,50,0.10) 0%, transparent 52%),
-    radial-gradient(ellipse 100% 100% at 50% 50%, transparent 28%, rgba(4,2,1,0.32) 100%);
+    radial-gradient(ellipse 70% 50% at 50% 45%, rgba(255,240,200,0.35) 0%, transparent 55%),
+    radial-gradient(ellipse 100% 100% at 50% 50%, transparent 30%, rgba(100,70,30,0.18) 100%);
   pointer-events: none; z-index: 1;
 }
 header > * { position: relative; z-index: 2; }
@@ -116,7 +122,7 @@ header > * { position: relative; z-index: 2; }
   font-family: 'Jost', sans-serif; font-size: .6rem; letter-spacing: .6em;
   text-transform: uppercase; color: var(--wine); margin-bottom: 1.8rem;
   display: flex; align-items: center; justify-content: center; gap: .8rem;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+  text-shadow: 0 1px 3px rgba(180,140,80,0.4);
 }
 .header-super::before, .header-super::after {
   content: ''; display: block; height: 1px; width: 40px;
@@ -125,15 +131,15 @@ header > * { position: relative; z-index: 2; }
 h1 {
   font-family: 'Cormorant Garamond', serif;
   font-size: clamp(3.8rem, 8.5vw, 7rem); font-weight: 300;
-  line-height: .92; color: #ede3cc; letter-spacing: -.03em; margin-bottom: .4rem;
-  text-shadow: 0 2px 16px rgba(0,0,0,0.55);
+  line-height: .92; color: #1c1410; letter-spacing: -.03em; margin-bottom: .4rem;
+  text-shadow: 0 1px 8px rgba(180,140,80,0.3);
 }
 h1 em {
   font-style: italic; font-weight: 400; color: var(--wine); display: block;
   font-size: clamp(4rem, 9vw, 7.5rem);
-  background: linear-gradient(135deg, #d4607a 0%, #e87090 45%, #c85068 100%);
+  background: linear-gradient(135deg, #7a2038 0%, #9b3050 45%, #6b1f2e 100%);
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4));
+  filter: drop-shadow(0 1px 4px rgba(100,40,50,0.2));
 }
 .header-book-icon { margin: 1.2rem auto .8rem; display: block; opacity: .65; }
 .header-rule {
@@ -144,14 +150,14 @@ h1 em {
 .header-rule span:last-child { background: linear-gradient(90deg, rgba(80,40,20,0.5), transparent); }
 .header-rule em {
   font-family: 'Libre Baskerville', serif; font-size: .7rem; letter-spacing: .3em;
-  text-transform: uppercase; color: #d4c8b0; font-style: italic;
-  text-shadow: 0 1px 6px rgba(0,0,0,0.7);
+  text-transform: uppercase; color: var(--stone); font-style: italic;
+  text-shadow: 0 1px 3px rgba(180,150,100,0.3);
 }
 .header-name {
   font-family: 'Libre Baskerville', serif;
   font-size: clamp(1rem, 2.2vw, 1.35rem); font-weight: 400; font-style: italic;
   color: var(--ink); letter-spacing: .06em;
-  text-shadow: 0 1px 6px rgba(0,0,0,0.8), 0 2px 12px rgba(0,0,0,0.5);
+  text-shadow: 0 1px 4px rgba(150,110,60,0.25);
 }
 
 /* ── NAV TABS ── */
@@ -665,6 +671,45 @@ body.dark {
   --shadow-soft: rgba(0,0,0,0.25);
   --shadow: rgba(0,0,0,0.4);
   --shadow-wine: rgba(200,80,112,0.18);
+}
+body.dark header {
+  background-color: #100c09;
+  background-image:
+    radial-gradient(ellipse 90% 70% at 65% 38%, rgba(155,70,35,0.26) 0%, transparent 58%),
+    radial-gradient(ellipse 65% 55% at 8%  12%, rgba(75,12,22,0.55)  0%, transparent 52%),
+    radial-gradient(ellipse 100% 50% at 50% 105%, rgba(184,151,90,0.18) 0%, transparent 48%),
+    radial-gradient(ellipse 55% 45% at 100% 0%,   rgba(6,4,2,0.72)    0%, transparent 48%),
+    radial-gradient(ellipse 45% 40% at 0%   100%, rgba(6,4,2,0.60)    0%, transparent 45%),
+    repeating-linear-gradient(
+      180deg,
+      transparent 0px, transparent 3px,
+      rgba(255,210,130,0.016) 3px, rgba(255,210,130,0.016) 4px
+    ),
+    linear-gradient(155deg, #1c1108 0%, #100c0a 38%, #160a0e 68%, #0e0a08 100%);
+}
+body.dark header::after {
+  background:
+    radial-gradient(ellipse 75% 55% at 55% 42%, rgba(190,110,50,0.10) 0%, transparent 52%),
+    radial-gradient(ellipse 100% 100% at 50% 50%, transparent 28%, rgba(4,2,1,0.32) 100%);
+}
+body.dark h1 {
+  color: #ede3cc;
+  text-shadow: 0 2px 16px rgba(0,0,0,0.55);
+}
+body.dark h1 em {
+  background: linear-gradient(135deg, #d4607a 0%, #e87090 45%, #c85068 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4));
+}
+body.dark .header-super {
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+}
+body.dark .header-rule em {
+  color: #d4c8b0;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.7);
+}
+body.dark .header-name {
+  text-shadow: 0 1px 6px rgba(0,0,0,0.8), 0 2px 12px rgba(0,0,0,0.5);
 }
 body.dark .nav-tabs { background: rgba(12,8,4,0.92); }
 body.dark .insight-item { background: var(--cream-mid); }
