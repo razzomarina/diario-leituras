@@ -2401,52 +2401,213 @@ window._generateStory = function(idx) {
   const W = 1080, H = 1920;
   canvas.width = W; canvas.height = H;
   const ctx = canvas.getContext('2d');
-  ctx.fillStyle = '#f5f0e6'; ctx.fillRect(0, 0, W, H);
-  function wrapText(text, maxW, font) {
+
+  // ── PAPEL ENVELHECIDO ─────────────────────────────────────────────────
+  // Fundo base creme
+  const bgGrad = ctx.createRadialGradient(W*0.45, H*0.42, 0, W*0.5, H*0.5, H*0.75);
+  bgGrad.addColorStop(0,   '#fdf8ef');
+  bgGrad.addColorStop(0.5, '#f7f0e0');
+  bgGrad.addColorStop(1,   '#ede3cc');
+  ctx.fillStyle = bgGrad;
+  ctx.fillRect(0, 0, W, H);
+
+  // Textura de papel — linhas horizontais sutis (pauta de livro)
+  ctx.strokeStyle = 'rgba(160,140,100,0.10)';
+  ctx.lineWidth = 1;
+  for (let y = 120; y < H - 120; y += 52) {
+    ctx.beginPath(); ctx.moveTo(80, y); ctx.lineTo(W - 80, y); ctx.stroke();
+  }
+
+  // Linha de margem vertical esquerda (estilo caderno)
+  ctx.strokeStyle = 'rgba(184,151,90,0.18)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(148, 80); ctx.lineTo(148, H - 80); ctx.stroke();
+
+  // Mancha de café no canto inferior direito
+  ctx.save();
+  ctx.translate(W - 160, H - 220);
+  const coffeeGrad = ctx.createRadialGradient(0, 0, 10, 0, 0, 95);
+  coffeeGrad.addColorStop(0,   'rgba(110,75,30,0.00)');
+  coffeeGrad.addColorStop(0.5, 'rgba(110,75,30,0.04)');
+  coffeeGrad.addColorStop(0.85,'rgba(110,75,30,0.09)');
+  coffeeGrad.addColorStop(1,   'rgba(110,75,30,0.00)');
+  ctx.fillStyle = coffeeGrad;
+  ctx.beginPath(); ctx.ellipse(0, 0, 95, 88, 0.3, 0, Math.PI*2); ctx.fill();
+  ctx.strokeStyle = 'rgba(110,75,30,0.11)'; ctx.lineWidth = 4;
+  ctx.beginPath(); ctx.ellipse(0, 0, 95, 88, 0.3, 0, Math.PI*2); ctx.stroke();
+  ctx.restore();
+
+  // Sombra de dobra no canto superior direito
+  ctx.save();
+  ctx.translate(W - 80, 0);
+  const foldGrad = ctx.createLinearGradient(-80, 0, 0, 80);
+  foldGrad.addColorStop(0, 'rgba(0,0,0,0.07)');
+  foldGrad.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = foldGrad;
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-80,0); ctx.lineTo(0,80); ctx.closePath(); ctx.fill();
+  ctx.restore();
+
+  // ── NÚMERO DE PÁGINA (canto superior) ────────────────────────────────
+  ctx.font = 'italic 32px "Georgia", serif';
+  ctx.fillStyle = 'rgba(140,120,80,0.45)';
+  ctx.textAlign = 'center';
+  ctx.fillText('— ' + (Math.floor(Math.random()*280)+42) + ' —', W/2, 90);
+
+  // ── TEXTO DO LIVRO SIMULADO (antes da citação) ────────────────────────
+  const fakeLines = [
+    'chamava-se a atenção para o modo como as palavras',
+    'se articulavam no silêncio, construindo pontes entre',
+    'o que foi dito e o que jamais poderia ser expresso',
+    'em voz alta. Havia ali uma linguagem secreta,',
+  ];
+  ctx.textAlign = 'left';
+  ctx.font = '34px "Georgia", serif';
+  ctx.fillStyle = 'rgba(60,45,20,0.22)';
+  let fakeY = 180;
+  fakeLines.forEach(line => {
+    ctx.fillText(line, 168, fakeY); fakeY += 55;
+  });
+
+  // ── MARCA-TEXTO ────────────────────────────────────────────────────────
+  const text = q.text;
+  const maxLineW = W - 240; // margem + direita
+  const xStart = 168;
+
+  // Quebrar o texto em linhas
+  function breakText(txt, font, maxW) {
     ctx.font = font;
-    const words = text.split(' '); const lines = []; let cur = '';
+    const words = txt.split(' ');
+    const lines = []; let cur = '';
     for (const w of words) {
       const test = cur ? cur + ' ' + w : w;
-      if (ctx.measureText(test).width > maxW && cur) { lines.push(cur); cur = w; } else cur = test;
+      if (ctx.measureText(test).width > maxW && cur) { lines.push(cur); cur = w; }
+      else cur = test;
     }
-    if (cur) lines.push(cur); return lines;
+    if (cur) lines.push(cur);
+    return lines;
   }
-  const len = q.text.length;
-  const fontSize = len < 80 ? 72 : len < 150 ? 60 : len < 250 ? 52 : 44;
-  const qFont = 'italic ' + fontSize + 'px "Cormorant Garamond", Georgia, serif';
-  const qLines = wrapText(q.text, W - 180, qFont);
-  const qLineH = fontSize * 1.5;
+
+  const len = text.length;
+  const fontSize = len < 60 ? 68 : len < 120 ? 58 : len < 220 ? 50 : 44;
+  const qFont = fontSize + 'px "Georgia", serif';
+  const qLineH = fontSize * 1.55;
+  const qLines = breakText(text, qFont, maxLineW);
   const qBlockH = qLines.length * qLineH;
-  const qStartY = (H - qBlockH) / 2 - 40;
-  ctx.save();
+
+  // Posição vertical centralizada levemente acima do meio
+  let qY = (H - qBlockH) / 2 - 30;
+
+  // Marca-texto amarelo/âmbar em cada linha (ligeiramente inclinado)
   qLines.forEach((line, i) => {
     ctx.font = qFont;
-    const tw = ctx.measureText(line).width;
-    const lx = (W - tw) / 2 - 32; const ly = qStartY + i * qLineH - fontSize * 0.85;
-    const lw = tw + 64; const lh = fontSize * 1.18;
-    ctx.fillStyle = 'rgba(245, 238, 220, 0.92)'; ctx.fillRect(lx, ly, lw, lh);
-    ctx.fillStyle = 'rgba(107, 31, 46, 0.55)'; ctx.fillRect(lx + 8, ly + lh - 4, lw - 16, 3);
+    const lw = ctx.measureText(line).width;
+    const ly = qY + i * qLineH;
+    ctx.save();
+    // Leve rotação aleatória mas consistente por linha
+    const angle = (((i * 7 + text.length) % 5) - 2) * 0.003;
+    ctx.translate(xStart + lw/2, ly - fontSize * 0.7);
+    ctx.rotate(angle);
+    ctx.translate(-(xStart + lw/2), -(ly - fontSize * 0.7));
+    const hlGrad = ctx.createLinearGradient(xStart - 4, 0, xStart + lw + 8, 0);
+    hlGrad.addColorStop(0,   'rgba(255,218,80,0.00)');
+    hlGrad.addColorStop(0.04,'rgba(255,218,80,0.72)');
+    hlGrad.addColorStop(0.5, 'rgba(255,210,60,0.68)');
+    hlGrad.addColorStop(0.96,'rgba(255,218,80,0.72)');
+    hlGrad.addColorStop(1,   'rgba(255,218,80,0.00)');
+    ctx.fillStyle = hlGrad;
+    ctx.fillRect(xStart - 6, ly - fontSize * 0.88, lw + 14, fontSize * 1.08);
+    ctx.restore();
   });
-  ctx.restore();
-  ctx.save(); ctx.font = qFont; ctx.fillStyle = '#1c1408'; ctx.textAlign = 'center';
-  qLines.forEach((line, i) => { ctx.fillText(line, W/2, qStartY + i * qLineH); });
-  ctx.restore();
+
+  // Texto da citação
+  ctx.font = qFont;
+  ctx.fillStyle = '#2a1e08';
+  ctx.textAlign = 'left';
+  qLines.forEach((line, i) => {
+    ctx.fillText(line, xStart, qY + i * qLineH);
+  });
+
+  // ── TEXTO SIMULADO (depois da citação) ───────────────────────────────
+  const afterLines = [
+    'naquele instante, tudo parecia possível. A memória',
+    'guardaria aquilo para sempre, como se as palavras',
+    'tivessem sido escritas diretamente na alma.',
+  ];
+  ctx.font = '34px "Georgia", serif';
+  ctx.fillStyle = 'rgba(60,45,20,0.22)';
+  let afterY = qY + qBlockH + 40;
+  afterLines.forEach(line => {
+    ctx.fillText(line, 168, afterY); afterY += 55;
+  });
+
+  // ── ANOTAÇÃO À MÃO NA MARGEM ─────────────────────────────────────────
   ctx.save();
-  ctx.font = 'italic ' + (fontSize * 2.5) + 'px "Cormorant Garamond", Georgia, serif';
-  ctx.fillStyle = 'rgba(107, 31, 46, 0.35)'; ctx.textAlign = 'center';
-  ctx.fillText('\u201C', W/2, qStartY - fontSize * 0.5); ctx.restore();
+  ctx.translate(62, qY + qBlockH/2);
+  ctx.rotate(-0.06);
+  // Chave / colchete na margem
+  ctx.strokeStyle = 'rgba(107,31,46,0.55)';
+  ctx.lineWidth = 3;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(14, -qBlockH/2 - 10);
+  ctx.lineTo(6,  -qBlockH/2 - 10);
+  ctx.lineTo(6,   qBlockH/2 + 10);
+  ctx.lineTo(14,  qBlockH/2 + 10);
+  ctx.stroke();
+  // Exclamação ou coração na margem
+  ctx.font = 'bold 36px "Georgia", serif';
+  ctx.fillStyle = 'rgba(107,31,46,0.55)';
+  ctx.textAlign = 'center';
+  ctx.fillText('!', -12, 14);
+  ctx.restore();
+
+  // ── FONTE / ATRIBUIÇÃO ────────────────────────────────────────────────
+  const srcY = qY + qBlockH + 130;
   if (q.book || q.author) {
-    const srcY = qStartY + qBlockH + 72;
-    ctx.save(); ctx.textAlign = 'center';
-    ctx.strokeStyle = 'rgba(184, 151, 90, 0.6)'; ctx.lineWidth = 1.5;
-    ctx.beginPath(); ctx.moveTo(W/2 - 100, srcY - 24); ctx.lineTo(W/2 + 100, srcY - 24); ctx.stroke();
-    const src = (q.book||'') + (q.author ? '  \u2014  ' + q.author : '');
-    ctx.font = '500 28px Jost, Arial, sans-serif'; ctx.fillStyle = 'rgba(28, 20, 8, 0.6)';
-    ctx.fillText(src.toUpperCase(), W/2, srcY); ctx.restore();
+    // Linha decorativa
+    ctx.strokeStyle = 'rgba(184,151,90,0.5)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(xStart, srcY - 18); ctx.lineTo(xStart + 380, srcY - 18); ctx.stroke();
+
+    ctx.font = 'italic 36px "Georgia", serif';
+    ctx.fillStyle = 'rgba(100,75,30,0.65)';
+    ctx.textAlign = 'left';
+    const srcParts = [];
+    if (q.book)   srcParts.push(q.book);
+    if (q.author) srcParts.push(q.author);
+    ctx.fillText(srcParts.join(' — '), xStart, srcY);
+
+    if (q.page) {
+      ctx.font = '28px "Georgia", serif';
+      ctx.fillStyle = 'rgba(140,110,60,0.50)';
+      ctx.fillText('p. ' + q.page, xStart, srcY + 46);
+    }
   }
-  ctx.save(); ctx.textAlign = 'center'; ctx.font = '300 20px Jost, Arial, sans-serif';
-  ctx.fillStyle = 'rgba(184, 151, 90, 0.5)';
-  ctx.fillText('\u2756  Diário de Leituras  · Marina Risther Razzo  \u2756', W/2, H - 72); ctx.restore();
+
+  // ── SUBLINHADO ondulado opcional sob a primeira linha (cor vinho) ─────
+  if (qLines.length > 0) {
+    ctx.font = qFont;
+    const fl = qLines[0];
+    const flw = ctx.measureText(fl).width;
+    const uly = qY + 8;
+    ctx.strokeStyle = 'rgba(107,31,46,0.30)';
+    ctx.lineWidth = 2.5;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    for (let x = xStart; x < xStart + flw; x += 12) {
+      const wave = Math.sin((x - xStart) / 12 * Math.PI) * 4;
+      if (x === xStart) ctx.moveTo(x, uly + wave);
+      else ctx.lineTo(x, uly + wave);
+    }
+    ctx.stroke();
+  }
+
+  // ── RODAPÉ ────────────────────────────────────────────────────────────
+  ctx.font = '26px "Jost", Arial, sans-serif';
+  ctx.fillStyle = 'rgba(160,140,90,0.40)';
+  ctx.textAlign = 'center';
+  ctx.fillText('✦  Diário de Leituras  ·  Marina Risther Razzo  ✦', W/2, H - 72);
+
   document.getElementById('storyOverlay').classList.remove('hidden');
 };
 
