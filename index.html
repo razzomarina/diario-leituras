@@ -465,7 +465,10 @@ select.filter-select:focus { outline: none; border-color: var(--gold); }
 .quote-text::before { content: '\201C'; color: var(--wine); font-size: 1.6rem; line-height: 0; vertical-align: -.3rem; margin-right: .12rem; }
 .quote-text::after  { content: '\201D'; color: var(--wine); font-size: 1.6rem; line-height: 0; vertical-align: -.3rem; margin-left: .12rem; }
 .quote-source { font-size: .65rem; letter-spacing: .15em; text-transform: uppercase; color: var(--stone-light); }
-.quote-del { background: none; border: none; cursor: pointer; font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; color: var(--stone-pale); text-decoration: underline; padding: 0; font-family: 'DM Sans', sans-serif; margin-top: .6rem; display: inline-block; transition: color .15s; }
+.quote-card-actions { display: flex; align-items: center; gap: 1rem; margin-top: .7rem; }
+.quote-story-btn { display: inline-flex; align-items: center; gap: .35rem; padding: .32rem .75rem; background: linear-gradient(135deg, var(--wine) 0%, var(--wine-light) 100%); color: white; border: none; border-radius: 1px; font-family: 'Jost', sans-serif; font-size: .6rem; letter-spacing: .12em; text-transform: uppercase; cursor: pointer; transition: all .18s; box-shadow: 0 1px 6px var(--shadow-wine); }
+.quote-story-btn:hover { box-shadow: 0 3px 10px var(--shadow-wine); transform: translateY(-1px); }
+.quote-del { background: none; border: none; cursor: pointer; font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; color: var(--stone-pale); text-decoration: underline; padding: 0; font-family: 'Jost', sans-serif; display: inline-block; transition: color .15s; }
 .quote-del:hover { color: var(--wine); }
 .no-quotes { text-align: center; padding: 5rem 2rem; color: var(--stone-light); font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-style: italic; }
 
@@ -949,6 +952,27 @@ footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border);
     <div class="modal-footer">
       <button class="btn" onclick="window.closeQuoteModal()">Cancelar</button>
       <button class="btn btn-primary" onclick="window.saveQuote()">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- STORY MODAL -->
+<div class="modal-overlay hidden" id="storyOverlay">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-header">
+      <h2>Story gerado</h2>
+      <button class="modal-close" onclick="window.closeStoryModal()">×</button>
+    </div>
+    <div class="modal-body" style="padding:1rem 1.5rem 1.2rem">
+      <p style="font-size:.72rem;color:var(--stone-light);margin-bottom:.8rem;letter-spacing:.04em">Clique com o botão direito na imagem para salvar, ou toque e segure no celular.</p>
+      <canvas id="storyCanvas" style="width:100%;border-radius:2px;box-shadow:0 4px 20px var(--shadow);display:block"></canvas>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="window.closeStoryModal()">Fechar</button>
+      <button class="btn btn-gold" onclick="window._downloadStory()">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+        Baixar
+      </button>
     </div>
   </div>
 </div>
@@ -1617,6 +1641,209 @@ window._importTbrCsv = async function(input) {
   showToast('✓ ' + imported + ' livro' + (imported !== 1 ? 's' : '') + ' importado' + (imported !== 1 ? 's' : '') + ' para Quero Ler!');
 };
 
+// ── STORY GENERATOR ──────────────────────────────────────
+function closeStoryModal(){ document.getElementById('storyOverlay').classList.add('hidden'); }
+window.closeStoryModal = closeStoryModal;
+
+window._downloadStory = function() {
+  const canvas = document.getElementById('storyCanvas');
+  const a = document.createElement('a');
+  a.download = 'citacao-story.png';
+  a.href = canvas.toDataURL('image/png');
+  a.click();
+};
+
+window._generateStory = function(idx) {
+  const q = window._quotesForStory[idx];
+  if (!q) return;
+  const canvas = document.getElementById('storyCanvas');
+  const W = 1080, H = 1920;
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  // ── Background: warm cream paper ──
+  const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
+  bgGrad.addColorStop(0, '#fdfaf6');
+  bgGrad.addColorStop(0.5, '#f8f3ea');
+  bgGrad.addColorStop(1, '#f2ebe0');
+  ctx.fillStyle = bgGrad;
+  ctx.fillRect(0, 0, W, H);
+
+  // Subtle paper texture lines
+  ctx.save();
+  ctx.globalAlpha = 0.018;
+  for (let y = 0; y < H; y += 32) {
+    ctx.fillStyle = '#8b7355';
+    ctx.fillRect(0, y, W, 1);
+  }
+  ctx.restore();
+
+  // ── Blurred background text (fake book page) ──
+  const loremLines = [
+    'restaurante e pedir o maravilhoso copo dia após dia e no',
+    'ininterruptamente num único fluido — esta vida. Faço minha',
+    'escapulo com ela para alguma sala mobilhada pode ela ser',
+    'irmada por diuvas de velas. Preciso de olhos postos em mim',
+    'extirpar estas floreios e fírulas. Para ser eu mesmo (tanto)',
+    'nciso da iluminação dos olhos de nustas pessoas e, portanto,',
+    'io posso estar inteiramente seguro sobre o que o meu eu é.',
+    'Os autênticos, como Rhoda, existem mais com a iluminação, a',
+    'pletamente em solitude. Eles se melindram com a iluminação, a',
+    'reduplicação. Eles atiram suas pinturas, uma vez concluídas, no',
+    'campo, com a frente virada para baixo. Em cima das palavras',
+    'de Louis estende-se uma espessa camada de gelo. Suas palavras',
+    'saem prensadas, condensadas, duradouras.',
+    '"Quero, pois, após esta sonolência, cintilar, multifacetado',
+    'sob a luz do rosto de meus amigos. Estive fazendo a travessia do',
+    'território sem sol da não-identidade. Uma terra estranha. Tenho',
+    'ouvido em meu momento de apaziguamento, em meu momento',
+    'de arrasadora satisfação, o suspiro, à medida que flui, que reflui,',
+    'de maré que se espraia para além deste círculo de radiante luz,',
+    'deste tamborilar de insensata fúria. Tenho tido um momento',
+    'único de enorme paz. Isso talvez seja a felicidade. Agora sou ar-',
+    'rastado de volta por pungentes sensações; pela curiosidade, pela',
+    'avidez (estou faminto) e pelo irresistível desejo de ser eu mesmo.',
+    'Penso nas pessoas às quais poderia dizer coisas: Louis, Neville,',
+    'Susan, Jinny e Rhoda. Com eles sou multiforme. Eles me livram',
+    'da escuridão. Iremos nos encontrar esta noite, graças aos céus.',
+    'Daremos adeus a Percival, que parte para a Índia. A hora ainda',
+    'está longe, mas já começo a perceber aqueles arautos, aqueles',
+    'batedores, as imagens de nossos amigos ausentes. Vejo Louis',
+    'esculpido em pedra, escultural; Neville, talhado a tesoura, exato',
+    'Susan com olhos como contas de cristal; Jinny dançando com',
+    'uma chama, febril, flamante, sobre a terra seca; e Rhoda a m-',
+    'da fonte sempre melhada. São figuras fantásticas, habita-',
+    'ções, essas visões de amigos ausentes, fantasmas, habitué',
+    'ouvido em meu momento de apaziguamento, em meu momento',
+    'de arrasadora satisfação, o suspiro, à medida que flui, que reflui,',
+    'de maré que se espraia para além deste círculo de radiante luz,',
+    'deste tamborilar de insensata fúria. Tenho tido um momento',
+    'único de enorme paz. Isso talvez seja a felicidade. Agora sou ar-',
+    'rastado de volta por pungentes sensações; pela curiosidade, pela',
+    'avidez (estou faminto) e pelo irresistível desejo de ser eu mesmo.',
+    'Penso nas pessoas às quais poderia dizer coisas: Louis, Neville,',
+    'da escuridão. Iremos nos encontrar esta noite, graças aos céus.',
+    'Daremos adeus a Percival, que parte para a Índia. A hora ainda',
+    'está longe, mas já começo a perceber aqueles arautos, aqueles',
+    'batedores, as imagens de nossos amigos ausentes. Vejo Louis',
+  ];
+
+  ctx.save();
+  ctx.filter = 'blur(5px)';
+  ctx.globalAlpha = 0.22;
+  ctx.fillStyle = '#2a221a';
+  ctx.font = '500 36px "Georgia", serif';
+  const lineH = 58;
+  const marginX = 88;
+  const startY = 110;
+  loremLines.forEach((line, i) => {
+    ctx.fillText(line, marginX, startY + i * lineH);
+  });
+  ctx.restore();
+
+  // ── Vignette overlay ──
+  const vig = ctx.createRadialGradient(W/2, H/2, H*0.25, W/2, H/2, H*0.75);
+  vig.addColorStop(0, 'rgba(0,0,0,0)');
+  vig.addColorStop(1, 'rgba(20,14,8,0.32)');
+  ctx.fillStyle = vig;
+  ctx.fillRect(0, 0, W, H);
+
+  // ── Quote text (centered, crisp) ──
+  const quoteText = q.text;
+  const fontSize = quoteText.length < 80 ? 68 : quoteText.length < 160 ? 56 : 46;
+  const quoteFont = `italic ${fontSize}px "Cormorant Garamond", "Georgia", serif`;
+  ctx.font = quoteFont;
+
+  // Word wrap
+  const maxWidth = W - 200;
+  const words = quoteText.split(' ');
+  const qLines = [];
+  let cur = '';
+  for (const w of words) {
+    const test = cur ? cur + ' ' + w : w;
+    if (ctx.measureText(test).width > maxWidth && cur) {
+      qLines.push(cur);
+      cur = w;
+    } else { cur = test; }
+  }
+  if (cur) qLines.push(cur);
+
+  const qLineH = fontSize * 1.45;
+  const qBlockH = qLines.length * qLineH;
+  const qStartY = (H - qBlockH) / 2 - 60;
+
+  // Highlight rectangles per line (wine/gold)
+  ctx.save();
+  ctx.globalAlpha = 0.22;
+  qLines.forEach((line, i) => {
+    const tw = ctx.measureText(line).width;
+    const x = (W - tw) / 2 - 28;
+    const y = qStartY + i * qLineH - fontSize * 0.82;
+    const rW = tw + 56;
+    const rH = fontSize * 1.1;
+    // gradient highlight
+    const hGrad = ctx.createLinearGradient(x, y, x + rW, y);
+    hGrad.addColorStop(0, 'rgba(107,31,46,0)');
+    hGrad.addColorStop(0.15, 'rgba(107,31,46,0.85)');
+    hGrad.addColorStop(0.85, 'rgba(107,31,46,0.85)');
+    hGrad.addColorStop(1, 'rgba(107,31,46,0)');
+    ctx.fillStyle = hGrad;
+    ctx.fillRect(x, y, rW, rH);
+  });
+  ctx.restore();
+
+  // Quote text itself
+  ctx.save();
+  ctx.fillStyle = '#faf7f2';
+  ctx.font = quoteFont;
+  ctx.textAlign = 'center';
+  ctx.shadowColor = 'rgba(0,0,0,0.3)';
+  ctx.shadowBlur = 8;
+  qLines.forEach((line, i) => {
+    ctx.fillText(line, W/2, qStartY + i * qLineH);
+  });
+  ctx.restore();
+
+  // Opening quote mark
+  ctx.save();
+  ctx.font = `${fontSize * 2.2}px "Cormorant Garamond", "Georgia", serif`;
+  ctx.fillStyle = 'rgba(184,151,90,0.5)';
+  ctx.textAlign = 'center';
+  ctx.fillText('“', W/2, qStartY - fontSize * 0.6);
+  ctx.restore();
+
+  // ── Source line ──
+  if (q.book || q.author) {
+    const sourceY = qStartY + qBlockH + 70;
+    ctx.save();
+    ctx.textAlign = 'center';
+    // decorative rule
+    ctx.strokeStyle = 'rgba(184,151,90,0.5)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(W/2 - 80, sourceY - 28);
+    ctx.lineTo(W/2 + 80, sourceY - 28);
+    ctx.stroke();
+    // book + author
+    ctx.font = '500 30px "Jost", "Arial", sans-serif';
+    ctx.fillStyle = 'rgba(250,247,242,0.75)';
+    ctx.letterSpacing = '0.12em';
+    const src = (q.book ? q.book.toUpperCase() : '') + (q.author ? '  —  ' + q.author : '');
+    ctx.fillText(src, W/2, sourceY);
+    ctx.restore();
+  }
+
+  // ── Branding bottom ──
+  ctx.save();
+  ctx.textAlign = 'center';
+  ctx.font = '400 22px "Jost", "Arial", sans-serif';
+  ctx.fillStyle = 'rgba(184,151,90,0.4)';
+  ctx.fillText('✦ Diário de Leituras · Marina Risther Razzo', W/2, H - 80);
+  ctx.restore();
+
+  document.getElementById('storyOverlay').classList.remove('hidden');
+};
+
 function exportCSV(){
   if(!books.length){showToast('⚠ Nenhum livro para exportar.');return;}
   const h=['Título','Autor','Gênero','Editora','Ano Pub.','Data Leitura','Avaliação','Favorito','Tags','Status','Como cheguei','ISBN','Notas'];
@@ -1633,9 +1860,10 @@ window._toggleNotes=card=>card.classList.toggle('expanded');
 document.getElementById('modalOverlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
 document.getElementById('quoteModalOverlay').addEventListener('click',function(e){if(e.target===this)closeQuoteModal();});
 document.getElementById('shuffleOverlay').addEventListener('click',function(e){if(e.target===this)closeShuffleModal();});
+document.getElementById('storyOverlay').addEventListener('click',function(e){if(e.target===this)closeStoryModal();});
 document.getElementById('confirmOverlay').addEventListener('click',function(e){if(e.target===this)closeConfirm();});
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){closeModal();closeQuoteModal();closeShuffleModal();closeConfirm();}
+  if(e.key==='Escape'){closeModal();closeQuoteModal();closeShuffleModal();closeStoryModal();closeConfirm();}
   if(e.key==='Enter'&&!document.getElementById('modalOverlay').classList.contains('hidden'))if(document.activeElement.tagName!=='TEXTAREA'&&document.activeElement.id!=='tagsInput')saveBook();
   if(e.key==='Enter'&&!document.getElementById('quoteModalOverlay').classList.contains('hidden'))if(document.activeElement.tagName!=='TEXTAREA')saveQuote();
 });
