@@ -2353,14 +2353,13 @@ body.dark .nyt-list-item:hover { background:var(--cream-dark); }
 
 <script type="module">
 // ── FIREBASE IMPORTS ───────────────────────────────────────
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import {
-  getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot,
-  enableIndexedDbPersistence  // melhoria 1: offline
-} from "https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+  getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import {
   getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
 // ── FIREBASE INIT ─────────────────────────────────────────
 const firebaseConfig = {
@@ -2376,11 +2375,8 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-// Melhoria 1: persistência offline
-enableIndexedDbPersistence(db).catch(err => {
-  if (err.code === 'failed-precondition') console.warn('[Offline] Múltiplas abas abertas — persistência desativada.');
-  else if (err.code === 'unimplemented') console.warn('[Offline] Navegador sem suporte.');
-});
+// Persistência offline (API v10+)
+// Persistência offline: suportada nativamente pelo Firestore v10+
 
 // Detectar estado de conexão
 window.addEventListener('online',  () => document.getElementById('offlineBadge').classList.remove('show'));
