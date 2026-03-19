@@ -1766,6 +1766,7 @@ function startListening() {
   unsubGoals = onSnapshot(goalsCol, snap => {
     snap.docs.forEach(d => { goals[d.id] = d.data().target; });
     renderGoals();
+    renderDashboard(); // atualiza dashboard quando metas chegam do Firestore
   }, err => console.error(err));
 }
 
