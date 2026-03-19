@@ -80,41 +80,25 @@ body { font-family: 'Jost', sans-serif; background: var(--cream); color: var(--i
 
 /* ── HEADER ── */
 header {
-  text-align: center; padding: 4.5rem 2rem 4rem;
-  background-color: #f0e8d8;
+  position: relative; overflow: hidden;
+  padding: 3.5rem 2rem 3rem;
+  background-color: #fdf9f2;
   background-image:
-    radial-gradient(ellipse 85% 65% at 50% 0%,   rgba(215,185,130,0.55) 0%, transparent 55%),
-    radial-gradient(ellipse 70% 55% at 10% 20%,  rgba(180,140,90,0.22)  0%, transparent 50%),
-    radial-gradient(ellipse 60% 50% at 90% 15%,  rgba(160,100,70,0.18)  0%, transparent 48%),
-    radial-gradient(ellipse 100% 45% at 50% 110%, rgba(120,80,40,0.20)  0%, transparent 50%),
-    radial-gradient(ellipse 50% 40% at 0%  100%, rgba(100,70,40,0.16)   0%, transparent 45%),
-    radial-gradient(ellipse 50% 40% at 100% 100%, rgba(100,70,40,0.14)  0%, transparent 45%),
-    repeating-linear-gradient(
-      0deg,
-      transparent 0px, transparent 28px,
-      rgba(160,120,70,0.04) 28px, rgba(160,120,70,0.04) 29px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent 0px, transparent 48px,
-      rgba(160,120,70,0.025) 48px, rgba(160,120,70,0.025) 49px
-    ),
-    linear-gradient(170deg, #f5edd8 0%, #ede0c4 30%, #e8d8b8 60%, #f0e4cc 100%);
-  background-size: cover;
-  position: relative; border-bottom: none; overflow: hidden;
-  min-height: 420px; display: flex; flex-direction: column;
+    linear-gradient(to right, #fdf9f2 60%, rgba(255,232,175,0.30) 100%);
+  border-bottom: none;
+  min-height: 340px;
+  display: flex; flex-direction: column;
   align-items: center; justify-content: center;
+  text-align: center;
 }
 header::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
-  background: linear-gradient(90deg, var(--wine) 0%, var(--gold) 40%, var(--gold-light) 60%, var(--wine) 100%);
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent 0%, rgba(184,151,90,0.6) 30%, rgba(184,151,90,0.6) 70%, transparent 100%);
   z-index: 2;
 }
 header::after {
   content: ''; position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 70% 50% at 50% 45%, rgba(255,240,200,0.35) 0%, transparent 55%),
-    radial-gradient(ellipse 100% 100% at 50% 50%, transparent 30%, rgba(100,70,30,0.18) 100%);
+  background: radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, rgba(220,190,130,0.07) 100%);
   pointer-events: none; z-index: 1;
 }
 header > * { position: relative; z-index: 2; }
@@ -687,6 +671,69 @@ body.dark header {
     ),
     linear-gradient(155deg, #1c1108 0%, #100c0a 38%, #160a0e 68%, #0e0a08 100%);
 }
+/* ═══ MODO ESCURO — LUAR ═══ */
+body.dark header {
+  background-color: #0e0c14;
+  background-image: linear-gradient(to right, #0e0c14 55%, rgba(100,115,180,0.15) 100%);
+}
+body.dark header::before {
+  background: linear-gradient(90deg, transparent 0%, rgba(140,160,220,0.45) 30%, rgba(140,160,220,0.45) 70%, transparent 100%);
+}
+body.dark header::after {
+  background: radial-gradient(ellipse 100% 100% at 50% 50%, transparent 40%, rgba(10,8,20,0.35) 100%);
+}
+/* Raios de luar */
+body.dark .header-rays line {
+  stroke: rgba(180,200,255,0.045);
+}
+/* Lua crescente */
+body.dark .header-astro-glow1 { fill: rgba(200,215,255,0.10); }
+body.dark .header-astro-glow2 { fill: rgba(180,200,255,0.10); }
+body.dark .header-astro-core  { fill: rgba(200,218,255,0.08); stroke: rgba(160,180,240,0.30); }
+body.dark .header-moon-shadow { fill: #0e0c14; opacity: 1; }
+/* Estrelas */
+body.dark .header-star { fill: rgba(220,230,255,0.55); }
+/* Monograma noturno */
+body.dark .mono-ring1 { fill: rgba(140,160,220,0.06); stroke: rgba(140,160,220,0.20); }
+body.dark .mono-ring2 { stroke: rgba(160,180,240,0.16); }
+body.dark .mono-letter { fill: #c898b0; }
+body.dark .header-monogram-wrap::before {
+  background: linear-gradient(to left, transparent, rgba(160,180,240,0.28));
+}
+body.dark .header-monogram-wrap::after {
+  background: linear-gradient(to right, transparent, rgba(160,180,240,0.28));
+}
+/* Tipografia noturna */
+body.dark h1 { color: #e8dfc8; }
+body.dark h1 em {
+  background: linear-gradient(135deg, #c898b0 0%, #e0b0c8 50%, #c898b0 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+body.dark .header-super { color: rgba(180,160,210,0.52); }
+body.dark .header-rule span {
+  background: linear-gradient(to right, transparent, rgba(160,180,240,0.30), transparent);
+}
+body.dark .header-name { color: rgba(200,185,220,0.52); }
+/* Nav noturna */
+body.dark .nav-tabs {
+  background: rgba(14,12,20,0.96);
+  border-bottom-color: rgba(140,160,220,0.16);
+  box-shadow: 0 1px 8px rgba(0,0,0,0.30);
+}
+body.dark .nav-tab { color: rgba(180,165,200,0.40); }
+body.dark .nav-tab:hover { color: rgba(200,160,200,0.80); }
+body.dark .nav-tab.active { color: #c898b0; border-bottom-color: #c898b0; }
+/* darkToggle noturno */
+body.dark #darkToggle {
+  border-color: rgba(160,180,240,0.22);
+  background: rgba(160,180,240,0.07);
+  color: rgba(180,200,255,0.65);
+}
+body.dark #darkToggle:hover {
+  background: rgba(160,180,240,0.14);
+  border-color: rgba(160,180,240,0.40);
+}
+
 body.dark header::after {
   background:
     radial-gradient(ellipse 75% 55% at 55% 42%, rgba(190,110,50,0.10) 0%, transparent 52%),
@@ -1638,6 +1685,120 @@ body.dark .quote-filter-select { background: var(--cream-mid); color: var(--ink)
 .quote-surprise-page {
   font-size: .7rem; color: var(--stone-light);
 }
+
+/* ── Header: SVG de fundo ── */
+.header-rays {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  pointer-events: none; z-index: 0;
+}
+/* Sol (modo claro) */
+.header-astro-glow1 { fill: rgba(255,228,150,0.13); }
+.header-astro-glow2 { fill: rgba(255,222,130,0.14); }
+.header-astro-core  { fill: rgba(255,210,90,0.16); stroke: rgba(184,151,90,0.32); stroke-width: 1; }
+.header-moon-shadow { fill: #fdf9f2; opacity: 0; }
+.header-star        { fill: rgba(220,230,255,0); }
+
+/* ── Header: monograma ── */
+.header-monogram-wrap {
+  position: relative; z-index: 2; margin-bottom: 1.2rem;
+}
+.header-monogram { width: 110px; height: 110px; }
+.mono-ring1 { fill: rgba(107,31,46,0.04); stroke: rgba(107,31,46,0.14); stroke-width: 1; }
+.mono-ring2 { fill: none; stroke: rgba(184,151,90,0.22); stroke-width: 0.6; stroke-dasharray: 2.5 4; }
+.mono-letter {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-style: italic; font-size: 82px;
+  fill: #6b1f2e; opacity: 0.82;
+}
+
+/* ── Ornamentos laterais do monograma ── */
+.header-monogram-wrap::before,
+.header-monogram-wrap::after {
+  content: '';
+  position: absolute; top: 50%; width: 60px; height: 1px;
+  background: linear-gradient(to right, transparent, rgba(184,151,90,0.35));
+  transform: translateY(-50%);
+}
+.header-monogram-wrap::before { right: calc(100% + 12px); background: linear-gradient(to left, transparent, rgba(184,151,90,0.35)); }
+.header-monogram-wrap::after  { left: calc(100% + 12px); }
+
+/* ── Header: conteúdo textual ── */
+.header-content { position: relative; z-index: 2; }
+
+/* ── h1 atualizado ── */
+h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3.2rem, 7vw, 5.5rem); font-weight: 300;
+  line-height: .95; color: #1c1410; letter-spacing: -.02em; margin-bottom: .3rem;
+  text-shadow: none;
+}
+h1 em {
+  font-style: italic; font-weight: 400; display: block;
+  font-size: clamp(3.5rem, 7.5vw, 6rem);
+  background: linear-gradient(135deg, #6b1f2e 0%, #9b3050 50%, #6b1f2e 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  filter: none;
+}
+
+/* ── header-super no novo layout ── */
+.header-super {
+  font-family: 'Jost', sans-serif; font-size: .58rem; letter-spacing: .55em;
+  text-transform: uppercase; color: rgba(107,31,46,0.52);
+  text-shadow: none; margin-bottom: .5rem;
+  display: block;
+}
+
+/* ── header-rule simplificada ── */
+.header-rule {
+  display: flex; align-items: center; justify-content: center;
+  margin: .6rem 0;
+}
+.header-rule span {
+  width: 120px; height: 1px;
+  background: linear-gradient(to right, transparent, rgba(184,151,90,0.40), transparent);
+  display: block;
+}
+
+/* ── header-name ── */
+.header-name {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(.9rem, 1.8vw, 1.1rem); font-weight: 400; font-style: italic;
+  color: rgba(100,78,48,0.60); letter-spacing: .08em;
+  text-shadow: none; margin-top: .4rem;
+}
+
+/* ── nav-tabs modo claro ── */
+.nav-tabs {
+  display: flex; justify-content: center;
+  background: rgba(253,249,242,0.96);
+  border-bottom: 1px solid rgba(184,151,90,0.20);
+  flex-wrap: wrap;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 1px 8px rgba(180,150,100,0.08);
+}
+.nav-tab {
+  padding: .9rem 1.4rem; font-family: 'Jost', sans-serif; font-size: .6rem;
+  letter-spacing: .18em; text-transform: uppercase; font-weight: 500;
+  background: none; border: none; border-bottom: 2px solid transparent;
+  cursor: pointer; color: rgba(80,55,30,0.45); transition: all .2s;
+  display: flex; align-items: center; gap: .4rem;
+}
+.nav-tab:hover { color: rgba(107,31,46,0.75); }
+.nav-tab.active {
+  color: #6b1f2e;
+  border-bottom-color: #6b1f2e;
+}
+
+/* ── darkToggle modo claro ── */
+#darkToggle {
+  display: flex; align-items: center; gap: .4rem;
+  padding: .35rem .7rem; border: 1px solid rgba(107,31,46,0.20);
+  background: rgba(107,31,46,0.05); color: rgba(107,31,46,0.65);
+  border-radius: 20px; cursor: pointer; font-family: 'Jost', sans-serif;
+  font-size: .6rem; letter-spacing: .12em; text-transform: uppercase;
+  transition: all .22s; position: relative; z-index: 2;
+}
+#darkToggle:hover { background: rgba(107,31,46,0.10); border-color: rgba(107,31,46,0.35); }
 </style>
 </head>
 <body>
@@ -1670,20 +1831,53 @@ body.dark .quote-filter-select { background: var(--cream-mid); color: var(--ink)
 <div id="appContent" style="display:none">
 <canvas id="confettiCanvas"></canvas>
 <header>
-  <span class="header-super">registro pessoal</span>
-  <svg class="header-book-icon" width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <rect x="8" y="6" width="26" height="38" rx="2" fill="none" stroke="#b8975a" stroke-width="1.5"/>
-    <rect x="10" y="6" width="4" height="38" rx="1" fill="rgba(107,31,46,0.18)"/>
-    <line x1="16" y1="14" x2="30" y2="14" stroke="#b8975a" stroke-width="1" stroke-opacity=".5"/>
-    <line x1="16" y1="19" x2="30" y2="19" stroke="#b8975a" stroke-width="1" stroke-opacity=".35"/>
-    <line x1="16" y1="24" x2="26" y2="24" stroke="#b8975a" stroke-width="1" stroke-opacity=".35"/>
-    <path d="M34 10 L44 10 L44 42 L34 42 Q32 42 32 40 L32 12 Q32 10 34 10Z" fill="none" stroke="#6b1f2e" stroke-width="1.2" stroke-opacity=".4"/>
+  <!-- Raios de luz (SVG de fundo, pointer-events:none) -->
+  <svg class="header-rays" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 1200 500">
+    <line x1="1120" y1="0" x2="80"   y2="500" stroke="rgba(255,215,130,0.09)"  stroke-width="60"/>
+    <line x1="1160" y1="0" x2="280"  y2="500" stroke="rgba(255,220,140,0.07)"  stroke-width="40"/>
+    <line x1="1080" y1="0" x2="0"    y2="440" stroke="rgba(255,208,110,0.06)"  stroke-width="28"/>
+    <line x1="1180" y1="10" x2="480" y2="500" stroke="rgba(255,225,150,0.05)" stroke-width="20"/>
+    <!-- Astro (sol no claro / lua no escuro — trocado via CSS/classe) -->
+    <circle class="header-astro-glow1" cx="1095" cy="90" r="110"/>
+    <circle class="header-astro-glow2" cx="1095" cy="90" r="80"/>
+    <circle class="header-astro-core"  cx="1095" cy="90" r="56"/>
+    <!-- Meia-lua (escondida no claro, visível no escuro) -->
+    <circle class="header-moon-shadow" cx="1078" cy="82" r="46"/>
+    <!-- Estrelas (escondidas no claro) -->
+    <circle class="header-star" cx="120"  cy="55"  r="1.5"/>
+    <circle class="header-star" cx="240"  cy="38"  r="1.2"/>
+    <circle class="header-star" cx="360"  cy="62"  r="1.8"/>
+    <circle class="header-star" cx="500"  cy="42"  r="1.3"/>
+    <circle class="header-star" cx="640"  cy="70"  r="1.0"/>
+    <circle class="header-star" cx="780"  cy="35"  r="1.5"/>
+    <circle class="header-star" cx="160"  cy="90"  r="1.0"/>
+    <circle class="header-star" cx="420"  cy="22"  r="1.2"/>
+    <circle class="header-star" cx="700"  cy="55"  r="0.9"/>
+    <circle class="header-star" cx="860"  cy="45"  r="1.4"/>
+    <circle class="header-star" cx="290"  cy="78"  r="0.8"/>
+    <circle class="header-star" cx="560"  cy="28"  r="1.1"/>
   </svg>
-  <h1>Diário de<em>Leituras</em></h1>
-  <div class="header-rule"><span></span><em>uma vida em livros</em><span></span></div>
-  <p class="header-name">Marina Risther Razzo</p>
-  <!-- Melhoria: Modo escuro -->
-  <div style="position:relative;z-index:2;margin-top:1rem;">
+
+  <!-- Monograma -->
+  <div class="header-monogram-wrap">
+    <svg class="header-monogram" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="80" cy="80" r="72" class="mono-ring1"/>
+      <circle cx="80" cy="80" r="62" class="mono-ring2"/>
+      <text x="80" y="108" class="mono-letter" text-anchor="middle">M</text>
+    </svg>
+  </div>
+
+  <!-- Conteúdo textual -->
+  <div class="header-content">
+    <span class="header-super">Diário de Leituras</span>
+    <div class="header-rule"><span></span></div>
+    <h1>Diário de<em>Leituras</em></h1>
+    <div class="header-rule"><span></span></div>
+    <p class="header-name">Marina Risther Razzo</p>
+  </div>
+
+  <!-- Controles -->
+  <div style="position:relative;z-index:2;margin-top:1.2rem;">
     <button id="darkToggle" onclick="window.toggleDark()" title="Alternar modo escuro">
       <span class="dk-icon" id="darkIcon">🌙</span>
       <span id="darkLabel">Modo escuro</span>
@@ -1691,8 +1885,8 @@ body.dark .quote-filter-select { background: var(--cream-mid); color: var(--ink)
   </div>
   <div id="userBadge" style="margin-top:.8rem;display:flex;align-items:center;justify-content:center;gap:.5rem;">
     <img id="userAvatar" src="" style="width:20px;height:20px;border-radius:50%;display:none;border:1px solid var(--border)">
-    <span id="userEmail" style="font-size:.62rem;letter-spacing:.1em;color:var(--ink);text-shadow:0 1px 4px rgba(240,228,200,0.8)"></span>
-    <button onclick="window.logout()" style="font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;background:none;border:none;cursor:pointer;color:var(--stone-pale);text-decoration:underline;font-family:'DM Sans',sans-serif;">sair</button>
+    <span id="userEmail" style="font-size:.62rem;letter-spacing:.1em;color:var(--ink);opacity:.7"></span>
+    <button onclick="window.logout()" style="font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;background:none;border:none;cursor:pointer;color:var(--stone);text-decoration:underline;font-family:'Jost',sans-serif;">sair</button>
   </div>
 </header>
 
