@@ -1586,6 +1586,21 @@ body.dark .nyt-list-item:hover { background:var(--cream-dark); }
   .desafios-hero { padding:1.2rem; }
 }
 
+
+/* ── Story style/format selectors ── */
+.story-style-btn, .story-fmt-btn {
+  display: inline-flex; align-items: center; gap: .3rem;
+  padding: .3rem .55rem; border: 1px solid var(--border-strong);
+  background: transparent; border-radius: 2px; cursor: pointer;
+  font-family: 'Jost', sans-serif; font-size: .58rem; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--stone); transition: all .15s;
+}
+.story-style-btn.active, .story-fmt-btn.active {
+  background: var(--wine); color: white; border-color: var(--wine);
+}
+.story-style-btn:hover:not(.active), .story-fmt-btn:hover:not(.active) {
+  border-color: var(--wine); color: var(--wine);
+}
 </style>
 </head>
 <body>
@@ -2247,13 +2262,49 @@ body.dark .nyt-list-item:hover { background:var(--cream-dark); }
 
 <!-- STORY MODAL -->
 <div class="modal-overlay hidden" id="storyOverlay">
-  <div class="modal" style="max-width:420px">
+  <div class="modal" style="max-width:460px">
     <div class="modal-header">
-      <h2>Story gerado</h2>
+      <h2>Gerar post</h2>
       <button class="modal-close" onclick="window.closeStoryModal()">×</button>
     </div>
-    <div class="modal-body" style="padding:1rem 1.5rem 1.2rem">
-      <p style="font-size:.72rem;color:var(--stone-light);margin-bottom:.8rem;letter-spacing:.04em">Clique com o botão direito na imagem para salvar, ou toque e segure no celular.</p>
+    <div class="modal-body" style="padding:.8rem 1.5rem 1rem">
+      <div style="display:flex;gap:.5rem;margin-bottom:.7rem;flex-wrap:wrap">
+        <div style="flex:1;min-width:140px">
+          <div style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--stone-light);margin-bottom:.35rem">Estilo</div>
+          <div style="display:flex;gap:.3rem">
+            <button class="story-style-btn active" data-style="page" onclick="window._setStoryStyle('page')" title="Página grifada">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              Página
+            </button>
+            <button class="story-style-btn" data-style="dark" onclick="window._setStoryStyle('dark')" title="Noturno">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+              Noturno
+            </button>
+            <button class="story-style-btn" data-style="minimal" onclick="window._setStoryStyle('minimal')" title="Minimalista">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h10M4 18h7"/></svg>
+              Minimal
+            </button>
+          </div>
+        </div>
+        <div style="flex:1;min-width:140px">
+          <div style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--stone-light);margin-bottom:.35rem">Formato</div>
+          <div style="display:flex;gap:.3rem">
+            <button class="story-fmt-btn active" data-fmt="story" onclick="window._setStoryFmt('story')" title="Story 9:16">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="7" y="2" width="10" height="20" rx="2" stroke-width="2"/></svg>
+              Story
+            </button>
+            <button class="story-fmt-btn" data-fmt="square" onclick="window._setStoryFmt('square')" title="Feed quadrado">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2" stroke-width="2"/></svg>
+              Feed
+            </button>
+            <button class="story-fmt-btn" data-fmt="twitter" onclick="window._setStoryFmt('twitter')" title="Twitter/X 16:9">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h10"/></svg>
+              Twitter
+            </button>
+          </div>
+        </div>
+      </div>
+      <p style="font-size:.68rem;color:var(--stone-light);margin-bottom:.6rem;letter-spacing:.03em">Clique com o botão direito para salvar, ou toque e segure no celular.</p>
       <canvas id="storyCanvas" style="width:100%;border-radius:2px;box-shadow:0 4px 20px var(--shadow);display:block"></canvas>
     </div>
     <div class="modal-footer">
@@ -3049,6 +3100,7 @@ function renderListView(filtered) {
       '<div class="card-actions" onclick="event.stopPropagation()">' +
         '<button class="fav-btn ' + (b.favorito ? 'active' : '') + '" onclick="window._toggleFavCard(\'' + b.id + '\')" title="Favorito">♥</button>' +
         ((!b.status || b.status==='lido') ? '<button onclick="window._rereadBook(\'' + b.id + '\')" title="Reler" style="font-size:.75rem;color:var(--stone-light)">↺</button>' : '') +
+        '<button onclick="window._quickAddQuote(\'' + b.id + '\',\'' + esc(b.title) + '\',\'' + esc(b.author||'') + '\')" title="Adicionar citação" style="color:var(--stone-light);font-size:.75rem">"</button>' +
         '<button onclick="window._openModal(\'' + b.id + '\')" title="Editar"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="12" height="12"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg></button>' +
         '<button onclick="window.generateBookCard(\'' + b.id + '\')" title="Gerar card" style="color:var(--gold)">◈</button>' +
         '<button onclick="window._confirmDelete(\'' + b.id + '\',\'' + esc(b.title) + '\')" title="Remover"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="12" height="12"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>' +
@@ -3481,76 +3533,70 @@ window._importTbrCsv = async function(input) {
 
 // ── STORY GENERATOR ───────────────────────────────────────
 function closeStoryModal() { document.getElementById('storyOverlay').classList.add('hidden'); }
+
+window._quickAddQuote = function(bookId, title, author) {
+  ['qText','qPage'].forEach(f => document.getElementById(f).value = '');
+  const bkEl = document.getElementById('qBook');
+  const auEl = document.getElementById('qAuthor');
+  if (bkEl) bkEl.value = title || '';
+  if (auEl) auEl.value = author || '';
+  document.getElementById('bookTitlesList').innerHTML = window._books
+    ? window._books.map(b => '<option value="' + b.title.replace(/"/g,'&quot;') + '">').join('')
+    : '';
+  document.getElementById('quoteModalOverlay').classList.remove('hidden');
+  document.getElementById('qText').focus();
+};
 window.closeStoryModal = closeStoryModal;
 window._downloadStory = function() {
   const canvas = document.getElementById('storyCanvas');
+  const fmt = window._currentStoryFmt || 'story';
   const a = document.createElement('a');
-  a.download = 'citacao-story.png'; a.href = canvas.toDataURL('image/png'); a.click();
+  a.download = 'citacao-' + fmt + '.png'; a.href = canvas.toDataURL('image/png'); a.click();
 };
 window._generateStory = function(idx) {
-  const q = window._quotesForStory[idx]; if (!q) return;
-  const canvas = document.getElementById('storyCanvas');
-  const W = 1080, H = 1920;
-  canvas.width = W; canvas.height = H;
-  const ctx = canvas.getContext('2d');
+  window._currentStoryStyle = window._currentStoryStyle || 'page';
+  window._currentStoryFmt   = window._currentStoryFmt   || 'story';
+  generateStory(idx);
+};;
 
-  // ── FUNDO: página de livro ────────────────────────────────────────
-  // Base creme
-  ctx.fillStyle = '#f7f1e3';
-  ctx.fillRect(0, 0, W, H);
+// ── Cor do grifo por livro (derivada do título) ───────────────────────────
+window._highlightColor = function(title) {
+  let h = 0;
+  for (let i = 0; i < (title||'').length; i++) h = (h * 31 + title.charCodeAt(i)) & 0xffff;
+  const palette = [
+    'rgba(110,85,180,0.22)',   // lilás
+    'rgba(60,130,100,0.20)',   // verde
+    'rgba(180,120,40,0.22)',   // âmbar
+    'rgba(50,110,170,0.22)',   // azul
+    'rgba(160,60,80,0.20)',    // vinho
+    'rgba(80,140,130,0.20)',   // teal
+  ];
+  return palette[h % palette.length];
+};
 
-  // Vinheta radial sutil
-  const vign = ctx.createRadialGradient(W*0.5, H*0.48, H*0.25, W*0.5, H*0.48, H*0.72);
-  vign.addColorStop(0,   'rgba(0,0,0,0)');
-  vign.addColorStop(1,   'rgba(60,38,10,0.13)');
-  ctx.fillStyle = vign;
-  ctx.fillRect(0, 0, W, H);
-
-  // Sombra da lombada (esquerda)
-  const spine = ctx.createLinearGradient(0, 0, 120, 0);
-  spine.addColorStop(0,   'rgba(40,24,4,0.10)');
-  spine.addColorStop(0.08,'rgba(40,24,4,0.03)');
-  spine.addColorStop(1,   'rgba(40,24,4,0)');
-  ctx.fillStyle = spine;
-  ctx.fillRect(0, 0, W, H);
-
-  // Dobra de página — canto superior direito
-  ctx.save();
-  ctx.beginPath();
-  ctx.moveTo(W - 80, 0); ctx.lineTo(W, 0); ctx.lineTo(W, 80); ctx.closePath();
-  ctx.fillStyle = 'rgba(140,110,50,0.07)';
-  ctx.fill();
-  ctx.strokeStyle = 'rgba(140,110,50,0.18)'; ctx.lineWidth = 1.5;
-  ctx.beginPath(); ctx.moveTo(W - 80, 0); ctx.lineTo(W, 80); ctx.stroke();
-  ctx.restore();
-
-  // ── UTILITÁRIO: quebra de texto ───────────────────────────────────
-  function wrapText(text, font, maxW) {
-    ctx.font = font;
-    const words = text.split(' ');
-    const lines = []; let cur = '';
-    for (const w of words) {
-      const test = cur ? cur + ' ' + w : w;
-      if (ctx.measureText(test).width > maxW && cur) { lines.push(cur); cur = w; }
-      else cur = test;
-    }
-    if (cur) lines.push(cur);
-    return lines;
+// ── Utilitário: quebra de texto ───────────────────────────────────────────
+window._wrapText = function(ctx, text, font, maxW) {
+  ctx.font = font;
+  const words = text.split(' ');
+  const lines = []; let cur = '';
+  for (const w of words) {
+    const test = cur ? cur + ' ' + w : w;
+    if (ctx.measureText(test).width > maxW && cur) { lines.push(cur); cur = w; }
+    else cur = test;
   }
+  if (cur) lines.push(cur);
+  return lines;
+};
 
-  const MARGIN_L = 110;
-  const MARGIN_R = 110;
-  const LINE_MAX = W - MARGIN_L - MARGIN_R;
-  const BODY_FONT = '38px "Georgia", serif';
-  const LINE_H = 62;
+// ── Dimensões por formato ─────────────────────────────────────────────────
+window._fmtDims = function(fmt) {
+  if (fmt === 'square')  return { W: 1080, H: 1080 };
+  if (fmt === 'twitter') return { W: 1600, H: 900  };
+  return { W: 1080, H: 1920 };
+};
 
-  // ── NÚMERO DE PÁGINA ──────────────────────────────────────────────
-  ctx.font = 'italic 30px "Georgia", serif';
-  ctx.fillStyle = 'rgba(130,100,50,0.42)';
-  ctx.textAlign = 'center';
-  ctx.fillText('— ' + (Math.floor(Math.random()*280)+42) + ' —', W/2, 72);
-
-  // ── TEXTO SIMULADO ACIMA (apagado) ───────────────────────────────
+// ── ESTILO: PÁGINA GRIFADA ────────────────────────────────────────────────
+window._drawPage = function(ctx, W, H, q) {
   const FAKE_ABOVE = [
     'chamava-se a atenção para o modo como as palavras se articulavam',
     'no silêncio, construindo pontes entre o que foi dito e o que jamais',
@@ -3558,93 +3604,236 @@ window._generateStory = function(idx) {
     'que não pertencia a nenhum dos dois, mas os atravessava como uma',
     'corrente invisível. Era esse silêncio que os mantinha unidos,',
   ];
-  ctx.font = BODY_FONT;
-  ctx.fillStyle = 'rgba(28,18,6,0.20)';
-  ctx.textAlign = 'left';
-  let curY = 160;
-  FAKE_ABOVE.forEach(line => { ctx.fillText(line, MARGIN_L, curY); curY += LINE_H; });
-  curY += 10; // pequena pausa antes da citação
-
-  // ── CALCULAR LINHAS DA CITAÇÃO ────────────────────────────────────
-  const qFont = BODY_FONT;
-  const qLines = wrapText(q.text, qFont, LINE_MAX);
-  const qStartY = curY;
-
-  // ── GRIFO: retângulos semitransparentes POR BAIXO do texto ────────
-  const hlColor = 'rgba(110,85,180,0.20)';
-  const hlH = LINE_H * 0.88;
-  const hlOffY = -LINE_H * 0.72;
-  qLines.forEach((line, i) => {
-    ctx.font = qFont;
-    const lw = i < qLines.length - 1 ? LINE_MAX : ctx.measureText(line).width + 8;
-    ctx.fillStyle = hlColor;
-    ctx.fillRect(MARGIN_L - 4, qStartY + i * LINE_H + hlOffY, lw + 8, hlH);
-  });
-
-  // ── TEXTO DA CITAÇÃO POR CIMA DO GRIFO ───────────────────────────
-  ctx.font = qFont;
-  ctx.fillStyle = '#1a1208';
-  ctx.textAlign = 'left';
-  qLines.forEach((line, i) => { ctx.fillText(line, MARGIN_L, qStartY + i * LINE_H); });
-
-  const afterQuoteY = qStartY + qLines.length * LINE_H + 10;
-
-  // ── TEXTO SIMULADO ABAIXO ─────────────────────────────────────────
   const FAKE_BELOW = [
     'Ele fechou o livro devagar, como se receasse acordar alguém. A luz',
     'da tarde entrava oblíqua pela janela, desenhando formas douradas',
     'no assoalho. Naquele instante, tudo parecia possível. A memória',
     'guardaria aquilo para sempre, como se as palavras tivessem sido',
     'escritas diretamente na alma. O silêncio que se seguiu era denso,',
-    'carregado de um significado que nenhuma palavra traduziria.',
+    'carregado de um significado que nenhuma palavra conseguiria.',
   ];
-  ctx.font = BODY_FONT;
-  ctx.fillStyle = 'rgba(28,18,6,0.20)';
-  curY = afterQuoteY;
-  FAKE_BELOW.forEach(line => { ctx.fillText(line, MARGIN_L, curY); curY += LINE_H; });
 
-  // ── ATRIBUIÇÃO ────────────────────────────────────────────────────
-  const attribY = curY + 40;
-  // Separador dourado
-  ctx.strokeStyle = 'rgba(184,151,90,0.55)'; ctx.lineWidth = 1.2;
-  ctx.beginPath(); ctx.moveTo(MARGIN_L, attribY - 16); ctx.lineTo(MARGIN_L + 340, attribY - 16); ctx.stroke();
-  ctx.fillStyle = 'rgba(184,151,90,0.55)';
-  ctx.beginPath(); ctx.arc(MARGIN_L, attribY - 16, 4, 0, Math.PI*2); ctx.fill();
+  // Escala relativa a 1080×1920 base
+  const scale = Math.min(W / 1080, H / 1920);
+  const ML = Math.round(110 * (W / 1080));
+  const MR = Math.round(110 * (W / 1080));
+  const LINE_MAX = W - ML - MR;
+  const FS = Math.round(38 * scale * (W < H ? 1 : 0.72));
+  const BODY = FS + 'px "Georgia", serif';
+  const LH = Math.round(FS * 1.62);
 
-  // Título e autor
-  const srcParts = [];
-  if (q.book)   srcParts.push(q.book);
-  if (q.author) srcParts.push(q.author);
-  if (srcParts.length) {
-    ctx.font = 'italic 34px "Georgia", serif';
-    ctx.fillStyle = 'rgba(46,28,8,0.80)';
-    ctx.textAlign = 'left';
-    ctx.fillText(srcParts.join(' — '), MARGIN_L, attribY + 10);
-  }
-  if (q.page) {
-    ctx.font = '28px "Georgia", serif';
-    ctx.fillStyle = 'rgba(100,75,30,0.55)';
-    ctx.fillText('p. ' + q.page, MARGIN_L, attribY + 52);
-  }
+  ctx.fillStyle = '#f7f1e3'; ctx.fillRect(0, 0, W, H);
+  const vign = ctx.createRadialGradient(W*.5,H*.48,H*.25,W*.5,H*.48,H*.72);
+  vign.addColorStop(0,'rgba(0,0,0,0)'); vign.addColorStop(1,'rgba(60,38,10,0.13)');
+  ctx.fillStyle = vign; ctx.fillRect(0,0,W,H);
+  const sp = ctx.createLinearGradient(0,0,120*(W/1080),0);
+  sp.addColorStop(0,'rgba(40,24,4,0.10)'); sp.addColorStop(0.08,'rgba(40,24,4,0.03)'); sp.addColorStop(1,'rgba(40,24,4,0)');
+  ctx.fillStyle = sp; ctx.fillRect(0,0,W,H);
 
-  // ── RODAPÉ ────────────────────────────────────────────────────────
-  ctx.strokeStyle = 'rgba(184,151,90,0.45)'; ctx.lineWidth = 1;
-  const rfy = H - 80;
-  ctx.beginPath(); ctx.moveTo(W/2 - 160, rfy - 18); ctx.lineTo(W/2 + 160, rfy - 18); ctx.stroke();
-  ctx.fillStyle = 'rgba(184,151,90,0.48)';
-  ctx.beginPath(); ctx.arc(W/2, rfy - 18, 5, 0, Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.arc(W/2 - 160, rfy - 18, 3.5, 0, Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.arc(W/2 + 160, rfy - 18, 3.5, 0, Math.PI*2); ctx.fill();
+  // Dobra canto sup direito
+  const dc = Math.round(80*(W/1080));
+  ctx.save(); ctx.beginPath(); ctx.moveTo(W-dc,0); ctx.lineTo(W,0); ctx.lineTo(W,dc); ctx.closePath();
+  ctx.fillStyle='rgba(140,110,50,0.07)'; ctx.fill();
+  ctx.strokeStyle='rgba(140,110,50,0.18)'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(W-dc,0); ctx.lineTo(W,dc); ctx.stroke(); ctx.restore();
 
-  ctx.font = '24px "Jost", Arial, sans-serif';
-  ctx.fillStyle = 'rgba(150,120,60,0.40)';
-  ctx.textAlign = 'center';
-  ctx.letterSpacing = '3px';
-  ctx.fillText('DIÁRIO DE LEITURAS  ·  MARINA RISTHER RAZZO', W/2, rfy + 12);
-  ctx.letterSpacing = '0px';
+  // Nº de página
+  const pgY = Math.round(72*(H/1920));
+  ctx.font = 'italic ' + Math.round(30*scale) + 'px "Georgia", serif';
+  ctx.fillStyle='rgba(130,100,50,0.42)'; ctx.textAlign='center';
+  ctx.fillText('— ' + (Math.floor(Math.random()*280)+42) + ' —', W/2, pgY);
 
-  document.getElementById('storyOverlay').classList.remove('hidden');
+  // Texto acima
+  ctx.font = BODY; ctx.fillStyle='rgba(28,18,6,0.20)'; ctx.textAlign='left';
+  let curY = Math.round(160*(H/1920));
+  FAKE_ABOVE.forEach(line => { ctx.fillText(line, ML, curY); curY += LH; });
+  curY += Math.round(10*(H/1920));
+
+  // Grifo + texto citação
+  const qLines = window._wrapText(ctx, q.text, BODY, LINE_MAX);
+  const hlColor = window._highlightColor(q.book || q.text);
+  const hlH = Math.round(LH * 0.88);
+  const hlOY = -Math.round(LH * 0.72);
+  const qStartY = curY;
+
+  qLines.forEach((line, i) => {
+    ctx.font = BODY;
+    const lw = i < qLines.length-1 ? LINE_MAX : ctx.measureText(line).width + 8;
+    ctx.fillStyle = hlColor;
+    ctx.fillRect(ML-4, qStartY + i*LH + hlOY, lw+8, hlH);
+  });
+  ctx.font = BODY; ctx.fillStyle='#1a1208'; ctx.textAlign='left';
+  qLines.forEach((line, i) => { ctx.fillText(line, ML, qStartY + i*LH); });
+
+  const afterQ = qStartY + qLines.length * LH + Math.round(10*(H/1920));
+
+  // Texto abaixo
+  ctx.font = BODY; ctx.fillStyle='rgba(28,18,6,0.20)'; ctx.textAlign='left';
+  curY = afterQ;
+  FAKE_BELOW.forEach(line => { ctx.fillText(line, ML, curY); curY += LH; });
+
+  // Atribuição
+  const aY = curY + Math.round(40*(H/1920));
+  ctx.strokeStyle='rgba(184,151,90,0.55)'; ctx.lineWidth=1.2;
+  ctx.beginPath(); ctx.moveTo(ML, aY-16); ctx.lineTo(ML+340*(W/1080), aY-16); ctx.stroke();
+  ctx.fillStyle='rgba(184,151,90,0.55)';
+  ctx.beginPath(); ctx.arc(ML, aY-16, 4, 0, Math.PI*2); ctx.fill();
+  const src = [q.book, q.author].filter(Boolean).join(' — ');
+  if (src) { ctx.font='italic '+Math.round(34*scale)+'px "Georgia",serif'; ctx.fillStyle='rgba(46,28,8,0.80)'; ctx.textAlign='left'; ctx.fillText(src, ML, aY+10); }
+  if (q.page) { ctx.font=Math.round(28*scale)+'px "Georgia",serif'; ctx.fillStyle='rgba(100,75,30,0.55)'; ctx.fillText('p. '+q.page, ML, aY+52); }
+
+  // Rodapé
+  const rY = H - Math.round(80*(H/1920));
+  ctx.strokeStyle='rgba(184,151,90,0.45)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(W/2-160*(W/1080),rY-18); ctx.lineTo(W/2+160*(W/1080),rY-18); ctx.stroke();
+  ctx.fillStyle='rgba(184,151,90,0.48)';
+  ctx.beginPath(); ctx.arc(W/2,rY-18,5,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(W/2-160*(W/1080),rY-18,3.5,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(W/2+160*(W/1080),rY-18,3.5,0,Math.PI*2); ctx.fill();
+  ctx.font=Math.round(24*scale)+'px "Jost",Arial,sans-serif';
+  ctx.fillStyle='rgba(150,120,60,0.40)'; ctx.textAlign='center';
+  ctx.letterSpacing='3px';
+  ctx.fillText('DIÁRIO DE LEITURAS  ·  MARINA RISTHER RAZZO', W/2, rY+12);
+  ctx.letterSpacing='0px';
 };
+
+// ── ESTILO: NOTURNO ───────────────────────────────────────────────────────
+window._drawDark = function(ctx, W, H, q) {
+  const scale = Math.min(W/1080, H/1920);
+  const ML = Math.round(100*(W/1080));
+  const LINE_MAX = W - ML*2;
+  const FS = Math.round(42*scale*(W<H?1:0.72));
+  const BODY = FS+'px "Cormorant Garamond","Georgia",serif';
+  const LH = Math.round(FS*1.7);
+
+  // Fundo escuro
+  ctx.fillStyle='#100c09'; ctx.fillRect(0,0,W,H);
+  const bg2 = ctx.createRadialGradient(W*.65,.38*H,0,W*.5,H*.5,H*.75);
+  bg2.addColorStop(0,'rgba(155,70,35,0.18)'); bg2.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=bg2; ctx.fillRect(0,0,W,H);
+  const bg3 = ctx.createRadialGradient(W*.08,.12*H,0,W*.5,H*.5,H*.6);
+  bg3.addColorStop(0,'rgba(75,12,22,0.40)'); bg3.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=bg3; ctx.fillRect(0,0,W,H);
+
+  // Linha dourada no topo
+  const topBarH = Math.round(4*(H/1920));
+  ctx.fillStyle='#b8975a'; ctx.fillRect(0,0,W,topBarH);
+
+  // Ornamento topo
+  const ornY = Math.round(60*(H/1920));
+  ctx.strokeStyle='rgba(184,151,90,0.35)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(ML,ornY); ctx.lineTo(W-ML,ornY); ctx.stroke();
+  ctx.fillStyle='rgba(184,151,90,0.45)';
+  ctx.beginPath(); ctx.arc(W/2,ornY,4,0,Math.PI*2); ctx.fill();
+
+  // Aspas abertas decorativas
+  const qY0 = Math.round(160*(H/1920));
+  ctx.font='italic '+Math.round(160*scale)+'px "Cormorant Garamond","Georgia",serif';
+  ctx.fillStyle='rgba(184,151,90,0.08)'; ctx.textAlign='left';
+  ctx.fillText('"', ML-20, qY0+120*scale);
+
+  // Texto da citação
+  const qLines = window._wrapText(ctx, q.text, BODY, LINE_MAX);
+  let curY = Math.round(200*(H/1920));
+  ctx.font=BODY; ctx.fillStyle='#e8dfc8'; ctx.textAlign='left';
+  qLines.forEach(line => { ctx.fillText(line, ML, curY); curY += LH; });
+  curY += Math.round(60*(H/1920));
+
+  // Separador
+  ctx.strokeStyle='rgba(184,151,90,0.4)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(ML,curY); ctx.lineTo(ML+200*(W/1080),curY); ctx.stroke();
+  ctx.fillStyle='rgba(184,151,90,0.5)';
+  ctx.beginPath(); ctx.arc(ML,curY,3,0,Math.PI*2); ctx.fill();
+  curY += Math.round(42*(H/1920));
+
+  // Atribuição
+  const src = [q.book, q.author].filter(Boolean).join(' — ');
+  if (src) { ctx.font='italic '+Math.round(34*scale)+'px "Cormorant Garamond","Georgia",serif'; ctx.fillStyle='rgba(200,170,120,0.75)'; ctx.textAlign='left'; ctx.fillText(src, ML, curY); curY += Math.round(50*(H/1920)); }
+  if (q.page) { ctx.font=Math.round(28*scale)+'px "Jost",Arial,sans-serif'; ctx.fillStyle='rgba(184,151,90,0.50)'; ctx.letterSpacing='2px'; ctx.fillText('P. '+q.page, ML, curY); ctx.letterSpacing='0px'; }
+
+  // Rodapé
+  const rY = H - Math.round(80*(H/1920));
+  ctx.strokeStyle='rgba(184,151,90,0.30)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(W/2-140*(W/1080),rY-20); ctx.lineTo(W/2+140*(W/1080),rY-20); ctx.stroke();
+  ctx.fillStyle='rgba(184,151,90,0.40)';
+  ctx.beginPath(); ctx.arc(W/2,rY-20,4,0,Math.PI*2); ctx.fill();
+  ctx.font=Math.round(22*scale)+'px "Jost",Arial,sans-serif';
+  ctx.fillStyle='rgba(184,151,90,0.38)'; ctx.textAlign='center';
+  ctx.letterSpacing='4px';
+  ctx.fillText('DIÁRIO DE LEITURAS  ·  MARINA RISTHER RAZZO', W/2, rY+10);
+  ctx.letterSpacing='0px';
+};
+
+// ── ESTILO: MINIMALISTA ────────────────────────────────────────────────────
+window._drawMinimal = function(ctx, W, H, q) {
+  const scale = Math.min(W/1080, H/1920);
+  const ML = Math.round(120*(W/1080));
+  const LINE_MAX = W - ML*2;
+  const FS = Math.round(48*scale*(W<H?1:0.72));
+  const BODY = 'italic '+FS+'px "Cormorant Garamond","Georgia",serif';
+  const LH = Math.round(FS*1.65);
+
+  ctx.fillStyle='#faf7f2'; ctx.fillRect(0,0,W,H);
+
+  // Linha vinho à esquerda
+  ctx.fillStyle='rgba(107,31,46,0.7)';
+  ctx.fillRect(Math.round(70*(W/1080)), Math.round(H*.2), Math.round(3*(W/1080)), Math.round(H*.6));
+
+  // Texto citação centrado verticalmente
+  const qLines = window._wrapText(ctx, q.text, BODY, LINE_MAX);
+  const totalH = qLines.length * LH;
+  let curY = (H - totalH)/2 - Math.round(40*(H/1920));
+
+  ctx.font=BODY; ctx.fillStyle='#1c1410'; ctx.textAlign='left';
+  qLines.forEach(line => { ctx.fillText(line, ML, curY); curY += LH; });
+  curY += Math.round(56*(H/1920));
+
+  // Separador fino
+  ctx.strokeStyle='rgba(184,151,90,0.6)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.moveTo(ML,curY); ctx.lineTo(ML+180*(W/1080),curY); ctx.stroke();
+  curY += Math.round(38*(H/1920));
+
+  // Atribuição
+  const src = [q.book, q.author].filter(Boolean).join(' — ');
+  if (src) { ctx.font='italic '+Math.round(30*scale)+'px "Cormorant Garamond","Georgia",serif'; ctx.fillStyle='rgba(107,31,46,0.75)'; ctx.textAlign='left'; ctx.fillText(src, ML, curY); curY += Math.round(46*(H/1920)); }
+  if (q.page) { ctx.font=Math.round(24*scale)+'px "Jost",Arial,sans-serif'; ctx.fillStyle='rgba(120,95,55,0.55)'; ctx.letterSpacing='2px'; ctx.fillText('p. '+q.page, ML, curY); ctx.letterSpacing='0px'; }
+
+  // Rodapé
+  ctx.font=Math.round(20*scale)+'px "Jost",Arial,sans-serif';
+  ctx.fillStyle='rgba(150,120,60,0.38)'; ctx.textAlign='center';
+  ctx.letterSpacing='3px';
+  ctx.fillText('DIÁRIO DE LEITURAS  ·  MARINA RISTHER RAZZO', W/2, H - Math.round(55*(H/1920)));
+  ctx.letterSpacing='0px';
+};
+
+// ── RENDER PRINCIPAL ──────────────────────────────────────────────────────
+window._renderStory = function() {
+  const idx = window._currentStoryIdx;
+  const style = window._currentStoryStyle || 'page';
+  const fmt   = window._currentStoryFmt   || 'story';
+  const q = window._quotesForStory[idx]; if (!q) return;
+
+  const { W, H } = window._fmtDims(fmt);
+  const canvas = document.getElementById('storyCanvas');
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  if      (style === 'dark')    window._drawDark(ctx, W, H, q);
+  else if (style === 'minimal') window._drawMinimal(ctx, W, H, q);
+  else                          window._drawPage(ctx, W, H, q);
+};
+
+// ── Seletores de estilo e formato ─────────────────────────────────────────
+window._setStoryStyle = function(style) {
+  window._currentStoryStyle = style;
+  document.querySelectorAll('.story-style-btn').forEach(b => b.classList.toggle('active', b.dataset.style === style));
+  window._renderStory();
+};
+window._setStoryFmt = function(fmt) {
+  window._currentStoryFmt = fmt;
+  document.querySelectorAll('.story-fmt-btn').forEach(b => b.classList.toggle('active', b.dataset.fmt === fmt));
+  window._renderStory();
+};;
 
 // ── EXPORT CSV ────────────────────────────────────────────
 function exportCSV() {
