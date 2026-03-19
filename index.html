@@ -2402,8 +2402,7 @@ window._generateStory = function(idx) {
   canvas.width = W; canvas.height = H;
   const ctx = canvas.getContext('2d');
 
-  // ── PAPEL ENVELHECIDO ─────────────────────────────────────────────────
-  // Fundo base creme
+  // ── PAPEL ENVELHECIDO ──────────────────────────────────────────────
   const bgGrad = ctx.createRadialGradient(W*0.45, H*0.42, 0, W*0.5, H*0.5, H*0.75);
   bgGrad.addColorStop(0,   '#fdf8ef');
   bgGrad.addColorStop(0.5, '#f7f0e0');
@@ -2411,69 +2410,38 @@ window._generateStory = function(idx) {
   ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, W, H);
 
-  // Textura de papel — linhas horizontais sutis (pauta de livro)
+  // Linhas de pauta
   ctx.strokeStyle = 'rgba(160,140,100,0.10)';
   ctx.lineWidth = 1;
   for (let y = 120; y < H - 120; y += 52) {
     ctx.beginPath(); ctx.moveTo(80, y); ctx.lineTo(W - 80, y); ctx.stroke();
   }
-
-  // Linha de margem vertical esquerda (estilo caderno)
+  // Margem vertical
   ctx.strokeStyle = 'rgba(184,151,90,0.18)';
   ctx.lineWidth = 1.5;
   ctx.beginPath(); ctx.moveTo(148, 80); ctx.lineTo(148, H - 80); ctx.stroke();
 
-  // Mancha de café no canto inferior direito
+  // Mancha de café — canto inferior direito
   ctx.save();
-  ctx.translate(W - 160, H - 220);
-  const coffeeGrad = ctx.createRadialGradient(0, 0, 10, 0, 0, 95);
-  coffeeGrad.addColorStop(0,   'rgba(110,75,30,0.00)');
-  coffeeGrad.addColorStop(0.5, 'rgba(110,75,30,0.04)');
-  coffeeGrad.addColorStop(0.85,'rgba(110,75,30,0.09)');
-  coffeeGrad.addColorStop(1,   'rgba(110,75,30,0.00)');
-  ctx.fillStyle = coffeeGrad;
-  ctx.beginPath(); ctx.ellipse(0, 0, 95, 88, 0.3, 0, Math.PI*2); ctx.fill();
+  ctx.translate(W - 170, H - 240);
+  const cg = ctx.createRadialGradient(0,0,10,0,0,90);
+  cg.addColorStop(0,'rgba(110,75,30,0.00)'); cg.addColorStop(0.5,'rgba(110,75,30,0.04)');
+  cg.addColorStop(0.85,'rgba(110,75,30,0.09)'); cg.addColorStop(1,'rgba(110,75,30,0.00)');
+  ctx.fillStyle = cg;
+  ctx.beginPath(); ctx.ellipse(0,0,90,84,0.3,0,Math.PI*2); ctx.fill();
   ctx.strokeStyle = 'rgba(110,75,30,0.11)'; ctx.lineWidth = 4;
-  ctx.beginPath(); ctx.ellipse(0, 0, 95, 88, 0.3, 0, Math.PI*2); ctx.stroke();
+  ctx.beginPath(); ctx.ellipse(0,0,90,84,0.3,0,Math.PI*2); ctx.stroke();
   ctx.restore();
 
-  // Sombra de dobra no canto superior direito
-  ctx.save();
-  ctx.translate(W - 80, 0);
-  const foldGrad = ctx.createLinearGradient(-80, 0, 0, 80);
-  foldGrad.addColorStop(0, 'rgba(0,0,0,0.07)');
-  foldGrad.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = foldGrad;
+  // Dobra de página
+  ctx.save(); ctx.translate(W-80,0);
+  const fg = ctx.createLinearGradient(-80,0,0,80);
+  fg.addColorStop(0,'rgba(0,0,0,0.07)'); fg.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle = fg;
   ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-80,0); ctx.lineTo(0,80); ctx.closePath(); ctx.fill();
   ctx.restore();
 
-  // ── NÚMERO DE PÁGINA (canto superior) ────────────────────────────────
-  ctx.font = 'italic 32px "Georgia", serif';
-  ctx.fillStyle = 'rgba(140,120,80,0.45)';
-  ctx.textAlign = 'center';
-  ctx.fillText('— ' + (Math.floor(Math.random()*280)+42) + ' —', W/2, 90);
-
-  // ── TEXTO DO LIVRO SIMULADO (antes da citação) ────────────────────────
-  const fakeLines = [
-    'chamava-se a atenção para o modo como as palavras',
-    'se articulavam no silêncio, construindo pontes entre',
-    'o que foi dito e o que jamais poderia ser expresso',
-    'em voz alta. Havia ali uma linguagem secreta,',
-  ];
-  ctx.textAlign = 'left';
-  ctx.font = '34px "Georgia", serif';
-  ctx.fillStyle = 'rgba(60,45,20,0.22)';
-  let fakeY = 180;
-  fakeLines.forEach(line => {
-    ctx.fillText(line, 168, fakeY); fakeY += 55;
-  });
-
-  // ── MARCA-TEXTO ────────────────────────────────────────────────────────
-  const text = q.text;
-  const maxLineW = W - 240; // margem + direita
-  const xStart = 168;
-
-  // Quebrar o texto em linhas
+  // ── UTILITÁRIO: quebra de texto ────────────────────────────────────
   function breakText(txt, font, maxW) {
     ctx.font = font;
     const words = txt.split(' ');
@@ -2487,35 +2455,72 @@ window._generateStory = function(idx) {
     return lines;
   }
 
-  const len = text.length;
+  const xStart = 168;
+  const maxLineW = W - 240;
+
+  // ── CALCULAR ALTURA DA CITAÇÃO PRIMEIRO ──────────────────────────
+  const len = q.text.length;
   const fontSize = len < 60 ? 68 : len < 120 ? 58 : len < 220 ? 50 : 44;
   const qFont = fontSize + 'px "Georgia", serif';
   const qLineH = fontSize * 1.55;
-  const qLines = breakText(text, qFont, maxLineW);
+  const qLines = breakText(q.text, qFont, maxLineW);
   const qBlockH = qLines.length * qLineH;
 
-  // Posição vertical centralizada levemente acima do meio
-  let qY = (H - qBlockH) / 2 - 30;
+  // Linhas acima (4 linhas × 55 = 220px) + margem depois
+  const fakeAboveH = 4 * 55 + 30;  // 250
+  // Atribuição (até 2 linhas × 48px) + espaço antes/depois
+  const hasAttrib = !!(q.book || q.author);
+  const attribH = hasAttrib ? 120 : 0;
+  // Linhas abaixo (3 linhas × 55 = 165px)
+  const fakeBelowH = 3 * 55 + 20;  // 185
 
-  // Marca-texto amarelo/âmbar em cada linha (ligeiramente inclinado)
+  // Bloco total de conteúdo
+  const totalContent = fakeAboveH + qBlockH + attribH + fakeBelowH;
+  // Centrar verticalmente (margem topo/base reservada)
+  const marginTop = 140; const marginBot = 130;
+  const availH = H - marginTop - marginBot;
+  const startY = marginTop + Math.max(0, (availH - totalContent) / 2);
+
+  // ── NÚMERO DE PÁGINA ──────────────────────────────────────────────
+  ctx.font = 'italic 32px "Georgia", serif';
+  ctx.fillStyle = 'rgba(140,120,80,0.45)';
+  ctx.textAlign = 'center';
+  ctx.fillText('— ' + (Math.floor(Math.random()*280)+42) + ' —', W/2, 90);
+
+  // ── TEXTO SIMULADO ACIMA ──────────────────────────────────────────
+  const fakeAbove = [
+    'chamava-se a atenção para o modo como as palavras',
+    'se articulavam no silêncio, construindo pontes entre',
+    'o que foi dito e o que jamais poderia ser expresso',
+    'em voz alta. Havia ali uma linguagem secreta,',
+  ];
+  ctx.textAlign = 'left';
+  ctx.font = '34px "Georgia", serif';
+  ctx.fillStyle = 'rgba(60,45,20,0.22)';
+  let curY = startY + 34;
+  fakeAbove.forEach(line => { ctx.fillText(line, xStart, curY); curY += 55; });
+
+  // ── CITAÇÃO ───────────────────────────────────────────────────────
+  const qY = startY + fakeAboveH;
+
+  // Marca-texto linha a linha
   qLines.forEach((line, i) => {
     ctx.font = qFont;
     const lw = ctx.measureText(line).width;
     const ly = qY + i * qLineH;
     ctx.save();
-    // Leve rotação aleatória mas consistente por linha
-    const angle = (((i * 7 + text.length) % 5) - 2) * 0.003;
-    ctx.translate(xStart + lw/2, ly - fontSize * 0.7);
+    const angle = (((i*7 + q.text.length) % 5) - 2) * 0.003;
+    ctx.translate(xStart + lw/2, ly - fontSize*0.7);
     ctx.rotate(angle);
-    ctx.translate(-(xStart + lw/2), -(ly - fontSize * 0.7));
-    const hlGrad = ctx.createLinearGradient(xStart - 4, 0, xStart + lw + 8, 0);
-    hlGrad.addColorStop(0,   'rgba(255,218,80,0.00)');
-    hlGrad.addColorStop(0.04,'rgba(255,218,80,0.72)');
-    hlGrad.addColorStop(0.5, 'rgba(255,210,60,0.68)');
-    hlGrad.addColorStop(0.96,'rgba(255,218,80,0.72)');
-    hlGrad.addColorStop(1,   'rgba(255,218,80,0.00)');
-    ctx.fillStyle = hlGrad;
-    ctx.fillRect(xStart - 6, ly - fontSize * 0.88, lw + 14, fontSize * 1.08);
+    ctx.translate(-(xStart + lw/2), -(ly - fontSize*0.7));
+    const hlG = ctx.createLinearGradient(xStart-4, 0, xStart+lw+8, 0);
+    hlG.addColorStop(0,   'rgba(255,218,80,0.00)');
+    hlG.addColorStop(0.04,'rgba(255,218,80,0.72)');
+    hlG.addColorStop(0.5, 'rgba(255,210,60,0.68)');
+    hlG.addColorStop(0.96,'rgba(255,218,80,0.72)');
+    hlG.addColorStop(1,   'rgba(255,218,80,0.00)');
+    ctx.fillStyle = hlG;
+    ctx.fillRect(xStart-6, ly - fontSize*0.88, lw+14, fontSize*1.08);
     ctx.restore();
   });
 
@@ -2523,86 +2528,72 @@ window._generateStory = function(idx) {
   ctx.font = qFont;
   ctx.fillStyle = '#2a1e08';
   ctx.textAlign = 'left';
-  qLines.forEach((line, i) => {
-    ctx.fillText(line, xStart, qY + i * qLineH);
-  });
+  qLines.forEach((line, i) => { ctx.fillText(line, xStart, qY + i * qLineH); });
 
-  // ── TEXTO SIMULADO (depois da citação) ───────────────────────────────
-  const afterLines = [
-    'naquele instante, tudo parecia possível. A memória',
-    'guardaria aquilo para sempre, como se as palavras',
-    'tivessem sido escritas diretamente na alma.',
-  ];
-  ctx.font = '34px "Georgia", serif';
-  ctx.fillStyle = 'rgba(60,45,20,0.22)';
-  let afterY = qY + qBlockH + 40;
-  afterLines.forEach(line => {
-    ctx.fillText(line, 168, afterY); afterY += 55;
-  });
+  // Sublinhado ondulado na primeira linha
+  if (qLines.length > 0) {
+    ctx.font = qFont;
+    const flw = ctx.measureText(qLines[0]).width;
+    const uly = qY + 8;
+    ctx.strokeStyle = 'rgba(107,31,46,0.30)';
+    ctx.lineWidth = 2.5; ctx.lineCap = 'round';
+    ctx.beginPath();
+    for (let x = xStart; x < xStart + flw; x += 12) {
+      const wave = Math.sin((x-xStart)/12*Math.PI)*4;
+      if (x === xStart) ctx.moveTo(x, uly+wave); else ctx.lineTo(x, uly+wave);
+    }
+    ctx.stroke();
+  }
 
-  // ── ANOTAÇÃO À MÃO NA MARGEM ─────────────────────────────────────────
+  // Anotação na margem
   ctx.save();
   ctx.translate(62, qY + qBlockH/2);
   ctx.rotate(-0.06);
-  // Chave / colchete na margem
   ctx.strokeStyle = 'rgba(107,31,46,0.55)';
-  ctx.lineWidth = 3;
-  ctx.lineCap = 'round';
+  ctx.lineWidth = 3; ctx.lineCap = 'round';
   ctx.beginPath();
-  ctx.moveTo(14, -qBlockH/2 - 10);
-  ctx.lineTo(6,  -qBlockH/2 - 10);
-  ctx.lineTo(6,   qBlockH/2 + 10);
-  ctx.lineTo(14,  qBlockH/2 + 10);
+  ctx.moveTo(14, -qBlockH/2-10); ctx.lineTo(6, -qBlockH/2-10);
+  ctx.lineTo(6,  qBlockH/2+10);  ctx.lineTo(14, qBlockH/2+10);
   ctx.stroke();
-  // Exclamação ou coração na margem
   ctx.font = 'bold 36px "Georgia", serif';
   ctx.fillStyle = 'rgba(107,31,46,0.55)';
   ctx.textAlign = 'center';
   ctx.fillText('!', -12, 14);
   ctx.restore();
 
-  // ── FONTE / ATRIBUIÇÃO ────────────────────────────────────────────────
-  const srcY = qY + qBlockH + 130;
-  if (q.book || q.author) {
-    // Linha decorativa
+  // ── ATRIBUIÇÃO (logo após citação) ───────────────────────────────
+  const attribY = qY + qBlockH + 38;
+  if (hasAttrib) {
     ctx.strokeStyle = 'rgba(184,151,90,0.5)';
     ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(xStart, srcY - 18); ctx.lineTo(xStart + 380, srcY - 18); ctx.stroke();
-
+    ctx.beginPath(); ctx.moveTo(xStart, attribY - 10); ctx.lineTo(xStart + 340, attribY - 10); ctx.stroke();
     ctx.font = 'italic 36px "Georgia", serif';
     ctx.fillStyle = 'rgba(100,75,30,0.65)';
     ctx.textAlign = 'left';
     const srcParts = [];
     if (q.book)   srcParts.push(q.book);
     if (q.author) srcParts.push(q.author);
-    ctx.fillText(srcParts.join(' — '), xStart, srcY);
-
+    ctx.fillText(srcParts.join(' — '), xStart, attribY + 30);
     if (q.page) {
       ctx.font = '28px "Georgia", serif';
       ctx.fillStyle = 'rgba(140,110,60,0.50)';
-      ctx.fillText('p. ' + q.page, xStart, srcY + 46);
+      ctx.fillText('p. ' + q.page, xStart, attribY + 74);
     }
   }
 
-  // ── SUBLINHADO ondulado opcional sob a primeira linha (cor vinho) ─────
-  if (qLines.length > 0) {
-    ctx.font = qFont;
-    const fl = qLines[0];
-    const flw = ctx.measureText(fl).width;
-    const uly = qY + 8;
-    ctx.strokeStyle = 'rgba(107,31,46,0.30)';
-    ctx.lineWidth = 2.5;
-    ctx.lineCap = 'round';
-    ctx.beginPath();
-    for (let x = xStart; x < xStart + flw; x += 12) {
-      const wave = Math.sin((x - xStart) / 12 * Math.PI) * 4;
-      if (x === xStart) ctx.moveTo(x, uly + wave);
-      else ctx.lineTo(x, uly + wave);
-    }
-    ctx.stroke();
-  }
+  // ── TEXTO SIMULADO ABAIXO (após atribuição) ───────────────────────
+  const fakeBelow = [
+    'naquele instante, tudo parecia possível. A memória',
+    'guardaria aquilo para sempre, como se as palavras',
+    'tivessem sido escritas diretamente na alma.',
+  ];
+  ctx.font = '34px "Georgia", serif';
+  ctx.fillStyle = 'rgba(60,45,20,0.22)';
+  ctx.textAlign = 'left';
+  let belowY = qY + qBlockH + attribH + 14;
+  fakeBelow.forEach(line => { ctx.fillText(line, xStart, belowY); belowY += 55; });
 
-  // ── RODAPÉ ────────────────────────────────────────────────────────────
+  // ── RODAPÉ ────────────────────────────────────────────────────────
   ctx.font = '26px "Jost", Arial, sans-serif';
   ctx.fillStyle = 'rgba(160,140,90,0.40)';
   ctx.textAlign = 'center';
@@ -2997,74 +2988,184 @@ window._downloadBookCard = function() {
 
 // ── WRAPPED CARD GENERATOR ──────────────────────────────────────────────────
 window._generateWrappedCard = function(year) {
-  // Re-use storyCanvas temporarily or open a quick canvas modal
-  // Simple approach: generate and download directly
   const rb = books.filter(b => (!b.status||b.status==='lido') && getYear(b.date)===year);
-  if (!rb.length) return;
+  if (!rb.length) { showToast('⚠ Nenhum livro em ' + year + '.'); return; }
+
   const W = 1080, H = 1920;
-  const cv = document.createElement('canvas'); cv.width=W; cv.height=H;
+  const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
   const ctx = cv.getContext('2d');
-  // Dark background gradient
-  const grd = ctx.createLinearGradient(0,0,0,H);
-  grd.addColorStop(0,'#1c0810'); grd.addColorStop(.5,'#2a1020'); grd.addColorStop(1,'#0c0608');
-  ctx.fillStyle = grd; ctx.fillRect(0,0,W,H);
-  // Gold top stripe
-  ctx.fillStyle='#b8975a'; ctx.fillRect(0,0,W,6);
-  // Big year number
-  ctx.font='300 340px "Georgia",serif'; ctx.fillStyle='rgba(184,151,90,.1)'; ctx.textAlign='center';
-  ctx.fillText(year, W/2, 480);
-  // Subtitle
-  ctx.font='300 56px "Jost",Arial,sans-serif'; ctx.fillStyle='rgba(200,170,130,.7)'; ctx.letterSpacing='12px';
-  ctx.fillText('ANO EM LIVROS', W/2, 200);
-  ctx.letterSpacing='0px';
-  // Stats
-  const mc=Array(12).fill(0);
-  rb.forEach(b=>{const d=parseDate(b.date);if(d&&d.getFullYear()===year)mc[d.getMonth()]++;});
-  const peak=mc.indexOf(Math.max(...mc));
-  const MONTHS=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-  const MONTHS_F=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-  const ac={}; rb.forEach(b=>{if(b.author)ac[b.author]=(ac[b.author]||0)+1;});
-  const topA=Object.entries(ac).sort((a,b)=>b[1]-a[1])[0];
-  // Stats cards
-  const stats=[
-    {icon:'📚',val:rb.length,lbl:'livros lidos'},
-    {icon:'🗓',val:MONTHS_F[peak],lbl:'mês mais produtivo'},
-    {icon:'✍',val:topA?topA[0]:'—',lbl:'autor mais lido'},
+
+  // ── FUNDO ─────────────────────────────────────────────────────────
+  const grd = ctx.createLinearGradient(0, 0, 0, H);
+  grd.addColorStop(0,   '#1c0810');
+  grd.addColorStop(0.5, '#2a1020');
+  grd.addColorStop(1,   '#0c0608');
+  ctx.fillStyle = grd; ctx.fillRect(0, 0, W, H);
+
+  // Faixa dourada topo e base
+  ctx.fillStyle = '#b8975a'; ctx.fillRect(0, 0, W, 6);
+  ctx.fillStyle = '#b8975a'; ctx.fillRect(0, H-6, W, 6);
+
+  // ── TÍTULO ────────────────────────────────────────────────────────
+  ctx.textAlign = 'center';
+  ctx.font = '300 52px "Jost", Arial, sans-serif';
+  ctx.fillStyle = 'rgba(200,170,130,0.65)';
+  ctx.letterSpacing = '14px';
+  ctx.fillText('ANO EM LIVROS', W/2, 110);
+  ctx.letterSpacing = '0px';
+
+  // Ano grande (marca d'água — empurrado para o topo, fora dos cards)
+  ctx.font = '300 260px "Georgia", serif';
+  ctx.fillStyle = 'rgba(184,151,90,0.08)';
+  ctx.fillText(String(year), W/2, 340);
+
+  // ── STATS: 3 cards abaixo do ano ─────────────────────────────────
+  const mc = Array(12).fill(0);
+  rb.forEach(b => { const d = parseDate(b.date); if (d && d.getFullYear()===year) mc[d.getMonth()]++; });
+  const peak = mc.indexOf(Math.max(...mc));
+  const MONTHS   = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  const MONTHS_F = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+  const ac = {}; rb.forEach(b => { if (b.author) ac[b.author] = (ac[b.author]||0)+1; });
+  const topA = Object.entries(ac).sort((a,b) => b[1]-a[1])[0];
+
+  const stats = [
+    { icon: '📚', val: String(rb.length), lbl: 'livros lidos' },
+    { icon: '🗓',  val: MONTHS_F[peak],    lbl: 'mês mais produtivo' },
+    { icon: '✍',  val: topA ? topA[0] : '—', lbl: 'autor mais lido' },
   ];
-  stats.forEach((s,i)=>{
-    const cx=180+i*240, cy=560;
-    ctx.fillStyle='rgba(255,255,255,.05)'; roundRect(ctx,cx,cy,220,180,8); ctx.fill();
-    ctx.font='50px serif'; ctx.textAlign='center'; ctx.fillText(s.icon,cx+110,cy+70);
-    ctx.font='bold 52px "Georgia",serif'; ctx.fillStyle='#c8a96a';
-    const sv=String(s.val).length>12?String(s.val).substring(0,12)+'…':String(s.val);
-    ctx.font=(String(s.val).length>8?'bold 36px':'bold 52px')+' "Georgia",serif';
-    ctx.fillText(sv,cx+110,cy+130);
-    ctx.font='24px "Jost",Arial,sans-serif'; ctx.fillStyle='rgba(200,170,130,.6)';
-    ctx.letterSpacing='4px'; ctx.fillText(s.lbl.toUpperCase(),cx+110,cy+165); ctx.letterSpacing='0px';
+
+  const cardW = 300, cardH = 190, cardGap = 30;
+  const totalCardsW = stats.length * cardW + (stats.length-1) * cardGap;
+  const cardX0 = (W - totalCardsW) / 2;
+  const cardY0 = 390;
+
+  function roundRect(cx, cy, cw, ch, r) {
+    ctx.beginPath();
+    ctx.moveTo(cx+r, cy); ctx.lineTo(cx+cw-r, cy); ctx.quadraticCurveTo(cx+cw, cy, cx+cw, cy+r);
+    ctx.lineTo(cx+cw, cy+ch-r); ctx.quadraticCurveTo(cx+cw, cy+ch, cx+cw-r, cy+ch);
+    ctx.lineTo(cx+r, cy+ch); ctx.quadraticCurveTo(cx, cy+ch, cx, cy+ch-r);
+    ctx.lineTo(cx, cy+r); ctx.quadraticCurveTo(cx, cy, cx+r, cy); ctx.closePath();
+  }
+
+  stats.forEach((s, i) => {
+    const cx = cardX0 + i * (cardW + cardGap);
+    const cy = cardY0;
+    // Card bg
+    ctx.fillStyle = 'rgba(255,255,255,0.05)'; roundRect(cx, cy, cardW, cardH, 8); ctx.fill();
+    ctx.strokeStyle = 'rgba(184,151,90,0.2)'; ctx.lineWidth = 1; roundRect(cx, cy, cardW, cardH, 8); ctx.stroke();
+    // Faixa dourada no topo do card
+    ctx.fillStyle = '#b8975a'; roundRect(cx, cy, cardW, 4, 2); ctx.fill();
+    // Ícone
+    ctx.font = '42px serif'; ctx.textAlign = 'center';
+    ctx.fillText(s.icon, cx + cardW/2, cy + 55);
+    // Valor — truncar se longo
+    const valStr = s.val.length > 10 ? s.val.substring(0, 10) + '…' : s.val;
+    const valFontSize = valStr.length > 7 ? 28 : 38;
+    ctx.font = 'bold ' + valFontSize + 'px "Georgia", serif';
+    ctx.fillStyle = '#c8a96a';
+    ctx.fillText(valStr, cx + cardW/2, cy + 110);
+    // Label
+    ctx.font = '20px "Jost", Arial, sans-serif';
+    ctx.fillStyle = 'rgba(200,170,130,0.55)';
+    ctx.letterSpacing = '3px';
+    ctx.fillText(s.lbl.toUpperCase(), cx + cardW/2, cy + 148);
+    ctx.letterSpacing = '0px';
   });
-  // Mini bar chart
-  const maxM=Math.max(1,...mc); const barW=60; const barMaxH=200;
-  mc.forEach((cnt,i)=>{
-    const bx=80+i*80; const bh=Math.max(4,cnt/maxM*barMaxH); const by=1050-bh;
-    ctx.fillStyle=i===peak?'#c8a96a':'rgba(184,151,90,.45)';
-    ctx.fillRect(bx,by,barW,bh);
-    ctx.font='22px "Jost",Arial,sans-serif'; ctx.fillStyle='rgba(200,170,130,.5)'; ctx.textAlign='center';
-    ctx.fillText(MONTHS[i],bx+barW/2,1080);
+
+  // ── GRÁFICO DE BARRAS (meses) ────────────────────────────────────
+  const chartTop = cardY0 + cardH + 70;
+  ctx.font = 'italic 300 34px "Georgia", serif';
+  ctx.fillStyle = 'rgba(200,170,130,0.45)';
+  ctx.textAlign = 'center';
+  ctx.fillText('leituras por mês', W/2, chartTop - 20);
+
+  const maxM = Math.max(1, ...mc);
+  const barMaxH = 170;
+  const barTotalW = W - 160; // padding 80 cada lado
+  const barSlot = barTotalW / 12;
+  const barW2 = Math.floor(barSlot * 0.55);
+
+  mc.forEach((cnt, i) => {
+    const bx = 80 + i * barSlot + (barSlot - barW2) / 2;
+    const bh = Math.max(cnt > 0 ? 6 : 0, cnt / maxM * barMaxH);
+    const by = chartTop + barMaxH - bh;
+    ctx.fillStyle = i === peak ? '#c8a96a' : 'rgba(184,151,90,0.40)';
+    ctx.fillRect(bx, by, barW2, bh);
+    // Número acima da barra
+    if (cnt > 0) {
+      ctx.font = '22px "Jost", Arial, sans-serif';
+      ctx.fillStyle = 'rgba(200,170,130,0.65)';
+      ctx.textAlign = 'center';
+      ctx.fillText(String(cnt), bx + barW2/2, by - 8);
+    }
+    // Label mês
+    ctx.font = '22px "Jost", Arial, sans-serif';
+    ctx.fillStyle = 'rgba(200,170,130,0.40)';
+    ctx.textAlign = 'center';
+    ctx.fillText(MONTHS[i], bx + barW2/2, chartTop + barMaxH + 30);
   });
-  // Fav book
-  const fav=[...rb].sort((a,b)=>(b.rating||0)-(a.rating||0))[0];
-  ctx.font='italic 300 42px "Georgia",serif'; ctx.fillStyle='rgba(200,170,130,.55)'; ctx.textAlign='center';
-  ctx.fillText('favorito do ano', W/2, 1180);
-  ctx.font='500 54px "Georgia",serif'; ctx.fillStyle='#e8dfc8';
-  ctx.fillText(fav.title.length>30?fav.title.substring(0,28)+'…':fav.title, W/2, 1260);
-  if(fav.author){ctx.font='italic 36px "Georgia",serif';ctx.fillStyle='rgba(200,170,130,.65)';ctx.fillText(fav.author,W/2,1310);}
-  // Branding
-  ctx.font='26px "Jost",Arial,sans-serif'; ctx.fillStyle='rgba(184,151,90,.45)'; ctx.textAlign='center';
-  ctx.fillText('✦  Diário de Leituras  ·  Marina Risther Razzo  ✦', W/2, H-70);
-  ctx.fillStyle='#b8975a'; ctx.fillRect(0,H-6,W,6);
-  // Download
-  const a=document.createElement('a'); a.download='ano-em-livros-'+year+'.png';
-  a.href=cv.toDataURL('image/png'); a.click();
+
+  // ── LIVRO FAVORITO ────────────────────────────────────────────────
+  const fav = [...rb].sort((a,b) => (b.rating||0)-(a.rating||0))[0];
+  const favY = chartTop + barMaxH + 80;
+
+  // Separador
+  ctx.strokeStyle = 'rgba(184,151,90,0.25)'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(120, favY); ctx.lineTo(W-120, favY); ctx.stroke();
+
+  ctx.font = 'italic 300 38px "Georgia", serif';
+  ctx.fillStyle = 'rgba(200,170,130,0.50)';
+  ctx.textAlign = 'center';
+  ctx.fillText('favorito do ano', W/2, favY + 52);
+
+  // Capa (se disponível) ou placeholder
+  const drawFav = (coverImg) => {
+    const covW = 180, covH = 268;
+    const covX = (W - covW) / 2;
+    const covY2 = favY + 78;
+    if (coverImg) {
+      ctx.save();
+      ctx.shadowColor = 'rgba(0,0,0,0.6)'; ctx.shadowBlur = 30; ctx.shadowOffsetX = 8; ctx.shadowOffsetY = 10;
+      ctx.drawImage(coverImg, covX, covY2, covW, covH);
+      ctx.restore();
+    } else {
+      ctx.fillStyle = fav.title ? titleColor(fav.title) : '#4a3f32';
+      ctx.fillRect(covX, covY2, covW, covH);
+      ctx.font = 'italic 80px "Georgia", serif'; ctx.fillStyle = 'rgba(255,255,255,.5)';
+      ctx.textAlign = 'center'; ctx.fillText(fav.title.charAt(0), covX+covW/2, covY2+covH/2+28);
+    }
+
+    const textY = covY2 + covH + 42;
+    ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0;
+    ctx.font = '500 52px "Georgia", serif'; ctx.fillStyle = '#e8dfc8'; ctx.textAlign = 'center';
+    const favTitle = fav.title.length > 28 ? fav.title.substring(0,26)+'…' : fav.title;
+    ctx.fillText(favTitle, W/2, textY);
+    if (fav.author) {
+      ctx.font = 'italic 36px "Georgia", serif'; ctx.fillStyle = 'rgba(200,170,130,0.65)';
+      ctx.fillText(fav.author, W/2, textY + 50);
+    }
+    if (fav.rating) {
+      ctx.font = '40px serif'; ctx.fillStyle = '#c8a96a';
+      const stars = '★'.repeat(Math.floor(fav.rating)) + (fav.rating%1?'½':'');
+      ctx.fillText(stars, W/2, textY + 100);
+    }
+
+    // Branding
+    ctx.font = '24px "Jost", Arial, sans-serif';
+    ctx.fillStyle = 'rgba(184,151,90,0.40)'; ctx.textAlign = 'center';
+    ctx.fillText('✦  Diário de Leituras  ·  Marina Risther Razzo  ✦', W/2, H - 35);
+
+    const a = document.createElement('a');
+    a.download = 'ano-em-livros-' + year + '.png';
+    a.href = cv.toDataURL('image/png'); a.click();
+  };
+
+  if (fav.coverUrl) {
+    const img = new Image(); img.crossOrigin = 'anonymous';
+    img.onload = () => drawFav(img);
+    img.onerror = () => drawFav(null);
+    img.src = fav.coverUrl;
+  } else drawFav(null);
 };
 function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();}
 
