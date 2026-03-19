@@ -1678,25 +1678,12 @@ window._generateStory = function(idx) {
   canvas.width = W; canvas.height = H;
   const ctx = canvas.getContext('2d');
 
-  // ── Background: warm cream paper ──
-  const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
-  bgGrad.addColorStop(0, '#fdfaf6');
-  bgGrad.addColorStop(0.5, '#f8f3ea');
-  bgGrad.addColorStop(1, '#f2ebe0');
-  ctx.fillStyle = bgGrad;
+  // ── Background: warm cream ──
+  ctx.fillStyle = '#f5f0e6';
   ctx.fillRect(0, 0, W, H);
 
-  // Subtle paper texture lines
-  ctx.save();
-  ctx.globalAlpha = 0.018;
-  for (let y = 0; y < H; y += 32) {
-    ctx.fillStyle = '#8b7355';
-    ctx.fillRect(0, y, W, 1);
-  }
-  ctx.restore();
-
-  // ── Blurred background text (fake book page) ──
-  const loremLines = [
+  // ── Blurred background text — very faint ──
+  const bgLines = [
     'restaurante e pedir o maravilhoso copo dia após dia e no',
     'ininterruptamente num único fluido — esta vida. Faço minha',
     'escapulo com ela para alguma sala mobilhada pode ela ser',
@@ -1704,158 +1691,142 @@ window._generateStory = function(idx) {
     'extirpar estas floreios e fírulas. Para ser eu mesmo (tanto)',
     'nciso da iluminação dos olhos de nustas pessoas e, portanto,',
     'io posso estar inteiramente seguro sobre o que o meu eu é.',
-    'Os autênticos, como Rhoda, existem mais com a iluminação, a',
-    'pletamente em solitude. Eles se melindram com a iluminação, a',
-    'reduplicação. Eles atiram suas pinturas, uma vez concluídas, no',
+    'Os autênticos, como Rhoda, existem mais com a iluminação,',
+    'pletamente em solitude. Eles se melindram com a iluminação,',
+    'reduplicação. Eles atiram suas pinturas, uma vez concluídas,',
     'campo, com a frente virada para baixo. Em cima das palavras',
     'de Louis estende-se uma espessa camada de gelo. Suas palavras',
     'saem prensadas, condensadas, duradouras.',
     '"Quero, pois, após esta sonolência, cintilar, multifacetado',
-    'sob a luz do rosto de meus amigos. Estive fazendo a travessia do',
-    'território sem sol da não-identidade. Uma terra estranha. Tenho',
+    'sob a luz do rosto de meus amigos. Estive fazendo a travessia',
+    'território sem sol da não-identidade. Uma terra estranha.',
     'ouvido em meu momento de apaziguamento, em meu momento',
-    'de arrasadora satisfação, o suspiro, à medida que flui, que reflui,',
+    'de arrasadora satisfação, o suspiro, à medida que flui,',
     'de maré que se espraia para além deste círculo de radiante luz,',
     'deste tamborilar de insensata fúria. Tenho tido um momento',
-    'único de enorme paz. Isso talvez seja a felicidade. Agora sou ar-',
-    'rastado de volta por pungentes sensações; pela curiosidade, pela',
-    'avidez (estou faminto) e pelo irresistível desejo de ser eu mesmo.',
+    'único de enorme paz. Isso talvez seja a felicidade. Agora sou',
+    'rastado de volta por pungentes sensações; pela curiosidade,',
+    'avidez (estou faminto) e pelo irresistível desejo de ser eu.',
     'Penso nas pessoas às quais poderia dizer coisas: Louis, Neville,',
     'Susan, Jinny e Rhoda. Com eles sou multiforme. Eles me livram',
     'da escuridão. Iremos nos encontrar esta noite, graças aos céus.',
     'Daremos adeus a Percival, que parte para a Índia. A hora ainda',
     'está longe, mas já começo a perceber aqueles arautos, aqueles',
     'batedores, as imagens de nossos amigos ausentes. Vejo Louis',
-    'esculpido em pedra, escultural; Neville, talhado a tesoura, exato',
+    'esculpido em pedra, escultural; Neville, talhado a tesoura,',
     'Susan com olhos como contas de cristal; Jinny dançando com',
-    'uma chama, febril, flamante, sobre a terra seca; e Rhoda a m-',
-    'da fonte sempre melhada. São figuras fantásticas, habita-',
-    'ções, essas visões de amigos ausentes, fantasmas, habitué',
+    'uma chama, febril, flamante, sobre a terra seca; e Rhoda',
+    'da fonte sempre melhada. São figuras fantásticas, habitadas',
     'ouvido em meu momento de apaziguamento, em meu momento',
-    'de arrasadora satisfação, o suspiro, à medida que flui, que reflui,',
+    'de arrasadora satisfação, o suspiro, à medida que flui,',
     'de maré que se espraia para além deste círculo de radiante luz,',
     'deste tamborilar de insensata fúria. Tenho tido um momento',
-    'único de enorme paz. Isso talvez seja a felicidade. Agora sou ar-',
-    'rastado de volta por pungentes sensações; pela curiosidade, pela',
-    'avidez (estou faminto) e pelo irresistível desejo de ser eu mesmo.',
+    'único de enorme paz. Isso talvez seja a felicidade. Agora sou',
+    'rastado de volta por pungentes sensações; pela curiosidade,',
+    'avidez (estou faminto) e pelo irresistível desejo de ser eu.',
     'Penso nas pessoas às quais poderia dizer coisas: Louis, Neville,',
     'da escuridão. Iremos nos encontrar esta noite, graças aos céus.',
     'Daremos adeus a Percival, que parte para a Índia. A hora ainda',
-    'está longe, mas já começo a perceber aqueles arautos, aqueles',
-    'batedores, as imagens de nossos amigos ausentes. Vejo Louis',
   ];
 
   ctx.save();
-  ctx.filter = 'blur(5px)';
-  ctx.globalAlpha = 0.22;
-  ctx.fillStyle = '#2a221a';
-  ctx.font = '500 36px "Georgia", serif';
-  const lineH = 58;
-  const marginX = 88;
-  const startY = 110;
-  loremLines.forEach((line, i) => {
-    ctx.fillText(line, marginX, startY + i * lineH);
+  ctx.filter = 'blur(7px)';
+  ctx.globalAlpha = 0.13;
+  ctx.fillStyle = '#1c1408';
+  ctx.font = '400 34px Georgia, serif';
+  const bgLineH = 56;
+  bgLines.forEach((line, i) => {
+    ctx.fillText(line, 72, 90 + i * bgLineH);
   });
   ctx.restore();
 
-  // ── Vignette overlay ──
-  const vig = ctx.createRadialGradient(W/2, H/2, H*0.25, W/2, H/2, H*0.75);
-  vig.addColorStop(0, 'rgba(0,0,0,0)');
-  vig.addColorStop(1, 'rgba(20,14,8,0.32)');
-  ctx.fillStyle = vig;
-  ctx.fillRect(0, 0, W, H);
-
-  // ── Quote text (centered, crisp) ──
-  const quoteText = q.text;
-  const fontSize = quoteText.length < 80 ? 68 : quoteText.length < 160 ? 56 : 46;
-  const quoteFont = `italic ${fontSize}px "Cormorant Garamond", "Georgia", serif`;
-  ctx.font = quoteFont;
-
-  // Word wrap
-  const maxWidth = W - 200;
-  const words = quoteText.split(' ');
-  const qLines = [];
-  let cur = '';
-  for (const w of words) {
-    const test = cur ? cur + ' ' + w : w;
-    if (ctx.measureText(test).width > maxWidth && cur) {
-      qLines.push(cur);
-      cur = w;
-    } else { cur = test; }
+  // ── Word wrap helper ──
+  function wrapText(text, maxW, font) {
+    ctx.font = font;
+    const words = text.split(' ');
+    const lines = [];
+    let cur = '';
+    for (const w of words) {
+      const test = cur ? cur + ' ' + w : w;
+      if (ctx.measureText(test).width > maxW && cur) { lines.push(cur); cur = w; }
+      else cur = test;
+    }
+    if (cur) lines.push(cur);
+    return lines;
   }
-  if (cur) qLines.push(cur);
 
-  const qLineH = fontSize * 1.45;
+  // ── Quote sizing ──
+  const quoteText = q.text;
+  const len = quoteText.length;
+  const fontSize = len < 80 ? 72 : len < 150 ? 60 : len < 250 ? 52 : 44;
+  const qFont = 'italic ' + fontSize + 'px "Cormorant Garamond", Georgia, serif';
+  const maxQW = W - 180;
+  const qLines = wrapText(quoteText, maxQW, qFont);
+  const qLineH = fontSize * 1.5;
   const qBlockH = qLines.length * qLineH;
-  const qStartY = (H - qBlockH) / 2 - 60;
+  const qStartY = (H - qBlockH) / 2 - 40;
 
-  // Highlight rectangles per line (wine/gold)
+  // ── Highlight: solid warm bar behind each line ──
   ctx.save();
-  ctx.globalAlpha = 0.22;
   qLines.forEach((line, i) => {
+    ctx.font = qFont;
     const tw = ctx.measureText(line).width;
-    const x = (W - tw) / 2 - 28;
-    const y = qStartY + i * qLineH - fontSize * 0.82;
-    const rW = tw + 56;
-    const rH = fontSize * 1.1;
-    // gradient highlight
-    const hGrad = ctx.createLinearGradient(x, y, x + rW, y);
-    hGrad.addColorStop(0, 'rgba(107,31,46,0)');
-    hGrad.addColorStop(0.15, 'rgba(107,31,46,0.85)');
-    hGrad.addColorStop(0.85, 'rgba(107,31,46,0.85)');
-    hGrad.addColorStop(1, 'rgba(107,31,46,0)');
-    ctx.fillStyle = hGrad;
-    ctx.fillRect(x, y, rW, rH);
+    const lx = (W - tw) / 2 - 32;
+    const ly = qStartY + i * qLineH - fontSize * 0.85;
+    const lw = tw + 64;
+    const lh = fontSize * 1.18;
+    // Warm cream/ivory solid background per line — like a book page stripe
+    ctx.fillStyle = 'rgba(245, 238, 220, 0.92)';
+    ctx.fillRect(lx, ly, lw, lh);
+    // Thin wine underline at bottom of each highlight
+    ctx.fillStyle = 'rgba(107, 31, 46, 0.55)';
+    ctx.fillRect(lx + 8, ly + lh - 4, lw - 16, 3);
   });
   ctx.restore();
 
-  // Quote text itself
+  // ── Quote text — dark ink, very readable ──
   ctx.save();
-  ctx.fillStyle = '#faf7f2';
-  ctx.font = quoteFont;
+  ctx.font = qFont;
+  ctx.fillStyle = '#1c1408';
   ctx.textAlign = 'center';
-  ctx.shadowColor = 'rgba(0,0,0,0.3)';
-  ctx.shadowBlur = 8;
   qLines.forEach((line, i) => {
-    ctx.fillText(line, W/2, qStartY + i * qLineH);
+    ctx.fillText(line, W / 2, qStartY + i * qLineH);
   });
   ctx.restore();
 
-  // Opening quote mark
+  // ── Opening curly quote — wine colored, large ──
   ctx.save();
-  ctx.font = `${fontSize * 2.2}px "Cormorant Garamond", "Georgia", serif`;
-  ctx.fillStyle = 'rgba(184,151,90,0.5)';
+  ctx.font = 'italic ' + (fontSize * 2.5) + 'px "Cormorant Garamond", Georgia, serif';
+  ctx.fillStyle = 'rgba(107, 31, 46, 0.35)';
   ctx.textAlign = 'center';
-  ctx.fillText('“', W/2, qStartY - fontSize * 0.6);
+  ctx.fillText('\u201C', W / 2, qStartY - fontSize * 0.5);
   ctx.restore();
 
-  // ── Source line ──
+  // ── Source: book + author ──
   if (q.book || q.author) {
-    const sourceY = qStartY + qBlockH + 70;
+    const srcY = qStartY + qBlockH + 72;
     ctx.save();
     ctx.textAlign = 'center';
-    // decorative rule
-    ctx.strokeStyle = 'rgba(184,151,90,0.5)';
-    ctx.lineWidth = 1;
+    // Small gold rule
+    ctx.strokeStyle = 'rgba(184, 151, 90, 0.6)';
+    ctx.lineWidth = 1.5;
     ctx.beginPath();
-    ctx.moveTo(W/2 - 80, sourceY - 28);
-    ctx.lineTo(W/2 + 80, sourceY - 28);
+    ctx.moveTo(W / 2 - 100, srcY - 24);
+    ctx.lineTo(W / 2 + 100, srcY - 24);
     ctx.stroke();
-    // book + author
-    ctx.font = '500 30px "Jost", "Arial", sans-serif';
-    ctx.fillStyle = 'rgba(250,247,242,0.75)';
-    ctx.letterSpacing = '0.12em';
-    const src = (q.book ? q.book.toUpperCase() : '') + (q.author ? '  —  ' + q.author : '');
-    ctx.fillText(src, W/2, sourceY);
+    const src = (q.book ? q.book : '') + (q.author ? '  \u2014  ' + q.author : '');
+    ctx.font = '500 28px Jost, Arial, sans-serif';
+    ctx.fillStyle = 'rgba(28, 20, 8, 0.6)';
+    ctx.fillText(src.toUpperCase(), W / 2, srcY);
     ctx.restore();
   }
 
-  // ── Branding bottom ──
+  // ── Branding ──
   ctx.save();
   ctx.textAlign = 'center';
-  ctx.font = '400 22px "Jost", "Arial", sans-serif';
-  ctx.fillStyle = 'rgba(184,151,90,0.4)';
-  ctx.fillText('✦ Diário de Leituras · Marina Risther Razzo', W/2, H - 80);
+  ctx.font = '300 20px Jost, Arial, sans-serif';
+  ctx.fillStyle = 'rgba(184, 151, 90, 0.5)';
+  ctx.fillText('\u2756  Di\u00e1rio de Leituras  \u00b7  Marina Risther Razzo  \u2756', W / 2, H - 72);
   ctx.restore();
 
   document.getElementById('storyOverlay').classList.remove('hidden');
