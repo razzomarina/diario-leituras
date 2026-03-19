@@ -1052,6 +1052,11 @@ body.dark .wrapped-top-authors{background:var(--cream-mid);}
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
           <input type="text" id="quoteSearchInput" placeholder="buscar nas citações…" oninput="window._filterQuotes(this.value)">
         </div>
+        <label class="btn" style="cursor:pointer" title="Importar citações de CSV (Kindle/Readwise)">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+          Importar CSV
+          <input type="file" accept=".csv" id="quotesCsvInput" style="display:none" onchange="window._importQuotesCsv(this)">
+        </label>
         <button class="btn btn-gold" onclick="window._openQuoteModal()">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
           Nova citação
@@ -1341,6 +1346,22 @@ body.dark .wrapped-top-authors{background:var(--cream-mid);}
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
         Baixar
       </button>
+    </div>
+  </div>
+</div>
+
+<!-- IMPORT PROGRESS MODAL -->
+<div class="modal-overlay hidden" id="importProgressOverlay">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-header">
+      <h2 id="importProgressTitle">Importando citações…</h2>
+    </div>
+    <div class="modal-body" style="padding:1.5rem 1.8rem">
+      <div style="background:var(--cream-dark);border-radius:2px;height:6px;overflow:hidden;margin-bottom:1rem;">
+        <div id="importProgressBar" style="height:6px;background:linear-gradient(90deg,var(--wine),var(--gold));border-radius:2px;width:0%;transition:width .3s ease;"></div>
+      </div>
+      <p id="importProgressMsg" style="font-family:'Cormorant Garamond',serif;font-size:.95rem;font-style:italic;color:var(--stone);text-align:center;"></p>
+      <p id="importProgressDetail" style="font-size:.68rem;color:var(--stone-light);text-align:center;margin-top:.4rem;letter-spacing:.06em;"></p>
     </div>
   </div>
 </div>
@@ -3196,6 +3217,150 @@ window.exportPDF = function() {
       '<div class="print-footer">Diário de Leituras · Marina Risther Razzo</div>' +
     '</div>';
   window.print();
+};
+
+
+// ── IMPORTAR CITAÇÕES DE CSV ──────────────────────────────────────────────
+window._importQuotesCsv = async function(input) {
+  const file = input.files[0]; if (!file) return;
+  input.value = '';
+
+  // Lê o texto
+  const raw = await file.text();
+
+  // Parser CSV simples mas robusto (lida com aspas e quebras dentro de campos)
+  function parseCSV(text) {
+    const rows = []; let cur = [], field = '', inQ = false;
+    // Normalizar quebras de linha
+    text = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+      if (inQ) {
+        if (c === '"' && text[i+1] === '"') { field += '"'; i++; }
+        else if (c === '"') { inQ = false; }
+        else { field += c; }
+      } else {
+        if (c === '"') { inQ = true; }
+        else if (c === ',') { cur.push(field); field = ''; }
+        else if (c === '\n') { cur.push(field); rows.push(cur); cur = []; field = ''; }
+        else { field += c; }
+      }
+    }
+    if (field || cur.length) { cur.push(field); rows.push(cur); }
+    return rows;
+  }
+
+  const rows = parseCSV(raw);
+  if (rows.length < 2) { showToast('⚠ CSV vazio ou inválido.'); return; }
+
+  // Detectar colunas por cabeçalho (case-insensitive, sem BOM)
+  const headers = rows[0].map(h => h.replace(/^\uFEFF/, '').trim().toLowerCase());
+
+  // Mapeamento flexível de colunas
+  const colIdx = (candidates) => {
+    for (const c of candidates) {
+      const i = headers.indexOf(c);
+      if (i >= 0) return i;
+    }
+    return -1;
+  };
+
+  const iHighlight = colIdx(['highlight','citação','citacao','quote','trecho','text','texto']);
+  const iTitle     = colIdx(['book title','title','título','titulo','livro','book']);
+  const iAuthor    = colIdx(['book author','author','autor','autora']);
+  const iLocation  = colIdx(['location','page','página','pagina','loc']);
+  const iNote      = colIdx(['note','nota']);
+
+  if (iHighlight < 0) {
+    showToast('⚠ Coluna de texto/citação não encontrada no CSV.');
+    return;
+  }
+
+  // Filtrar linhas válidas
+  const dataRows = rows.slice(1).filter(r => r[iHighlight] && r[iHighlight].trim().length > 5);
+  if (!dataRows.length) { showToast('⚠ Nenhuma citação válida encontrada.'); return; }
+
+  // Mostrar modal de progresso
+  const overlay = document.getElementById('importProgressOverlay');
+  const bar     = document.getElementById('importProgressBar');
+  const msgEl   = document.getElementById('importProgressMsg');
+  const detEl   = document.getElementById('importProgressDetail');
+  const titleEl = document.getElementById('importProgressTitle');
+  overlay.classList.remove('hidden');
+  titleEl.textContent = 'Importando citações…';
+  msgEl.textContent   = 'Preparando ' + dataRows.length + ' citações…';
+  detEl.textContent   = '';
+  bar.style.width = '0%';
+
+  // Verificar duplicatas já existentes
+  const existingTexts = new Set(quotes.map(q => q.text.trim().toLowerCase().substring(0, 80)));
+
+  let imported = 0, skipped = 0;
+
+  // Importar em lotes de 20 para não travar
+  const BATCH = 20;
+  for (let i = 0; i < dataRows.length; i++) {
+    const row = dataRows[i];
+    const text = (row[iHighlight] || '').trim();
+    if (!text) { skipped++; continue; }
+
+    // Checar duplicata (primeiros 80 chars)
+    const key = text.toLowerCase().substring(0, 80);
+    if (existingTexts.has(key)) { skipped++; continue; }
+    existingTexts.add(key);
+
+    // Extrair campos
+    let bookTitle = iTitle >= 0 ? (row[iTitle] || '').trim() : '';
+    let author    = iAuthor >= 0 ? (row[iAuthor] || '').trim() : '';
+    const loc     = iLocation >= 0 ? (row[iLocation] || '').trim() : '';
+    const note    = iNote >= 0 ? (row[iNote] || '').trim() : '';
+
+    // Tentar casar com livro existente no diário
+    let bookId = '';
+    if (bookTitle) {
+      const match = books.find(b =>
+        b.title.toLowerCase() === bookTitle.toLowerCase() ||
+        b.title.toLowerCase().includes(bookTitle.toLowerCase().substring(0, 20))
+      );
+      if (match) { bookId = match.id; if (!author) author = match.author || ''; }
+    }
+
+    const qData = {
+      id:      Date.now().toString(36) + Math.random().toString(36).slice(2,6) + i,
+      text,
+      book:    bookTitle,
+      author,
+      page:    loc ? 'loc. ' + loc : '',
+      bookId,
+      note,
+      addedAt: Date.now() - (dataRows.length - i) * 100, // preservar ordem
+    };
+
+    await saveQuoteToDb(qData);
+    imported++;
+
+    // Atualizar progresso
+    const pct = Math.round((i + 1) / dataRows.length * 100);
+    bar.style.width = pct + '%';
+    msgEl.textContent = 'Importando ' + (i+1) + ' de ' + dataRows.length + '…';
+    detEl.textContent = '"' + text.substring(0, 55) + (text.length > 55 ? '…' : '') + '"';
+
+    // Yield a cada lote para não congelar a UI
+    if (i % BATCH === BATCH - 1) await new Promise(r => setTimeout(r, 0));
+  }
+
+  // Concluído
+  bar.style.width = '100%';
+  titleEl.textContent = 'Importação concluída!';
+  msgEl.textContent = '✓ ' + imported + ' citaç' + (imported===1?'ão':'ões') + ' importada' + (imported===1?'':'s') +
+    (skipped ? ' · ' + skipped + ' ignorada' + (skipped===1?'':'s') + ' (duplicatas ou vazias)' : '');
+  detEl.textContent = '';
+
+  setTimeout(() => {
+    overlay.classList.add('hidden');
+    switchTab('quotes');
+    showToast('✓ ' + imported + ' citações importadas!');
+  }, 2200);
 };
 
 // ── DARK MODE TOGGLE ──────────────────────────────────────────────────────
