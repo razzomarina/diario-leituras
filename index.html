@@ -2500,6 +2500,15 @@ function titleColor(t) {
 }
 
 // ── ISBN / TITLE SEARCH ───────────────────────────────────
+// Para aumentar a cota da API do Google Books, insira sua chave abaixo:
+// Obtenha gratuitamente em: https://console.cloud.google.com → APIs → Books API
+const GBOOKS_KEY = 'AIzaSyD6f9GFnQXZ30dtNpraZ8nq0Y1HiwqXP70';
+const _gbooksCache = {};
+
+function _gbooksUrl(q) {
+  return 'https://www.googleapis.com/books/v1/volumes?' + q + (GBOOKS_KEY ? '&key=' + GBOOKS_KEY : '');
+}
+
 let searchTimer = null;
 document.getElementById('fIsbn').addEventListener('input', function() {
   clearTimeout(searchTimer);
@@ -2508,10 +2517,10 @@ document.getElementById('fIsbn').addEventListener('input', function() {
   const isbn = val.replace(/[-\s]/g, '');
   if (/^\d{10}$|^\d{13}$/.test(isbn)) {
     setIsbnStatus('⏳');
-    searchTimer = setTimeout(() => fetchByIsbn(isbn), 600);
-  } else if (val.length >= 3) {
+    searchTimer = setTimeout(() => fetchByIsbn(isbn), 800);
+  } else if (val.length >= 4) {
     setIsbnStatus('⏳');
-    searchTimer = setTimeout(() => fetchByTitle(val), 700);
+    searchTimer = setTimeout(() => fetchByTitle(val), 1000);
   }
 });
 document.addEventListener('click', e => {
@@ -2520,18 +2529,26 @@ document.addEventListener('click', e => {
 function setIsbnStatus(s) { document.getElementById('isbnStatus').textContent = s; }
 function hideSuggestions() { document.getElementById('isbnSuggestions').classList.remove('show'); }
 async function fetchByIsbn(isbn) {
+  const ckey = 'isbn:' + isbn;
   try {
-    const res = await fetch('https://www.googleapis.com/books/v1/volumes?q=isbn:' + isbn);
+    if (_gbooksCache[ckey]) { applyBookInfo(_gbooksCache[ckey]); setIsbnStatus('✓'); return; }
+    const res = await fetch(_gbooksUrl('q=isbn:' + isbn));
+    if (res.status === 429) { setIsbnStatus('⚠ Limite API'); return; }
     const data = await res.json();
     if (!data.items || !data.items.length) { setIsbnStatus('✗'); return; }
+    _gbooksCache[ckey] = data.items[0].volumeInfo;
     applyBookInfo(data.items[0].volumeInfo); setIsbnStatus('✓');
   } catch(e) { setIsbnStatus('✗'); }
 }
 async function fetchByTitle(title) {
+  const ckey = 'title:' + title.toLowerCase();
   try {
-    const res = await fetch('https://www.googleapis.com/books/v1/volumes?q=' + encodeURIComponent(title) + '&maxResults=6&langRestrict=pt');
+    if (_gbooksCache[ckey]) { showSuggestions(_gbooksCache[ckey]); setIsbnStatus(''); return; }
+    const res = await fetch(_gbooksUrl('q=' + encodeURIComponent(title) + '&maxResults=6&langRestrict=pt'));
+    if (res.status === 429) { setIsbnStatus('⚠ Limite API'); hideSuggestions(); return; }
     const data = await res.json();
     if (!data.items || !data.items.length) { setIsbnStatus('✗'); hideSuggestions(); return; }
+    _gbooksCache[ckey] = data.items;
     setIsbnStatus(''); showSuggestions(data.items);
   } catch(e) { setIsbnStatus('✗'); }
 }
