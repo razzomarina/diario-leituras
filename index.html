@@ -1442,19 +1442,27 @@ function renderQuotes(){
   if(!quotes.length){list.innerHTML='<div class="no-quotes">Nenhuma citação ainda.<br>Adicione frases que te marcaram.</div>';return;}
   const sorted=[...quotes].sort((a,b)=>(b.addedAt||0)-(a.addedAt||0));
   window._quotesForStory=sorted;
-  list.innerHTML=sorted.map((q,i)=>
-    '<div class="quote-card" style="animation-delay:'+Math.min(i*.04,.35)+'s">'+
-    '<div class="quote-text">'+esc(q.text)+'</div>'+
-    '<div class="quote-source">'+(q.book?esc(q.book):'')+(q.author?' — '+esc(q.author):'')+(q.page?', p.'+esc(q.page):'')+' </div>'+
-    '<div class="quote-card-actions">'+
-      '<button class="quote-story-btn" onclick="window._generateStory('+i+')">'+
-        '<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='currentColor' width='13' height='13'><rect x='4' y='2' width='13' height='18' rx='1.5' stroke-width='1.8'/><path stroke-linecap='round' stroke-width='1.5' d='M7 7h7M7 11h5'/><circle cx='18' cy='18' r='4' fill='currentColor' stroke='none'/><path d='M17 18l.8.8L19.5 16.5' stroke='white' stroke-width='1.2' stroke-linecap='round'/></svg>'+
-        'Gerar story'+
-      '</button>'+
-      '<button class="quote-del" onclick="window._deleteQuote(''+q.id+'')">remover</button>'+
-    '</div>'+
-    '</div>'
-  ).join('');
+  const cards=sorted.map(function(q,i){
+    const src=(q.book?esc(q.book):'')+(q.author?' — '+esc(q.author):'')+(q.page?', p.'+esc(q.page):'');
+    const d=document.createElement('div');
+    d.className='quote-card';
+    d.style.animationDelay=Math.min(i*.04,.35)+'s';
+    d.innerHTML=(
+      '<div class="quote-text">'+esc(q.text)+'</div>'+
+      '<div class="quote-source">'+src+'</div>'+
+      '<div class="quote-card-actions">'+
+        '<button class="quote-story-btn" data-idx="'+i+'">&#10024; Gerar story</button>'+
+        '<button class="quote-del" data-id="'+q.id+'">remover</button>'+
+      '</div>'
+    );
+    return d;
+  });
+  list.innerHTML='';
+  cards.forEach(function(card){
+    list.appendChild(card);
+    card.querySelector('.quote-story-btn').addEventListener('click',function(){window._generateStory(+this.dataset.idx);});
+    card.querySelector('.quote-del').addEventListener('click',function(){window._deleteQuote(this.dataset.id);});
+  });
 }
 
 function openQuoteModal(){
