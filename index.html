@@ -3554,9 +3554,11 @@ window._downloadStory = function() {
   a.download = 'citacao-' + fmt + '.png'; a.href = canvas.toDataURL('image/png'); a.click();
 };
 window._generateStory = function(idx) {
+  window._currentStoryIdx   = idx;
   window._currentStoryStyle = window._currentStoryStyle || 'page';
   window._currentStoryFmt   = window._currentStoryFmt   || 'story';
-  generateStory(idx);
+  window._renderStory();
+  document.getElementById('storyOverlay').classList.remove('hidden');
 };;
 
 // ── Cor do grifo por livro (derivada do título) ───────────────────────────
