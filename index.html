@@ -878,6 +878,201 @@ body.dark .wrapped-top-authors{background:var(--cream-mid);}
   .series-grid{grid-template-columns:1fr;}
 }
 
+
+/* ── ARQUIVO vs DIÁRIO VIVO ── */
+.timeline-archive { opacity: .72; filter: sepia(0.38) brightness(0.97); }
+.timeline-archive .timeline-month-label { color: var(--stone); }
+.timeline-archive .timeline-book-cover,
+.timeline-archive .timeline-book-ph { filter: sepia(0.35) saturate(0.8); }
+.timeline-divider {
+  display: flex; align-items: center; gap: 1rem;
+  margin: 2rem 0; padding: .6rem 0;
+}
+.timeline-divider::before, .timeline-divider::after {
+  content: ''; flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: .5;
+}
+.timeline-divider-text {
+  font-family: 'Cormorant Garamond', serif; font-size: .75rem;
+  letter-spacing: .35em; text-transform: uppercase; color: var(--gold);
+  font-style: italic; white-space: nowrap; opacity: .75;
+}
+
+/* ── CAMPO "NESSE MOMENTO" ── */
+.momento-group {
+  background: linear-gradient(135deg, rgba(184,151,90,.06) 0%, rgba(107,31,46,.04) 100%);
+  border: 1px solid rgba(184,151,90,.2); border-left: 3px solid var(--gold);
+  padding: .9rem 1.1rem; margin-bottom: 1.1rem;
+}
+.momento-label {
+  display: flex; align-items: center; gap: .45rem;
+  font-size: .62rem; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: .4rem;
+}
+.momento-label svg { width: 12px; height: 12px; flex-shrink: 0; }
+.momento-textarea {
+  width: 100%; padding: .55rem .8rem; border: 1px solid rgba(184,151,90,.25);
+  background: rgba(255,255,255,.6); font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem; font-style: italic; color: var(--ink); resize: vertical;
+  min-height: 72px; transition: border-color .18s; border-radius: 0;
+  line-height: 1.6;
+}
+.momento-textarea:focus { outline: none; border-color: var(--gold); background: white; }
+.momento-textarea::placeholder { color: var(--stone-pale); font-style: italic; }
+body.dark .momento-textarea { background: rgba(42,36,32,.6); }
+
+/* ── CONFETE ── */
+#confettiCanvas {
+  position: fixed; inset: 0; z-index: 9000;
+  pointer-events: none; display: none;
+}
+
+/* ── MODAL COMEMORATIVO ── */
+.celebration-modal .modal { max-width: 480px; border-top: 3px solid var(--gold); }
+.celebration-cover-wrap { text-align: center; margin: .5rem 0 1.4rem; }
+.celebration-cover {
+  width: 100px; height: 148px; object-fit: cover; border-radius: 1px;
+  box-shadow: 4px 6px 20px var(--shadow); display: inline-block;
+}
+.celebration-cover-ph {
+  width: 100px; height: 148px; border-radius: 1px; display: inline-flex;
+  align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif; font-size: 2.8rem;
+  color: white; font-style: italic; box-shadow: 4px 6px 20px var(--shadow);
+}
+.celebration-title {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; font-weight: 500;
+  text-align: center; color: var(--ink); line-height: 1.2; margin-bottom: .3rem;
+}
+.celebration-author {
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  font-size: 1rem; color: var(--stone); text-align: center; margin-bottom: 1rem;
+}
+.celebration-msg {
+  font-family: 'Cormorant Garamond', serif; font-size: 1.05rem;
+  font-style: italic; color: var(--wine); text-align: center;
+  margin-bottom: 1.2rem; letter-spacing: .02em;
+}
+.celebration-stars { text-align: center; color: var(--gold); font-size: 1.1rem; margin-bottom: 1.1rem; }
+
+/* ── ME SURPREENDA ── */
+.surprise-modal .modal { max-width: 520px; }
+.surprise-cover-wrap { display: flex; align-items: flex-start; gap: 1.5rem; margin-bottom: 1.2rem; }
+.surprise-cover {
+  width: 90px; height: 134px; object-fit: cover; border-radius: 1px;
+  box-shadow: 4px 6px 18px var(--shadow); flex-shrink: 0;
+}
+.surprise-cover-ph {
+  width: 90px; height: 134px; border-radius: 1px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif; font-size: 2.5rem;
+  color: white; font-style: italic; box-shadow: 4px 6px 18px var(--shadow);
+}
+.surprise-info { flex: 1; min-width: 0; }
+.surprise-badge { font-size: .55rem; letter-spacing: .3em; text-transform: uppercase; color: var(--wine); display: block; margin-bottom: .5rem; }
+.surprise-title { font-family: 'Cormorant Garamond', serif; font-size: 1.55rem; font-weight: 500; color: var(--ink); line-height: 1.2; margin-bottom: .3rem; }
+.surprise-author { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: .95rem; color: var(--stone); margin-bottom: .5rem; }
+.surprise-stars { color: var(--gold); font-size: .9rem; margin-bottom: .5rem; }
+.surprise-date { font-size: .62rem; letter-spacing: .12em; color: var(--stone-light); text-transform: uppercase; }
+.surprise-section-title {
+  font-size: .58rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--wine); margin: 1rem 0 .4rem; padding-bottom: .3rem;
+  border-bottom: 1px solid var(--wine-pale);
+}
+.surprise-notes {
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  font-size: .95rem; color: var(--stone); line-height: 1.65;
+}
+.surprise-quotes-list { display: flex; flex-direction: column; gap: .5rem; }
+.surprise-quote {
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  font-size: .9rem; color: var(--ink); line-height: 1.6;
+  padding-left: .75rem; border-left: 2px solid var(--gold);
+}
+.surprise-momento {
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  font-size: .95rem; color: var(--ink); line-height: 1.65;
+  background: linear-gradient(135deg, rgba(184,151,90,.07) 0%, rgba(107,31,46,.04) 100%);
+  border-left: 3px solid var(--gold); padding: .65rem .9rem;
+}
+.surprise-btn-other {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .55rem 1.1rem; background: transparent;
+  border: 1px solid var(--border-strong); border-radius: 1px;
+  font-family: 'Jost', sans-serif; font-size: .65rem; letter-spacing: .12em;
+  text-transform: uppercase; cursor: pointer; color: var(--stone); transition: all .18s;
+}
+.surprise-btn-other:hover { border-color: var(--gold); color: var(--gold); }
+body.dark .celebration-modal .modal,
+body.dark .surprise-modal .modal { background: var(--cream-mid); }
+
+/* ── DASHBOARD ── */
+#dashboardSection { margin-bottom: 0; }
+.dashboard-wrap { padding: 2rem 0 1.5rem; }
+.dashboard-reading-cards {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.2rem; margin-bottom: 2rem;
+}
+.dash-reading-card {
+  background: white; border: 1px solid var(--border);
+  border-top: 3px solid var(--wine);
+  display: flex; gap: 1.1rem; padding: 1.2rem 1.4rem;
+  box-shadow: 0 2px 14px var(--shadow-soft);
+  transition: box-shadow .2s; cursor: pointer; animation: fadeUp .35s ease both;
+}
+.dash-reading-card:hover { box-shadow: 0 4px 22px var(--shadow); }
+body.dark .dash-reading-card { background: var(--cream-mid); }
+.dash-card-cover { width: 56px; height: 82px; object-fit: cover; border-radius: 1px; box-shadow: 2px 3px 10px var(--shadow); flex-shrink: 0; }
+.dash-card-cover-ph { width: 56px; height: 82px; border-radius: 1px; display: flex; align-items: center; justify-content: center; font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; color: white; font-style: italic; font-weight: 600; box-shadow: 2px 3px 10px var(--shadow); flex-shrink: 0; }
+.dash-card-info { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: .3rem; }
+.dash-card-label { font-size: .55rem; letter-spacing: .25em; text-transform: uppercase; color: var(--wine); }
+.dash-card-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--ink); }
+.dash-card-author { font-size: .72rem; color: var(--stone); font-style: italic; font-family: 'Cormorant Garamond', serif; }
+.dash-card-progress { margin-top: .35rem; }
+.dash-bottom-grid {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 1rem; margin-bottom: 1.5rem;
+}
+.dash-bottom-card {
+  background: white; border: 1px solid var(--border);
+  padding: 1.1rem 1.3rem; box-shadow: 0 2px 10px var(--shadow-soft);
+  animation: fadeUp .35s ease both;
+}
+body.dark .dash-bottom-card { background: var(--cream-mid); }
+.dash-bottom-label { font-size: .55rem; letter-spacing: .22em; text-transform: uppercase; color: var(--stone-light); margin-bottom: .55rem; display: block; }
+.dash-bottom-content { font-family: 'Cormorant Garamond', serif; font-size: .96rem; font-style: italic; color: var(--ink); line-height: 1.55; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.dash-bottom-sub { font-size: .68rem; color: var(--stone-light); margin-top: .35rem; font-family: 'Jost', sans-serif; }
+.dash-goal-bar-bg { height: 4px; background: var(--cream-dark); border-radius: 2px; margin: .5rem 0 .3rem; overflow: hidden; }
+.dash-goal-bar-fill { height: 4px; background: linear-gradient(90deg, var(--wine), var(--gold)); border-radius: 2px; transition: width 1s ease; }
+.dash-see-all {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: .75rem 1rem; background: var(--cream-mid); border: 1px solid var(--border);
+  cursor: pointer; margin-bottom: 2rem; transition: background .15s;
+}
+.dash-see-all:hover { background: var(--cream-dark); }
+.dash-see-all span { font-size: .65rem; letter-spacing: .18em; text-transform: uppercase; color: var(--stone); }
+.dash-see-all svg { width: 14px; height: 14px; color: var(--stone-light); transition: transform .2s; }
+.dash-see-all:hover svg { transform: translateX(4px); }
+.dash-see-all.open svg { transform: rotate(90deg); }
+#libraryFull { display: none; }
+
+/* ── TOOLBAR "ME SURPREENDA" btn ── */
+.btn-surprise {
+  display: inline-flex; align-items: center; gap: .38rem;
+  padding: .46rem .85rem; border: 1px solid rgba(184,151,90,.35);
+  background: rgba(184,151,90,.07); border-radius: 1px;
+  font-family: 'Jost', sans-serif; font-size: .65rem;
+  letter-spacing: .1em; text-transform: uppercase; cursor: pointer;
+  color: var(--gold); transition: all .18s;
+}
+.btn-surprise:hover { background: rgba(184,151,90,.15); border-color: var(--gold); }
+
+@media (max-width: 650px) {
+  .dash-bottom-grid { grid-template-columns: 1fr; }
+  .dashboard-reading-cards { grid-template-columns: 1fr; }
+}
+
 </style>
 </head>
 <body>
@@ -908,6 +1103,7 @@ body.dark .wrapped-top-authors{background:var(--cream-mid);}
 
 <!-- APP -->
 <div id="appContent" style="display:none">
+<canvas id="confettiCanvas"></canvas>
 <header>
   <span class="header-super">registro pessoal</span>
   <svg class="header-book-icon" width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -970,6 +1166,14 @@ body.dark .wrapped-top-authors{background:var(--cream-mid);}
 
 <!-- BOOKS PANE -->
 <div id="booksPane">
+  <div id="dashboardSection" class="container">
+    <div class="dashboard-wrap" id="dashboardWrap"></div>
+    <div id="dashSeeAll" class="dash-see-all" onclick="window.toggleLibrary()">
+      <span>Ver toda a biblioteca</span>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+    </div>
+  </div>
+  <div id="libraryFull">
   <div class="container">
     <div class="toolbar">
       <div class="toolbar-left">
@@ -992,6 +1196,9 @@ body.dark .wrapped-top-authors{background:var(--cream-mid);}
         </select>
       </div>
       <div class="toolbar-right">
+        <button class="btn-surprise" onclick="window.openSurprise()" title="Sorteia um livro já lido">
+          ✦ Me surpreenda
+        </button>
         <span class="kbd-hint" title="Atalho para novo livro"><kbd>Ctrl</kbd>+<kbd>N</kbd></span>
         <div class="view-toggle">
           <button class="view-btn active" id="viewList" onclick="window.setView('list')" title="Lista">
@@ -1025,6 +1232,7 @@ body.dark .wrapped-top-authors{background:var(--cream-mid);}
     <div id="bookGridTimeline"></div>
   </div>
 </div>
+  </div><!-- /libraryFull -->
 
 <!-- STATS PANE -->
 <div id="statsPane">
@@ -1260,6 +1468,13 @@ body.dark .wrapped-top-authors{background:var(--cream-mid);}
         </div>
       </div>
       <div class="form-group"><label>Notas &amp; Impressões</label><textarea id="fNotes" placeholder="Impressões gerais sobre o livro…"></textarea></div>
+      <div class="momento-group" id="momentoGroup" style="display:none">
+        <div class="momento-label">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+          nesse momento...
+        </div>
+        <textarea class="momento-textarea" id="fMomento" placeholder="O que estava acontecendo na sua vida enquanto lia este livro? Uma lembrança, um sentimento, um lugar…"></textarea>
+      </div>
       <div class="form-row series-row">
         <div class="form-group">
           <label>Série <span style="opacity:.6">(opcional)</span></label>
@@ -1346,6 +1561,49 @@ body.dark .wrapped-top-authors{background:var(--cream-mid);}
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
         Baixar
       </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL COMEMORATIVO -->
+<div class="modal-overlay hidden celebration-modal" id="celebrationOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>✦ Livro concluído!</h2>
+      <button class="modal-close" onclick="window.closeCelebration()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="celebration-cover-wrap" id="celebCoverWrap"></div>
+      <div class="celebration-title" id="celebTitle"></div>
+      <div class="celebration-author" id="celebAuthor"></div>
+      <div class="celebration-stars" id="celebStars"></div>
+      <div class="celebration-msg" id="celebMsg"></div>
+      <div class="momento-group" id="celebMomentoGroup">
+        <div class="momento-label">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+          nesse momento...
+        </div>
+        <textarea class="momento-textarea" id="celebMomento" placeholder="O que estava acontecendo na sua vida enquanto lia este livro?"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="window._skipCelebration()">Pular por agora</button>
+      <button class="btn btn-gold" onclick="window._saveCelebration()">Salvar memória</button>
+    </div>
+  </div>
+</div>
+
+<!-- ME SURPREENDA MODAL -->
+<div class="modal-overlay hidden surprise-modal" id="surpriseOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>✦ Memória de leitura</h2>
+      <button class="modal-close" onclick="window.closeSurprise()">×</button>
+    </div>
+    <div class="modal-body" id="surpriseBody" style="max-height:70vh;overflow-y:auto"></div>
+    <div class="modal-footer">
+      <button class="surprise-btn-other" onclick="window.openSurprise()">⟳ Outro livro</button>
+      <button class="btn btn-gold" id="surpriseEditBtn">✎ Editar</button>
     </div>
   </div>
 </div>
@@ -1734,6 +1992,13 @@ function setDirty(v) {
   document.getElementById('dirtyDot').classList.toggle('show', v);
 }
 function watchFormChanges() {
+  // Mostrar/esconder "nesse momento" conforme o ano digitado
+  const dateEl = document.getElementById('fDate');
+  if (dateEl) dateEl.addEventListener('input', function() {
+    const yr = getYear(this.value);
+    const mGrp = document.getElementById('momentoGroup');
+    if (mGrp) mGrp.style.display = (!yr || yr >= 2026) ? 'block' : 'none';
+  }, {passive:true});
   const fields = ['fTitle','fAuthor','fGenre','fDate','fNotes','fIsbn','fCoverUrl',
                   'fPublisher','fPubYear','fOrigin','fPageCurrent','fPageTotal','fStatus'];
   fields.forEach(id => {
@@ -1956,8 +2221,15 @@ window._markRead = async function(id) {
   const b = books.find(x => x.id === id); if (!b) return;
   const today = new Date();
   const ds = String(today.getDate()).padStart(2,'0') + '/' + String(today.getMonth()+1).padStart(2,'0') + '/' + today.getFullYear();
-  await saveBookToDb({ ...b, status: 'lido', date: b.date || ds });
-  showToast('✓ Marcado como lido!');
+  const dateStr = b.date || ds;
+  const yr = getYear(dateStr) || today.getFullYear();
+  await saveBookToDb({ ...b, status: 'lido', date: dateStr });
+  if (yr >= 2026) {
+    launchConfetti();
+    setTimeout(() => openCelebration(id), 900);
+  } else {
+    showToast('✓ Marcado como lido!');
+  }
 };
 
 // ── TBR ──────────────────────────────────────────────────
@@ -2074,7 +2346,7 @@ function renderGrid() {
   else if (currentView === 'shelf') renderShelfView(filtered);
   else renderTimelineView(filtered);
 }
-function render() { renderInsights(); updateFilters(); renderGrid(); renderStalledAlerts(); }
+function render() { renderInsights(); updateFilters(); renderGrid(); renderStalledAlerts(); renderDashboard(); }
 function esc(s) {
   if (!s) return '';
   return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
@@ -2294,6 +2566,14 @@ function openModal(id, defaultStatus) {
   }
   updateStarUI(); updateFavUI();
   // Populate series datalist
+  // Campo "nesse momento" — só para diário vivo (2026+)
+  const _editBook = id ? books.find(x => x.id === id) : null;
+  const _editYear = _editBook ? getYear(_editBook.date) : null;
+  const _isLive = _editYear ? _editYear >= 2026 : (defaultStatus && defaultStatus !== 'quero');
+  const mGroup = document.getElementById('momentoGroup');
+  if (mGroup) mGroup.style.display = _isLive ? 'block' : 'none';
+  if (_editBook && _editBook.momento) document.getElementById('fMomento').value = _editBook.momento || '';
+  else if (!id) document.getElementById('fMomento').value = '';
   document.getElementById('seriesList').innerHTML = [...new Set(books.map(b=>b.series).filter(Boolean))].map(s=>'<option value="'+esc(s)+'">').join('');
   if (id) {
     const b = books.find(x => x.id === id);
@@ -2343,6 +2623,7 @@ async function saveBook() {
     coverUrl:  currentCoverUrl, rating: currentRating, favorito: isFavorito,
     tags: currentTags, status,
     series:      document.getElementById('fSeries').value.trim(),
+    momento:     document.getElementById('fMomento').value.trim() || null,
     seriesOrder: document.getElementById('fSeriesOrder').value ? +document.getElementById('fSeriesOrder').value : null,
     pageCurrent: status === 'lendo' ? parseInt(document.getElementById('fPageCurrent').value)||0 : null,
     pageTotal:   status === 'lendo' ? parseInt(document.getElementById('fPageTotal').value)||null : null,
@@ -2790,7 +3071,21 @@ function renderTimelineView(filtered) {
     groups[k].books.push(b);
   });
   const sorted = Object.keys(groups).sort((a, b) => b.localeCompare(a));
+  const dividerKey = '2025-12'; // divisor entre arquivo e diário vivo
+  let dividerInserted = false;
   el.innerHTML = sorted.map((k, gi) => {
+    const blockYear = parseInt(k.substring(0,4)) || 0;
+    const isArchive = blockYear > 0 && blockYear < 2026;
+    const isLive = blockYear >= 2026;
+    const prevKey = sorted[gi - 1];
+    const prevYear = prevKey ? parseInt(prevKey.substring(0,4)) : 0;
+    // Inserir divisor entre o último bloco de 2025 e o primeiro de 2026
+    let dividerHtml = '';
+    if (!dividerInserted && prevYear >= 2026 && blockYear < 2026) {
+      dividerInserted = true;
+      dividerHtml = '<div class="timeline-divider"><span class="timeline-divider-text">✦ início do diário ✦</span></div>';
+    }
+    const archiveClass = isArchive ? 'timeline-archive' : '';
     const g = groups[k];
     const booksHtml = g.books.map((b, i) => {
       const safe = b.coverUrl ? b.coverUrl.replace(/"/g,'').replace(/'/g,'') : '';
@@ -2802,7 +3097,7 @@ function renderTimelineView(filtered) {
         (stars ? '<div class="timeline-book-stars">' + stars + '</div>' : '') +
       '</div>';
     }).join('');
-    return '<div class="timeline-month-block" style="animation-delay:' + Math.min(gi*.06,.5) + 's">' +
+    return dividerHtml + '<div class="timeline-month-block ' + archiveClass + '" style="animation-delay:' + Math.min(gi*.06,.5) + 's">' +
       '<div class="timeline-month-header"><span class="timeline-month-label">' + esc(g.lbl) + '</span><span class="timeline-month-count">' + g.books.length + ' livro' + (g.books.length!==1?'s':'') + '</span></div>' +
       '<div class="timeline-books">' + booksHtml + '</div>' +
     '</div>';
@@ -3362,6 +3657,262 @@ window._importQuotesCsv = async function(input) {
     showToast('✓ ' + imported + ' citações importadas!');
   }, 2200);
 };
+
+
+// ══════════════════════════════════════════════════════════════════════════
+// NOVAS FUNCIONALIDADES v6
+// ══════════════════════════════════════════════════════════════════════════
+
+// ── HELPER: ano é diário vivo? ────────────────────────────────────────────
+function isLiveYear(yr) { return !yr || yr >= 2026; }
+
+// ── CONFETE ───────────────────────────────────────────────────────────────
+function launchConfetti() {
+  const cv = document.getElementById('confettiCanvas');
+  cv.width  = window.innerWidth;
+  cv.height = window.innerHeight;
+  cv.style.display = 'block';
+  const ctx = cv.getContext('2d');
+  const COLORS = ['#b8975a','#c8a96a','#6b1f2e','#8b3040','#fdf8ef','#e8dfc8','#d4b47e','#a04060'];
+  const N = 120;
+  const pieces = Array.from({length:N}, () => ({
+    x:     Math.random() * cv.width,
+    y:     -Math.random() * cv.height * 0.5,
+    w:     6 + Math.random() * 8,
+    h:     10 + Math.random() * 14,
+    color: COLORS[Math.floor(Math.random()*COLORS.length)],
+    rot:   Math.random() * Math.PI * 2,
+    vx:    (Math.random()-0.5)*3,
+    vy:    2 + Math.random()*4,
+    vr:    (Math.random()-0.5)*0.18,
+    wobble: Math.random()*Math.PI*2,
+    wobbleSpeed: 0.05 + Math.random()*0.05,
+    alpha: 0.85 + Math.random()*0.15,
+  }));
+  let frame = 0;
+  function draw() {
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    let alive = false;
+    pieces.forEach(p => {
+      p.y += p.vy; p.x += p.vx + Math.sin(p.wobble)*1.5;
+      p.rot += p.vr; p.wobble += p.wobbleSpeed;
+      if (frame > 80) p.alpha -= 0.012;
+      if (p.alpha <= 0 || p.y > cv.height + 20) return;
+      alive = true;
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, p.alpha);
+      ctx.translate(p.x, p.y); ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.restore();
+    });
+    frame++;
+    if (alive && frame < 200) requestAnimationFrame(draw);
+    else { ctx.clearRect(0,0,cv.width,cv.height); cv.style.display='none'; }
+  }
+  draw();
+}
+
+// ── MODAL COMEMORATIVO ────────────────────────────────────────────────────
+let _celebBook = null;
+const CELEB_MSGS = [
+  'Mais um mundo explorado, mais um universo dentro de você.',
+  'Cada livro concluído é uma versão nova de si mesma.',
+  'Você carregará essas páginas para sempre.',
+  'Fim de livro é sempre um pequeno luto e uma grande vitória.',
+  'Obrigado por ter chegado até o fim.',
+];
+
+function openCelebration(bookId) {
+  const b = books.find(x => x.id === bookId); if (!b) return;
+  _celebBook = b;
+  const safe = b.coverUrl ? b.coverUrl.replace(/"/g,'') : '';
+  const bg   = titleColor(b.title);
+  const stars = b.rating ? '★'.repeat(Math.floor(b.rating))+(b.rating%1?'½':'') : '';
+  document.getElementById('celebCoverWrap').innerHTML =
+    safe ? '<img class="celebration-cover" src="'+safe+'" alt="">'
+         : '<div class="celebration-cover-ph" style="background:'+bg+'">'+b.title.charAt(0)+'</div>';
+  document.getElementById('celebTitle').textContent  = b.title;
+  document.getElementById('celebAuthor').textContent = b.author || '';
+  document.getElementById('celebStars').textContent  = stars;
+  document.getElementById('celebMsg').textContent    = CELEB_MSGS[Math.floor(Math.random()*CELEB_MSGS.length)];
+  document.getElementById('celebMomento').value      = b.momento || '';
+  document.getElementById('celebrationOverlay').classList.remove('hidden');
+}
+
+window.closeCelebration = function() {
+  document.getElementById('celebrationOverlay').classList.add('hidden');
+  _celebBook = null;
+};
+window._skipCelebration = function() { window.closeCelebration(); showToast('✓ Livro marcado como lido!'); };
+window._saveCelebration = async function() {
+  if (!_celebBook) return;
+  const momento = document.getElementById('celebMomento').value.trim();
+  await saveBookToDb({ ..._celebBook, momento: momento || null });
+  window.closeCelebration();
+  showToast('✓ Memória salva!');
+};
+
+// ── "ME SURPREENDA" ───────────────────────────────────────────────────────
+let _lastSurpriseId = null;
+window.openSurprise = function() {
+  const pool = books.filter(b => (!b.status || b.status === 'lido'));
+  if (!pool.length) { showToast('⚠ Nenhum livro lido ainda.'); return; }
+  // Evitar repetir o mesmo
+  const filtered = pool.length > 1 ? pool.filter(b => b.id !== _lastSurpriseId) : pool;
+  const b = filtered[Math.floor(Math.random()*filtered.length)];
+  _lastSurpriseId = b.id;
+  const yr = getYear(b.date);
+  const isLive = isLiveYear(yr);
+  const safe   = b.coverUrl ? b.coverUrl.replace(/"/g,'') : '';
+  const bg     = titleColor(b.title);
+  const stars  = b.rating ? '★'.repeat(Math.floor(b.rating))+(b.rating%1?'½':'') : '';
+  const bQuotes = quotes.filter(q => q.bookId === b.id).slice(0, 3);
+
+  let html = '<div class="surprise-cover-wrap">' +
+    (safe ? '<img class="surprise-cover" src="'+safe+'" alt="">'
+           : '<div class="surprise-cover-ph" style="background:'+bg+'">'+esc(b.title.charAt(0))+'</div>') +
+    '<div class="surprise-info">' +
+      '<span class="surprise-badge">'+( isLive ? '✦ diário vivo' : '◎ arquivo')+'</span>' +
+      '<div class="surprise-title">'+esc(b.title)+'</div>' +
+      (b.author ? '<div class="surprise-author">'+esc(b.author)+'</div>' : '') +
+      (stars    ? '<div class="surprise-stars">'+stars+'</div>' : '') +
+      (b.date   ? '<div class="surprise-date">'+esc(b.date)+'</div>' : '') +
+    '</div></div>';
+
+  if (b.notes) {
+    html += '<div class="surprise-section-title">Notas &amp; impressões</div>' +
+            '<div class="surprise-notes">'+esc(b.notes)+'</div>';
+  }
+  if (bQuotes.length) {
+    html += '<div class="surprise-section-title">Citações</div>' +
+            '<div class="surprise-quotes-list">' +
+            bQuotes.map(q => '<div class="surprise-quote">'+esc(q.text)+'</div>').join('') +
+            '</div>';
+  }
+  if (isLive && b.momento) {
+    html += '<div class="surprise-section-title">nesse momento...</div>' +
+            '<div class="surprise-momento">'+esc(b.momento)+'</div>';
+  }
+
+  document.getElementById('surpriseBody').innerHTML = html;
+  document.getElementById('surpriseEditBtn').onclick = () => {
+    window.closeSurprise(); window._openModal(b.id);
+  };
+  document.getElementById('surpriseOverlay').classList.remove('hidden');
+};
+window.closeSurprise = function() { document.getElementById('surpriseOverlay').classList.add('hidden'); };
+
+// ── DASHBOARD ─────────────────────────────────────────────────────────────
+function renderDashboard() {
+  const wrap = document.getElementById('dashboardWrap'); if (!wrap) return;
+  const cy   = new Date().getFullYear();
+  const reading    = books.filter(b => b.status === 'lendo');
+  const readBooks  = books.filter(b => !b.status || b.status === 'lido');
+  const thisYear   = readBooks.filter(b => getYear(b.date) === cy);
+  const goalTarget = goals[cy] || null;
+  const lastRead   = [...readBooks].sort((a,b) => {
+    const da = parseDate(a.date), db = parseDate(b.date);
+    return (db && da) ? db - da : (!da ? 1 : -1);
+  })[0];
+  const lastQuote  = [...quotes].sort((a,b) => (b.addedAt||0)-(a.addedAt||0))[0];
+
+  // Seção lendo atualmente — cards grandes
+  let readingHtml = '';
+  if (reading.length) {
+    readingHtml = '<div style="font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:var(--wine);margin-bottom:.75rem;display:block">Lendo agora</div>' +
+      '<div class="dashboard-reading-cards">' +
+      reading.map(b => {
+        const safe = b.coverUrl ? b.coverUrl.replace(/"/g,'') : '';
+        const bg   = titleColor(b.title);
+        const pct  = b.pageTotal ? Math.min(100, Math.round((b.pageCurrent||0)/b.pageTotal*100)) : 0;
+        return '<div class="dash-reading-card" onclick="window._openModal(\''+b.id+'\')">' +
+          (safe ? '<img class="dash-card-cover" src="'+safe+'" alt="">'
+                : '<div class="dash-card-cover-ph" style="background:'+bg+'">'+esc(b.title.charAt(0))+'</div>') +
+          '<div class="dash-card-info">' +
+            '<span class="dash-card-label">Lendo atualmente</span>' +
+            '<div class="dash-card-title">'+esc(b.title)+'</div>' +
+            (b.author ? '<div class="dash-card-author">'+esc(b.author)+'</div>' : '') +
+            '<div class="dash-card-progress">' +
+              '<div class="progress-bar-bg"><div class="progress-bar-fill" style="width:'+pct+'%"></div></div>' +
+              '<div class="progress-label" style="margin-top:.25rem">'+(b.pageTotal ? pct+'% · p.'+(b.pageCurrent||0)+'/'+b.pageTotal : 'progresso não definido')+'</div>' +
+            '</div>' +
+            '<div style="display:flex;gap:.4rem;margin-top:.5rem">' +
+              '<button onclick="event.stopPropagation();window._updateProgressInline(\''+b.id+'\')" class="progress-save-btn" style="font-size:.56rem">Atualizar progresso</button>' +
+              '<button onclick="event.stopPropagation();window._markRead(\''+b.id+'\')" class="progress-save-btn" style="background:var(--gold)">✓ Concluir</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      }).join('') + '</div>';
+  }
+
+  // Bottom row: meta, última citação, último lido
+  let goalHtml = '<div class="dash-bottom-card" style="animation-delay:.1s">' +
+    '<span class="dash-bottom-label">Meta ' + cy + '</span>';
+  if (goalTarget) {
+    const pct = Math.min(100, Math.round(thisYear.length/goalTarget*100));
+    goalHtml += '<div class="dash-bottom-content" style="font-style:normal;font-size:1.4rem;font-family:\'Cormorant Garamond\',serif">' +
+      '<span style="color:var(--wine)">'+thisYear.length+'</span>' +
+      '<span style="color:var(--stone-pale);font-size:1rem"> / '+goalTarget+'</span></div>' +
+      '<div class="dash-goal-bar-bg"><div class="dash-goal-bar-fill" style="width:'+pct+'%"></div></div>' +
+      '<div class="dash-bottom-sub">'+pct+'% da meta anual</div>';
+  } else {
+    goalHtml += '<div class="dash-bottom-content">Nenhuma meta definida.</div>' +
+      '<div class="dash-bottom-sub" style="cursor:pointer;color:var(--gold);text-decoration:underline" onclick="window.switchTab(\'goals\')">Definir meta →</div>';
+  }
+  goalHtml += '</div>';
+
+  let quoteHtml = '<div class="dash-bottom-card" style="animation-delay:.15s;cursor:pointer" onclick="window.switchTab(\'quotes\')">' +
+    '<span class="dash-bottom-label">Última citação</span>';
+  if (lastQuote) {
+    quoteHtml += '<div class="dash-bottom-content">&ldquo;'+esc(lastQuote.text)+'&rdquo;</div>' +
+      (lastQuote.book ? '<div class="dash-bottom-sub">'+esc(lastQuote.book)+'</div>' : '');
+  } else quoteHtml += '<div class="dash-bottom-content">Nenhuma citação ainda.</div>';
+  quoteHtml += '</div>';
+
+  let lastReadHtml = '<div class="dash-bottom-card" style="animation-delay:.2s;cursor:pointer" onclick="window._openModal(\''+(lastRead?lastRead.id:'')+'\')"><span class="dash-bottom-label">Último livro lido</span>';
+  if (lastRead) {
+    const stars = lastRead.rating ? '★'.repeat(Math.floor(lastRead.rating))+(lastRead.rating%1?'½':'') : '';
+    lastReadHtml += '<div class="dash-bottom-content" style="font-style:normal">'+esc(lastRead.title)+'</div>' +
+      (stars ? '<div class="dash-bottom-sub" style="color:var(--gold)">'+stars+'</div>' : '') +
+      (lastRead.date ? '<div class="dash-bottom-sub">'+esc(lastRead.date)+'</div>' : '');
+  } else lastReadHtml += '<div class="dash-bottom-content">Nenhum livro lido ainda.</div>';
+  lastReadHtml += '</div>';
+
+  wrap.innerHTML = readingHtml +
+    '<div class="dash-bottom-grid">' + goalHtml + quoteHtml + lastReadHtml + '</div>';
+}
+
+// Toggle da biblioteca completa
+let _libraryOpen = false;
+window.toggleLibrary = function() {
+  _libraryOpen = !_libraryOpen;
+  const lib = document.getElementById('libraryFull');
+  const btn = document.getElementById('dashSeeAll');
+  if (lib) lib.style.display = _libraryOpen ? 'block' : 'none';
+  if (btn) btn.classList.toggle('open', _libraryOpen);
+  if (btn) btn.querySelector('span').textContent = _libraryOpen ? 'Ocultar biblioteca' : 'Ver toda a biblioteca';
+};
+
+// Atalho para atualizar progresso inline do dashboard
+window._updateProgressInline = function(id) {
+  const b = books.find(x => x.id === id); if (!b) return;
+  const pc = prompt('Página atual (estava em ' + (b.pageCurrent||0) + '):');
+  if (pc === null) return;
+  const pt = b.pageTotal || parseInt(prompt('Total de páginas:')) || null;
+  if (!isNaN(parseInt(pc))) window._updateProgressDirect(id, parseInt(pc), pt);
+};
+window._updateProgressDirect = async function(id, pc, pt) {
+  const b = books.find(x => x.id === id); if (!b) return;
+  await setDoc(doc(booksCol, id), { ...b, pageCurrent: pc, pageTotal: pt, progressUpdatedAt: Date.now() });
+  showToast('✓ Progresso atualizado!');
+};
+
+// Click fora dos novos modais
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('celebrationOverlay')?.addEventListener('click', e => { if (e.target.id==='celebrationOverlay') window.closeCelebration(); });
+  document.getElementById('surpriseOverlay')?.addEventListener('click',    e => { if (e.target.id==='surpriseOverlay')    window.closeSurprise(); });
+});
 
 // ── DARK MODE TOGGLE ──────────────────────────────────────────────────────
 (function() {
