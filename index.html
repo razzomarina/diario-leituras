@@ -2869,7 +2869,8 @@ async function fetchByTitle(title) {
   const ckey = 'title:' + title.toLowerCase();
   try {
     if (_gbooksCache[ckey]) { showSuggestions(_gbooksCache[ckey]); setIsbnStatus(''); return; }
-    const res = await fetch(_gbooksUrl('q=' + encodeURIComponent(title) + '&maxResults=6&langRestrict=pt'));
+    // Sem langRestrict para não perder livros estrangeiros
+    const res = await fetch(_gbooksUrl('q=' + encodeURIComponent(title) + '&maxResults=8'));
     if (res.status === 429) { setIsbnStatus('⚠ Limite API'); hideSuggestions(); return; }
     const data = await res.json();
     if (!data.items || !data.items.length) { setIsbnStatus('✗'); hideSuggestions(); return; }
@@ -2883,8 +2884,14 @@ function showSuggestions(items) {
     const info = item.volumeInfo;
     const title = info.title || '(sem título)';
     const author = info.authors ? info.authors[0] : '';
-    const cover = info.imageLinks ? (info.imageLinks.smallThumbnail || info.imageLinks.thumbnail || '') : '';
-    const safe = cover.replace('http://', 'https://');
+    let cover = '';
+    if (info.imageLinks) {
+      cover = info.imageLinks.thumbnail || info.imageLinks.smallThumbnail ||
+              info.imageLinks.medium    || info.imageLinks.extraLarge     || '';
+    }
+    const safe = cover
+      ? cover.replace(/^http:/, 'https:').replace(/&zoom=\d/, '').replace(/&edge=curl/, '') + '&fife=w128'
+      : '';
     return '<div class="isbn-suggestion" onclick="window._selectSuggestion(' + i + ')">' +
       (safe ? '<img class="isbn-sug-cover" src="' + safe + '" alt="">' : '<div class="isbn-sug-cover"></div>') +
       '<div><div class="isbn-sug-title">' + esc(title) + '</div><div class="isbn-sug-author">' + esc(author) + '</div></div></div>';
@@ -2902,8 +2909,22 @@ function applyBookInfo(info) {
   const pubYear = info.publishedDate ? info.publishedDate.substring(0, 4) : '';
   const category = info.categories ? info.categories[0] : '';
   const pageCount = info.pageCount ? String(info.pageCount) : '';
-  let coverUrl = (info.imageLinks && (info.imageLinks.thumbnail || info.imageLinks.smallThumbnail)) || '';
-  if (coverUrl) coverUrl = coverUrl.replace('http://', 'https://').replace('&zoom=1', '&zoom=2');
+  let coverUrl = '';
+  if (info.imageLinks) {
+    // Pegar a melhor qualidade disponível
+    coverUrl = info.imageLinks.extraLarge ||
+               info.imageLinks.large      ||
+               info.imageLinks.medium     ||
+               info.imageLinks.thumbnail  ||
+               info.imageLinks.smallThumbnail || '';
+  }
+  if (coverUrl) {
+    coverUrl = coverUrl
+      .replace(/^http:/, 'https:')   // forçar HTTPS
+      .replace(/&zoom=\d/, '')       // remover zoom antigo
+      .replace(/&edge=curl/, '')      // remover efeito de dobra
+      + '&fife=w400';                 // pedir 400px de largura (melhor qualidade)
+  }
   if (title   && !document.getElementById('fTitle').value)     document.getElementById('fTitle').value = title;
   if (author  && !document.getElementById('fAuthor').value)    document.getElementById('fAuthor').value = author;
   if (publisher && !document.getElementById('fPublisher').value) document.getElementById('fPublisher').value = publisher;
