@@ -904,6 +904,24 @@ body.dark .wrapped-top-authors{background:var(--cream-mid);}
 .wrapped-author-count{font-size:.65rem;color:var(--stone-light);letter-spacing:.08em;}
 .wrapped-empty{text-align:center;padding:5rem 2rem;color:var(--stone-light);font-family:'Playfair Display',serif;font-size:1.1rem;font-style:italic;}
 
+/* ── PAÍSES ── */
+.country-section { animation: fadeUp .4s ease both; }
+.country-map-wrap { border: 1px solid var(--border); border-radius: 2px; overflow: hidden; background: var(--cream); }
+body.dark .country-map-wrap { background: var(--cream-dark); }
+.country-map-svg { width: 100%; display: block; }
+.country-bubble { transition: opacity .2s, r .2s; cursor: default; }
+.country-bubble:hover { opacity: 1 !important; }
+.country-bar-row {
+  display: grid; grid-template-columns: 130px 1fr 60px;
+  align-items: center; gap: .6rem; margin-bottom: .45rem;
+  animation: fadeSlide .3s ease both;
+}
+.country-bar-label { font-family: 'Playfair Display', serif; font-size: .88rem; color: var(--ink); text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.country-bar-track { height: 6px; background: var(--cream-dark); border-radius: 3px; overflow: hidden; }
+.country-bar-fill { height: 6px; background: linear-gradient(90deg, var(--wine), var(--gold)); border-radius: 3px; transition: width .8s ease; }
+.country-bar-count { font-family: 'Playfair Display', serif; font-size: .88rem; color: var(--stone); }
+body.dark .country-bar-track { background: var(--stone-pale); }
+
 /* ── STREAK BADGE ── */
 .streak-badge{display:inline-flex;align-items:center;gap:.32rem;background:linear-gradient(135deg,var(--wine),var(--wine-light));color:white;padding:.2rem .6rem;border-radius:20px;font-size:.6rem;letter-spacing:.08em;font-family:'Jost',sans-serif;box-shadow:0 1px 6px var(--shadow-wine);margin-top:.15rem;}
 .streak-fire{font-size:.8rem;}
@@ -2409,6 +2427,14 @@ body.dark .quote-story-btn:hover {
       </div>
       <div class="form-row">
         <div class="form-group"><label>Ano de publicação</label><input type="text" id="fPubYear" placeholder="2021" maxlength="4"></div>
+        <div class="form-group">
+          <label>Nacionalidade do(a) autor(a) <span style="opacity:.6">(2026+)</span></label>
+          <input type="text" id="fAuthorNationality" placeholder="Ex: Brasileira, Japonesa, Húngara…" list="nationalityList" autocomplete="off">
+          <datalist id="nationalityList"></datalist>
+          <div class="date-hint" id="nationalityHint">Preenchido via ISBN quando disponível</div>
+        </div>
+      </div>
+      <div class="form-row">
         <!-- Melhoria 5: data com validação -->
         <div class="form-group">
           <label>Data de Leitura</label>
@@ -3031,6 +3057,10 @@ function applyBookInfo(info) {
     document.getElementById('fCoverUrl').value = coverUrl;
     showCoverPreview(coverUrl, title, author);
   }
+  // Tentar buscar nacionalidade do autor via OpenLibrary (apenas se campo vazio)
+  if (author && !document.getElementById('fAuthorNationality').value) {
+    _fetchAuthorNationality(author);
+  }
   checkDuplicate();
 }
 function showCoverPreview(url, title, author) {
@@ -3048,6 +3078,84 @@ function applyManualCover() {
   showToast('✓ Capa aplicada!');
 }
 window._applyManualCover = applyManualCover;
+
+// ── NATIONALITY LOOKUP ────────────────────────────────────
+// Mapeamento de country codes ISO → gentílico em português
+const _COUNTRY_PT = {
+  'Brazil':'Brasileira','Brasil':'Brasileira','United States':'Norte-americana','United Kingdom':'Britânica',
+  'England':'Britânica','Scotland':'Britânica','Wales':'Britânica','Ireland':'Irlandesa',
+  'France':'Francesa','Germany':'Alemã','Spain':'Espanhola','Portugal':'Portuguesa',
+  'Italy':'Italiana','Russia':'Russa','Japan':'Japonesa','China':'Chinesa',
+  'Colombia':'Colombiana','Argentina':'Argentina','Chile':'Chilena','Mexico':'Mexicana',
+  'Peru':'Peruana','Uruguay':'Uruguaia','Venezuela':'Venezuelana','Cuba':'Cubana',
+  'Norway':'Norueguesa','Sweden':'Sueca','Denmark':'Dinamarquesa','Finland':'Finlandesa',
+  'Netherlands':'Neerlandesa','Belgium':'Belga','Switzerland':'Suíça','Austria':'Austríaca',
+  'Poland':'Polonesa','Czech Republic':'Tcheca','Hungary':'Húngara','Romania':'Romena',
+  'Greece':'Grega','Turkey':'Turca','Israel':'Israelense','India':'Indiana',
+  'South Africa':'Sul-africana','Nigeria':'Nigeriana','Kenya':'Queniana',
+  'Egypt':'Egípcia','Morocco':'Marroquina','Ethiopia':'Etíope','Senegal':'Senegalesa',
+  'Mozambique':'Moçambicana','Angola':'Angolana','Canada':'Canadense','Australia':'Australiana',
+  'New Zealand':'Neozelandesa','South Korea':'Sul-coreana','Taiwan':'Taiwanesa',
+  'Philippines':'Filipina','Indonesia':'Indonésia','Vietnam':'Vietnamita',
+  'Ukraine':'Ucraniana','Belarus':'Bielorrussa','Georgia':'Georgiana',
+  'Czech':'Tcheca','Slovakia':'Eslovaca','Croatia':'Croata','Serbia':'Sérvia',
+  'Bulgaria':'Búlgara','Lithuania':'Lituana','Latvia':'Letã','Estonia':'Estoniana',
+  'Albania':'Albanesa','Romania':'Romena','Moldova':'Moldava',
+  'Iran':'Iraniana','Iraq':'Iraquiana','Lebanon':'Libanesa','Syria':'Síria',
+  'Pakistan':'Paquistanesa','Bangladesh':'Bengalesa','Sri Lanka':'Cingalesa',
+  'Myanmar':'Birmanesa','Thailand':'Tailandesa','Malaysia':'Malaia',
+  'Singapore':'Singapuriana','Jamaica':'Jamaicana','Trinidad':'Trinitária',
+  'Haiti':'Haitiana','Dominican Republic':'Dominicana',
+};
+const _natCache = {};
+async function _fetchAuthorNationality(author) {
+  if (_natCache[author]) {
+    _applyNationality(_natCache[author]); return;
+  }
+  try {
+    document.getElementById('nationalityHint').textContent = '⏳ buscando nacionalidade…';
+    // 1) Tenta OpenLibrary search
+    const q = encodeURIComponent(author);
+    const res = await fetch('https://openlibrary.org/search/authors.json?q=' + q + '&limit=3');
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    if (data.docs && data.docs.length) {
+      const authorKey = data.docs[0].key; // ex: /authors/OL123A
+      const detRes = await fetch('https://openlibrary.org' + authorKey + '.json');
+      if (detRes.ok) {
+        const det = await detRes.json();
+        // birth_place pode conter o país
+        const bp = det.birth_place || '';
+        // Também tenta 'nationality' field quando disponível
+        const natField = det.nationality || '';
+        const combined = natField || bp;
+        if (combined) {
+          // Procura match no mapeamento
+          let found = null;
+          for (const [en, pt] of Object.entries(_COUNTRY_PT)) {
+            if (combined.toLowerCase().includes(en.toLowerCase())) { found = pt; break; }
+          }
+          if (found) { _natCache[author] = found; _applyNationality(found); return; }
+          // Se não mapeou mas tem dado, retorna o raw para o usuário corrigir
+          if (natField) { _natCache[author] = natField; _applyNationality(natField, true); return; }
+        }
+      }
+    }
+    // Sem resultado
+    document.getElementById('nationalityHint').textContent = 'Não encontrado — preencha manualmente';
+  } catch(e) {
+    document.getElementById('nationalityHint').textContent = 'Não foi possível buscar — preencha manualmente';
+  }
+}
+function _applyNationality(val, raw) {
+  const el = document.getElementById('fAuthorNationality');
+  if (!el.value) {
+    el.value = val;
+    document.getElementById('nationalityHint').textContent = raw ? '⚠ Dado bruto — verifique e ajuste se necessário' : '✓ Nacionalidade detectada automaticamente';
+  } else {
+    document.getElementById('nationalityHint').textContent = 'Preenchido via ISBN quando disponível';
+  }
+}
 
 // ── MELHORIA 5: Validação de data ─────────────────────────
 function _validateDate(input) {
@@ -3171,7 +3279,7 @@ function watchFormChanges() {
     if (mGrp) mGrp.style.display = (!yr || yr >= 2026) ? 'block' : 'none';
   }, {passive:true});
   const fields = ['fTitle','fAuthor','fGenre','fDate','fNotes','fIsbn','fCoverUrl',
-                  'fPublisher','fPubYear','fOrigin','fPageCurrent','fPageTotal','fStatus'];
+                  'fPublisher','fPubYear','fOrigin','fPageCurrent','fPageTotal','fStatus','fAuthorNationality'];
   fields.forEach(id => {
     const el = document.getElementById(id);
     if (el) el.addEventListener('input', () => setDirty(true), { passive: true });
@@ -3854,6 +3962,11 @@ function openModal(id, defaultStatus) {
   if (mGroup) mGroup.style.display = _isLive ? 'block' : 'none';
   if (_editBook && _editBook.momento) document.getElementById('fMomento').value = _editBook.momento || '';
   else if (!id) document.getElementById('fMomento').value = '';
+  // Nacionalidade: popular datalist com valores já usados
+  const _usedNat = [...new Set(books.map(b => b.authorNationality).filter(Boolean))].sort();
+  document.getElementById('nationalityList').innerHTML = _usedNat.map(n => '<option value="'+esc(n)+'">').join('');
+  document.getElementById('fAuthorNationality').value = (id && books.find(x=>x.id===id)?.authorNationality) || '';
+  document.getElementById('nationalityHint').textContent = 'Preenchido via ISBN quando disponível';
   document.getElementById('seriesList').innerHTML = [...new Set(books.map(b=>b.series).filter(Boolean))].map(s=>'<option value="'+esc(s)+'">').join('');
   if (id) {
     const b = books.find(x => x.id === id);
@@ -3911,7 +4024,8 @@ async function saveBook() {
     mood:        _currentMood        || null,
     readingTime: _currentReadingTime || null,
     connections: _currentConnections.length ? _currentConnections : null,
-    momento:     document.getElementById('fMomento').value.trim() || null,
+    momento:           document.getElementById('fMomento').value.trim() || null,
+    authorNationality: document.getElementById('fAuthorNationality').value.trim() || null,
     seriesOrder: document.getElementById('fSeriesOrder').value ? +document.getElementById('fSeriesOrder').value : null,
     pageCurrent: status === 'lendo' ? parseInt(document.getElementById('fPageCurrent').value)||0 : null,
     pageTotal:   status === 'lendo' ? parseInt(document.getElementById('fPageTotal').value)||null : null,
@@ -4618,6 +4732,139 @@ function renderSeries() {
   }).join('');
 }
 
+// ── PAÍSES DE AUTORES ──────────────────────────────────────────────────────
+// Mapeamento gentílico PT → código ISO alpha-2 para o mapa SVG
+const _NAT_TO_ISO = {
+  'Brasileira':'BR','Norte-americana':'US','Britânica':'GB','Irlandesa':'IE',
+  'Francesa':'FR','Alemã':'DE','Espanhola':'ES','Portuguesa':'PT',
+  'Italiana':'IT','Russa':'RU','Japonesa':'JP','Chinesa':'CN',
+  'Colombiana':'CO','Argentina':'AR','Chilena':'CL','Mexicana':'MX',
+  'Peruana':'PE','Uruguaia':'UY','Venezuelana':'VE','Cubana':'CU',
+  'Norueguesa':'NO','Sueca':'SE','Dinamarquesa':'DK','Finlandesa':'FI',
+  'Neerlandesa':'NL','Belga':'BE','Suíça':'CH','Austríaca':'AT',
+  'Polonesa':'PL','Tcheca':'CZ','Húngara':'HU','Romena':'RO',
+  'Grega':'GR','Turca':'TR','Israelense':'IL','Indiana':'IN',
+  'Sul-africana':'ZA','Nigeriana':'NG','Queniana':'KE','Egípcia':'EG',
+  'Marroquina':'MA','Etíope':'ET','Senegalesa':'SN','Moçambicana':'MZ',
+  'Angolana':'AO','Canadense':'CA','Australiana':'AU','Neozelandesa':'NZ',
+  'Sul-coreana':'KR','Taiwanesa':'TW','Filipina':'PH',
+  'Indonésia':'ID','Vietnamita':'VN','Ucraniana':'UA','Georgiana':'GE',
+  'Eslovaca':'SK','Croata':'HR','Sérvia':'RS','Búlgara':'BG',
+  'Lituana':'LT','Letã':'LV','Estoniana':'EE','Iraniana':'IR',
+  'Libanesa':'LB','Paquistanesa':'PK','Bengalesa':'BD','Tailandesa':'TH',
+  'Malaio':'MY','Jamaicana':'JM','Haitiana':'HT',
+};
+
+// Coordenadas aproximadas (cx, cy) de cada país no viewBox 1000×500 (Mercator simplificado)
+const _ISO_POS = {
+  'BR':[310,330],'US':[180,200],'CA':[170,150],'MX':[190,250],
+  'CO':[265,280],'VE':[285,265],'PE':[265,320],'CL':[270,390],
+  'AR':[285,400],'UY':[305,400],'CU':[240,235],
+  'GB':[455,155],'IE':[440,160],'FR':[470,185],'ES':[455,205],
+  'PT':[440,205],'DE':[490,170],'NL':[480,160],'BE':[475,165],
+  'CH':[485,185],'AT':[500,180],'IT':[495,200],'GR':[520,215],
+  'NO':[480,135],'SE':[500,135],'DK':[487,150],'FI':[520,125],
+  'PL':[510,162],'CZ':[500,168],'HU':[513,175],'RO':[525,178],
+  'HR':[505,185],'RS':[515,183],'BG':[525,190],'LT':[520,152],
+  'LV':[522,146],'EE':[522,140],'UA':[535,165],'GE':[555,190],
+  'RU':[600,140],'TR':[548,200],'IL':[548,215],'LB':[546,212],
+  'IR':[570,210],'PK':[600,220],'IN':[620,240],'BD':[640,235],
+  'CN':[680,210],'JP':[730,200],'KR':[718,205],'TW':[710,220],
+  'TH':[670,255],'VN':[680,260],'PH':[710,265],'MY':[685,280],
+  'ID':[695,295],'AU':[730,360],'NZ':[780,390],
+  'EG':[535,225],'MA':[450,225],'SN':[432,255],'NG':[490,270],
+  'ET':[555,270],'KE':[555,285],'ZA':[515,360],'MZ':[540,330],
+  'AO':[500,320],
+};
+
+function _renderCountrySection(rb, year) {
+  // Apenas livros com nacionalidade preenchida
+  const withNat = rb.filter(b => b.authorNationality);
+  if (!withNat.length) {
+    return '<div class="wrapped-top-authors" style="opacity:.7"><span class="chart-title" style="display:block;margin-bottom:.6rem">Países dos autores</span>' +
+      '<p style="font-size:.82rem;color:var(--stone-light);font-style:italic;font-family:\'Playfair Display\',serif">Nenhum livro de '+year+' tem a nacionalidade do autor preenchida. O campo aparece no modal de adição de livros.</p></div>';
+  }
+
+  // Contagem por país
+  const cc = {};
+  withNat.forEach(b => {
+    const n = b.authorNationality;
+    cc[n] = (cc[n]||0) + 1;
+  });
+  const sorted = Object.entries(cc).sort((a,b)=>b[1]-a[1]);
+  const maxC = sorted[0][1];
+  const total = withNat.length;
+
+  // Montar dados do mapa
+  const mapData = {};
+  sorted.forEach(([nat, cnt]) => {
+    const iso = _NAT_TO_ISO[nat];
+    if (iso) mapData[iso] = { nat, cnt };
+  });
+
+  // Gerar bolhas SVG do mapa
+  let bubbles = '';
+  const wineRGB = [107,31,46];
+  Object.entries(mapData).forEach(([iso, {nat, cnt}]) => {
+    const pos = _ISO_POS[iso]; if (!pos) return;
+    const [cx, cy] = pos;
+    const r = 5 + Math.round((cnt / maxC) * 22);
+    const op = 0.35 + (cnt / maxC) * 0.65;
+    bubbles += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="rgba(${wineRGB.join(',')},${op.toFixed(2)})" stroke="rgba(${wineRGB.join(',')},0.5)" stroke-width="0.8" class="country-bubble" data-nat="${esc(nat)}" data-cnt="${cnt}">
+      <title>${nat} · ${cnt} livro${cnt>1?'s':''}</title>
+    </circle>`;
+  });
+
+  // Barras horizontais
+  const bars = sorted.map(([nat, cnt], i) => {
+    const iso = _NAT_TO_ISO[nat] || '';
+    const pct = Math.round(cnt / maxC * 100);
+    const pctTotal = Math.round(cnt / total * 100);
+    return `<div class="country-bar-row" style="animation-delay:${Math.min(i*0.04,0.4)}s">
+      <div class="country-bar-label">${esc(nat)}</div>
+      <div class="country-bar-track">
+        <div class="country-bar-fill" style="width:${pct}%"></div>
+      </div>
+      <div class="country-bar-count">${cnt} <span style="opacity:.55;font-size:.6rem">(${pctTotal}%)</span></div>
+    </div>`;
+  }).join('');
+
+  return `<div class="wrapped-top-authors country-section">
+    <span class="chart-title" style="display:block;margin-bottom:1rem">Países dos autores · ${withNat.length} de ${rb.length} livros</span>
+    <!-- Mapa -->
+    <div class="country-map-wrap">
+      <svg viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg" class="country-map-svg" id="countryMapSvg${year}">
+        <!-- Fundo oceano suave -->
+        <rect width="1000" height="500" fill="var(--cream-mid)" rx="4"/>
+        <!-- Continentes simplificados (formas aproximadas) -->
+        <!-- América do Norte -->
+        <path d="M120,80 L260,80 L275,120 L260,170 L230,200 L210,260 L195,290 L175,300 L155,280 L130,260 L110,220 L100,170 L105,120 Z" fill="var(--stone-pale)" opacity=".7"/>
+        <!-- América Central/Caribe -->
+        <path d="M195,290 L240,280 L255,295 L250,320 L235,330 L215,320 L200,310 Z" fill="var(--stone-pale)" opacity=".7"/>
+        <!-- América do Sul -->
+        <path d="M240,280 L320,270 L345,290 L350,330 L340,390 L320,430 L295,440 L270,430 L250,400 L240,360 L235,320 Z" fill="var(--stone-pale)" opacity=".7"/>
+        <!-- Europa -->
+        <path d="M430,110 L540,110 L560,130 L555,160 L540,185 L520,200 L490,205 L465,215 L445,210 L432,200 L425,180 L428,150 Z" fill="var(--stone-pale)" opacity=".7"/>
+        <!-- África -->
+        <path d="M440,220 L540,215 L565,235 L570,280 L560,340 L540,380 L510,400 L480,395 L460,375 L445,340 L430,290 L428,250 Z" fill="var(--stone-pale)" opacity=".7"/>
+        <!-- Ásia (simplificada) -->
+        <path d="M540,100 L760,90 L790,120 L800,160 L780,200 L750,230 L700,245 L660,240 L620,235 L580,220 L555,200 L545,170 L540,140 Z" fill="var(--stone-pale)" opacity=".7"/>
+        <!-- Oceania -->
+        <path d="M700,320 L790,315 L810,340 L805,380 L780,405 L745,400 L715,380 L700,355 Z" fill="var(--stone-pale)" opacity=".7"/>
+        <!-- Bolhas de países -->
+        ${bubbles}
+        <!-- Legenda do mapa -->
+        <text x="15" y="488" font-family="Jost,sans-serif" font-size="9" fill="var(--stone-light)" opacity=".6">Tamanho da bolha = nº de livros</text>
+      </svg>
+    </div>
+    <!-- Barras de ranking -->
+    <div class="country-bars-wrap" style="margin-top:1.2rem">
+      <span style="font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--stone-light);display:block;margin-bottom:.7rem">Ranking por país</span>
+      ${bars}
+    </div>
+  </div>`;
+}
+
 // ── YEAR IN BOOKS ─────────────────────────────────────────────────────────
 function populateYearSelect() {
   const sel = document.getElementById('yearSelect'); if (!sel) return;
@@ -4689,6 +4936,8 @@ function renderYearInBooks(year) {
     (topAuthors.length ? '<div class="wrapped-top-authors"><span class="chart-title" style="margin-bottom:1rem;display:block">Autores mais lidos</span>' +
       topAuthors.map((([name,cnt],i)=>'<div class="wrapped-author-row"><span class="wrapped-author-rank">'+(i+1)+'</span><span class="wrapped-author-name">'+esc(name)+'</span><span class="wrapped-author-count">'+cnt+' livro'+(cnt>1?'s':'')+'</span></div>')).join('') +
     '</div>' : '') +
+    // ── PAÍSES ────────────────────────────────────────────────────────
+    _renderCountrySection(rb, year) +
     // Share button
     '<div style="text-align:center;margin-top:1.2rem"><button class="wrapped-share-btn" onclick="window._generateWrappedCard('+year+')">✦ Gerar imagem do meu ano em livros</button></div>';
 }
