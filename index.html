@@ -4354,9 +4354,20 @@ window._renderStory = function() {
   canvas.width = W; canvas.height = H;
   const ctx = canvas.getContext('2d');
 
-  if      (style === 'dark')    window._drawDark(ctx, W, H, q);
-  else if (style === 'minimal') window._drawMinimal(ctx, W, H, q);
-  else                          window._drawPage(ctx, W, H, q);
+  const _doDraw = () => {
+    if      (style === 'dark')    window._drawDark(ctx, W, H, q);
+    else if (style === 'minimal') window._drawMinimal(ctx, W, H, q);
+    else                          window._drawPage(ctx, W, H, q);
+  };
+
+  // Garantir que Lora e Playfair estão carregadas antes de desenhar no canvas
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.load('italic 40px "Lora"').then(() =>
+      document.fonts.load('400 40px "Lora"').then(_doDraw)
+    ).catch(_doDraw);
+  } else {
+    _doDraw();
+  }
 };
 
 // ── Seletores de estilo e formato ─────────────────────────────────────────
