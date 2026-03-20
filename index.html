@@ -766,7 +766,7 @@ body.dark .form-group input,
 body.dark .form-group textarea,
 body.dark .form-group select,
 body.dark #searchInput, body.dark #quoteSearchInput,
-body.dark select.filter-select { background: #2a2420; color: var(--ink); border-color: var(--border-strong); }
+body.dark select.filter-select { background: var(--cream-mid); color: var(--ink); border-color: var(--border-strong); }
 body.dark .progress-inline-input { background: #2a2420; color: var(--ink); }
 body.dark .isbn-suggestion:hover { background: var(--cream-dark); }
 body.dark .tag-chip { background: rgba(200,169,106,.12); border-color: rgba(200,169,106,.25); }
@@ -1624,11 +1624,12 @@ body.dark .nyt-list-item:hover { background:var(--cream-dark); }
 
 /* ── Story style/format selectors ── */
 .story-style-btn, .story-fmt-btn {
-  display: inline-flex; align-items: center; gap: .3rem;
-  padding: .3rem .55rem; border: 1px solid var(--border-strong);
+  display: inline-flex; align-items: center; gap: .25rem;
+  padding: .28rem .45rem; border: 1px solid var(--border-strong);
   background: transparent; border-radius: 2px; cursor: pointer;
-  font-family: 'Jost', sans-serif; font-size: .58rem; letter-spacing: .08em;
+  font-family: 'Jost', sans-serif; font-size: .55rem; letter-spacing: .06em;
   text-transform: uppercase; color: var(--stone); transition: all .15s;
+  white-space: nowrap; flex-shrink: 0;
 }
 .story-style-btn.active, .story-fmt-btn.active {
   background: var(--wine); color: white; border-color: var(--wine);
@@ -1654,7 +1655,7 @@ body.dark .nyt-list-item:hover { background:var(--cream-dark); }
   font-family: 'Jost', sans-serif; font-size: .6rem;
   letter-spacing: .1em; text-transform: uppercase; color: var(--stone-light);
 }
-body.dark .quote-filter-select { background: var(--cream-mid); color: var(--ink); }
+body.dark .quote-filter-select { background: var(--cream-dark); color: var(--ink); border-color: var(--border-strong); }
 
 /* ── Quote surprise modal ── */
 .quote-surprise-card {
@@ -2636,37 +2637,37 @@ body.dark .quote-story-btn:hover {
       <button class="modal-close" onclick="window.closeStoryModal()">×</button>
     </div>
     <div class="modal-body" style="padding:.8rem 1.5rem 1rem">
-      <div style="display:flex;gap:.5rem;margin-bottom:.7rem;flex-wrap:wrap">
-        <div style="flex:1;min-width:140px">
-          <div style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--stone-light);margin-bottom:.35rem">Estilo</div>
-          <div style="display:flex;gap:.3rem">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.7rem;">
+        <div>
+          <div style="font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--stone-light);margin-bottom:.3rem">Estilo</div>
+          <div style="display:flex;gap:.25rem;flex-wrap:nowrap">
             <button class="story-style-btn active" data-style="page" onclick="window._setStoryStyle('page')" title="Página grifada">
-              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
               Página
             </button>
             <button class="story-style-btn" data-style="dark" onclick="window._setStoryStyle('dark')" title="Noturno">
-              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+              <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
               Noturno
             </button>
             <button class="story-style-btn" data-style="minimal" onclick="window._setStoryStyle('minimal')" title="Minimalista">
-              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h10M4 18h7"/></svg>
+              <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h10M4 18h7"/></svg>
               Minimal
             </button>
           </div>
         </div>
-        <div style="flex:1;min-width:140px">
-          <div style="font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--stone-light);margin-bottom:.35rem">Formato</div>
-          <div style="display:flex;gap:.3rem">
+        <div>
+          <div style="font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--stone-light);margin-bottom:.3rem">Formato</div>
+          <div style="display:flex;gap:.25rem;flex-wrap:nowrap">
             <button class="story-fmt-btn active" data-fmt="story" onclick="window._setStoryFmt('story')" title="Story 9:16">
-              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="7" y="2" width="10" height="20" rx="2" stroke-width="2"/></svg>
+              <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="7" y="2" width="10" height="20" rx="2" stroke-width="2"/></svg>
               Story
             </button>
             <button class="story-fmt-btn" data-fmt="square" onclick="window._setStoryFmt('square')" title="Feed quadrado">
-              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2" stroke-width="2"/></svg>
+              <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><rect x="3" y="3" width="18" height="18" rx="2" stroke-width="2"/></svg>
               Feed
             </button>
             <button class="story-fmt-btn" data-fmt="twitter" onclick="window._setStoryFmt('twitter')" title="Twitter/X 16:9">
-              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h10"/></svg>
+              <svg width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h10"/></svg>
               Twitter
             </button>
           </div>
