@@ -4167,28 +4167,65 @@ window._drawDark = function(ctx, W, H, q) {
   const isSquare = W === H;
   const isWide   = W > H;
   const ML = Math.round(100*(W/1080));
-  const MR = Math.round(100*(W/1080));
-  const LINE_MAX = W - ML - MR;
-  // Tamanho de fonte proporcional ao menor lado
+  const LINE_MAX = W - ML*2;
   const FS = Math.round(isSquare ? 52 : isWide ? 48 : 42);
-  const BODY = FS+'px "Cormorant Garamond","Lora",serif';
+  const BODY = FS+'px "Lora",serif';
   const LH = Math.round(FS*1.68);
   const ATTR_FS = Math.round(FS*0.72);
   const BRAND_FS = Math.round(FS*0.46);
 
-  // Fundo
-  ctx.fillStyle='#100c09'; ctx.fillRect(0,0,W,H);
-  const bg2 = ctx.createRadialGradient(W*.65,H*.38,0,W*.5,H*.5,H*.75);
-  bg2.addColorStop(0,'rgba(155,70,35,0.22)'); bg2.addColorStop(1,'rgba(0,0,0,0)');
-  ctx.fillStyle=bg2; ctx.fillRect(0,0,W,H);
-  const bg3 = ctx.createRadialGradient(W*.08,H*.12,0,W*.5,H*.5,H*.6);
-  bg3.addColorStop(0,'rgba(75,12,22,0.45)'); bg3.addColorStop(1,'rgba(0,0,0,0)');
-  ctx.fillStyle=bg3; ctx.fillRect(0,0,W,H);
+  // ── Fundo noturno azul-profundo ───────────────────────────────────────
+  ctx.fillStyle='#0e0c14'; ctx.fillRect(0,0,W,H);
 
-  // Linha dourada no topo
-  ctx.fillStyle='#b8975a'; ctx.fillRect(0,0,W,Math.round(4*(H/1080)));
+  // Gradiente lateral — luz lunar vinda da direita
+  const bgR = ctx.createLinearGradient(0,0,W,0);
+  bgR.addColorStop(0,   'rgba(14,12,20,0)');
+  bgR.addColorStop(0.6, 'rgba(14,12,20,0)');
+  bgR.addColorStop(1,   'rgba(100,115,180,0.14)');
+  ctx.fillStyle=bgR; ctx.fillRect(0,0,W,H);
 
-  // Calcular alturas para centralizar
+  // Gradiente radial suave no centro
+  const bgC = ctx.createRadialGradient(W*.5,H*.45,0,W*.5,H*.45,H*.65);
+  bgC.addColorStop(0,  'rgba(30,26,46,0.55)');
+  bgC.addColorStop(1,  'rgba(0,0,0,0)');
+  ctx.fillStyle=bgC; ctx.fillRect(0,0,W,H);
+
+  // ── Linha prateada no topo ────────────────────────────────────────────
+  const topH = Math.round(2*(H/1080));
+  const topG = ctx.createLinearGradient(0,0,W,0);
+  topG.addColorStop(0,   'rgba(140,160,220,0)');
+  topG.addColorStop(0.3, 'rgba(140,160,220,0.55)');
+  topG.addColorStop(0.7, 'rgba(140,160,220,0.55)');
+  topG.addColorStop(1,   'rgba(140,160,220,0)');
+  ctx.fillStyle=topG; ctx.fillRect(0,0,W,topH);
+
+  // ── Estrelas ──────────────────────────────────────────────────────────
+  const stars = [[0.08,0.04,1.5],[0.22,0.03,1.2],[0.38,0.06,1.8],
+                 [0.52,0.03,1.3],[0.67,0.07,1.0],[0.78,0.04,1.5],
+                 [0.14,0.09,1.0],[0.44,0.02,1.2],[0.73,0.05,0.9],[0.86,0.04,1.4]];
+  ctx.fillStyle='rgba(220,230,255,0.55)';
+  stars.forEach(([sx,sy,sr]) => {
+    ctx.beginPath(); ctx.arc(W*sx,H*sy,sr*(W/1080),0,Math.PI*2); ctx.fill();
+  });
+
+  // ── Lua crescente (canto superior direito) ────────────────────────────
+  const moonX = W - Math.round(90*(W/1080));
+  const moonY = Math.round(80*(H/1080));
+  const moonR = Math.round(38*(W/1080));
+  // Brilho exterior
+  const moonGlow = ctx.createRadialGradient(moonX,moonY,0,moonX,moonY,moonR*2.5);
+  moonGlow.addColorStop(0,  'rgba(200,215,255,0.12)');
+  moonGlow.addColorStop(1,  'rgba(200,215,255,0)');
+  ctx.fillStyle=moonGlow; ctx.fillRect(0,0,W,H);
+  // Círculo da lua
+  ctx.fillStyle='rgba(200,218,255,0.10)';
+  ctx.strokeStyle='rgba(160,180,240,0.35)'; ctx.lineWidth=1;
+  ctx.beginPath(); ctx.arc(moonX,moonY,moonR,0,Math.PI*2); ctx.fill(); ctx.stroke();
+  // Sombra que cria o crescente
+  ctx.fillStyle='#0e0c14';
+  ctx.beginPath(); ctx.arc(moonX-moonR*0.38, moonY-moonR*0.2, moonR*0.86,0,Math.PI*2); ctx.fill();
+
+  // ── Calcular posição vertical ─────────────────────────────────────────
   const qLines = window._wrapText(ctx, q.text, BODY, LINE_MAX);
   const src = [q.book, q.author].filter(Boolean).join(' — ');
   const hasAttr = !!(src || q.page);
@@ -4198,43 +4235,53 @@ window._drawDark = function(ctx, W, H, q) {
   const totalH = qBlockH + (hasAttr ? sepH + attrH : 0);
   let curY = Math.round((H - totalH) / 2) + Math.round(FS * 0.8);
 
-  // Aspas decorativas
-  ctx.font='italic '+Math.round(FS*3.2)+'px "Cormorant Garamond","Lora",serif';
-  ctx.fillStyle='rgba(184,151,90,0.07)'; ctx.textAlign='left';
+  // ── Aspas decorativas em malva muito suave ────────────────────────────
+  ctx.font='italic '+Math.round(FS*3.2)+'px "Lora",serif';
+  ctx.fillStyle='rgba(200,152,176,0.07)'; ctx.textAlign='left';
   ctx.fillText('"', ML-Math.round(FS*0.3), curY+Math.round(FS*1.5));
 
-  // Texto
-  ctx.font=BODY; ctx.fillStyle='#e8dfc8'; ctx.textAlign='left';
+  // ── Texto da citação ──────────────────────────────────────────────────
+  ctx.font=BODY; ctx.fillStyle='#e8e0f0'; ctx.textAlign='left';
   qLines.forEach(line => { ctx.fillText(line, ML, curY); curY += LH; });
   curY += sepH;
 
   if (hasAttr) {
-    // Separador
-    ctx.strokeStyle='rgba(184,151,90,0.4)'; ctx.lineWidth=1;
-    ctx.beginPath(); ctx.moveTo(ML,curY-Math.round(sepH*0.4)); ctx.lineTo(ML+Math.round(200*(W/1080)),curY-Math.round(sepH*0.4)); ctx.stroke();
-    ctx.fillStyle='rgba(184,151,90,0.5)';
-    ctx.beginPath(); ctx.arc(ML,curY-Math.round(sepH*0.4),3,0,Math.PI*2); ctx.fill();
+    // Separador prateado
+    ctx.strokeStyle='rgba(160,180,240,0.35)'; ctx.lineWidth=1;
+    ctx.beginPath();
+    ctx.moveTo(ML, curY-Math.round(sepH*0.4));
+    ctx.lineTo(ML+Math.round(200*(W/1080)), curY-Math.round(sepH*0.4));
+    ctx.stroke();
+    ctx.fillStyle='rgba(160,180,240,0.50)';
+    ctx.beginPath(); ctx.arc(ML, curY-Math.round(sepH*0.4), 3, 0, Math.PI*2); ctx.fill();
 
     if (src) {
-      ctx.font='italic '+ATTR_FS+'px "Cormorant Garamond","Lora",serif';
-      ctx.fillStyle='rgba(200,170,120,0.78)'; ctx.textAlign='left';
+      ctx.font='italic '+ATTR_FS+'px "Lora",serif';
+      ctx.fillStyle='rgba(200,152,176,0.78)'; ctx.textAlign='left';
       ctx.fillText(src, ML, curY); curY += Math.round(ATTR_FS*1.6);
     }
     if (q.page) {
       ctx.font=Math.round(ATTR_FS*0.78)+'px "Jost",Arial,sans-serif';
-      ctx.fillStyle='rgba(184,151,90,0.50)'; ctx.letterSpacing='2px';
+      ctx.fillStyle='rgba(160,180,240,0.50)'; ctx.letterSpacing='2px';
       ctx.fillText('P. '+q.page, ML, curY); ctx.letterSpacing='0px';
     }
   }
 
-  // Rodapé
+  // ── Rodapé ────────────────────────────────────────────────────────────
   const rY = H - Math.round(55*(H/1080));
-  ctx.strokeStyle='rgba(184,151,90,0.30)'; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(W/2-Math.round(140*(W/1080)),rY-18); ctx.lineTo(W/2+Math.round(140*(W/1080)),rY-18); ctx.stroke();
-  ctx.fillStyle='rgba(184,151,90,0.40)';
+  const sepG = ctx.createLinearGradient(W/2-Math.round(140*(W/1080)),0,W/2+Math.round(140*(W/1080)),0);
+  sepG.addColorStop(0,'rgba(160,180,240,0)');
+  sepG.addColorStop(0.5,'rgba(160,180,240,0.35)');
+  sepG.addColorStop(1,'rgba(160,180,240,0)');
+  ctx.strokeStyle=sepG; ctx.lineWidth=1;
+  ctx.beginPath();
+  ctx.moveTo(W/2-Math.round(140*(W/1080)),rY-18);
+  ctx.lineTo(W/2+Math.round(140*(W/1080)),rY-18);
+  ctx.stroke();
+  ctx.fillStyle='rgba(160,180,240,0.40)';
   ctx.beginPath(); ctx.arc(W/2,rY-18,4,0,Math.PI*2); ctx.fill();
   ctx.font=BRAND_FS+'px "Jost",Arial,sans-serif';
-  ctx.fillStyle='rgba(184,151,90,0.38)'; ctx.textAlign='center';
+  ctx.fillStyle='rgba(160,180,240,0.38)'; ctx.textAlign='center';
   ctx.letterSpacing='4px';
   ctx.fillText('DIÁRIO DE LEITURAS  ·  MARINA RISTHER RAZZO', W/2, rY+10);
   ctx.letterSpacing='0px';
