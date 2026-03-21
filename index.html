@@ -906,17 +906,12 @@ body.dark .wrapped-top-authors{background:var(--cream-mid);}
 
 /* ── PAÍSES ── */
 .country-section { animation: fadeUp .4s ease both; }
-.country-map-wrap { border: 1px solid var(--border); border-radius: 2px; overflow: hidden; background: var(--cream); }
-body.dark .country-map-wrap { background: var(--cream-dark); }
-.country-map-svg { width: 100%; display: block; }
-.country-bubble { transition: opacity .2s, r .2s; cursor: default; }
-.country-bubble:hover { opacity: 1 !important; }
 .country-bar-row {
-  display: grid; grid-template-columns: 130px 1fr 60px;
-  align-items: center; gap: .6rem; margin-bottom: .45rem;
+  display: grid; grid-template-columns: 140px 1fr 60px;
+  align-items: center; gap: .6rem; margin-bottom: .5rem;
   animation: fadeSlide .3s ease both;
 }
-.country-bar-label { font-family: 'Playfair Display', serif; font-size: .88rem; color: var(--ink); text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.country-bar-label { font-family: 'Playfair Display', serif; font-size: .9rem; color: var(--ink); text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .country-bar-track { height: 6px; background: var(--cream-dark); border-radius: 3px; overflow: hidden; }
 .country-bar-fill { height: 6px; background: linear-gradient(90deg, var(--wine), var(--gold)); border-radius: 3px; transition: width .8s ease; }
 .country-bar-count { font-family: 'Playfair Display', serif; font-size: .88rem; color: var(--stone); }
@@ -2428,8 +2423,8 @@ body.dark .quote-story-btn:hover {
       <div class="form-row">
         <div class="form-group"><label>Ano de publicação</label><input type="text" id="fPubYear" placeholder="2021" maxlength="4"></div>
         <div class="form-group">
-          <label>Nacionalidade do(a) autor(a) <span style="opacity:.6">(2026+)</span></label>
-          <input type="text" id="fAuthorNationality" placeholder="Ex: Brasileira, Japonesa, Húngara…" list="nationalityList" autocomplete="off">
+          <label>País do(a) autor(a) <span style="opacity:.6">(2026+)</span></label>
+          <input type="text" id="fAuthorNationality" placeholder="Ex: Brasil, Japão, Hungria…" list="nationalityList" autocomplete="off">
           <datalist id="nationalityList"></datalist>
           <div class="date-hint" id="nationalityHint">Preenchido via ISBN quando disponível</div>
         </div>
@@ -3079,79 +3074,136 @@ function applyManualCover() {
 }
 window._applyManualCover = applyManualCover;
 
-// ── NATIONALITY LOOKUP ────────────────────────────────────
-// Mapeamento de country codes ISO → gentílico em português
+// ── COUNTRY LOOKUP ────────────────────────────────────────
+// Mapeamento de termos comuns em inglês → nome do país em português
 const _COUNTRY_PT = {
-  'Brazil':'Brasileira','Brasil':'Brasileira','United States':'Norte-americana','United Kingdom':'Britânica',
-  'England':'Britânica','Scotland':'Britânica','Wales':'Britânica','Ireland':'Irlandesa',
-  'France':'Francesa','Germany':'Alemã','Spain':'Espanhola','Portugal':'Portuguesa',
-  'Italy':'Italiana','Russia':'Russa','Japan':'Japonesa','China':'Chinesa',
-  'Colombia':'Colombiana','Argentina':'Argentina','Chile':'Chilena','Mexico':'Mexicana',
-  'Peru':'Peruana','Uruguay':'Uruguaia','Venezuela':'Venezuelana','Cuba':'Cubana',
-  'Norway':'Norueguesa','Sweden':'Sueca','Denmark':'Dinamarquesa','Finland':'Finlandesa',
-  'Netherlands':'Neerlandesa','Belgium':'Belga','Switzerland':'Suíça','Austria':'Austríaca',
-  'Poland':'Polonesa','Czech Republic':'Tcheca','Hungary':'Húngara','Romania':'Romena',
-  'Greece':'Grega','Turkey':'Turca','Israel':'Israelense','India':'Indiana',
-  'South Africa':'Sul-africana','Nigeria':'Nigeriana','Kenya':'Queniana',
-  'Egypt':'Egípcia','Morocco':'Marroquina','Ethiopia':'Etíope','Senegal':'Senegalesa',
-  'Mozambique':'Moçambicana','Angola':'Angolana','Canada':'Canadense','Australia':'Australiana',
-  'New Zealand':'Neozelandesa','South Korea':'Sul-coreana','Taiwan':'Taiwanesa',
-  'Philippines':'Filipina','Indonesia':'Indonésia','Vietnam':'Vietnamita',
-  'Ukraine':'Ucraniana','Belarus':'Bielorrussa','Georgia':'Georgiana',
-  'Czech':'Tcheca','Slovakia':'Eslovaca','Croatia':'Croata','Serbia':'Sérvia',
-  'Bulgaria':'Búlgara','Lithuania':'Lituana','Latvia':'Letã','Estonia':'Estoniana',
-  'Albania':'Albanesa','Romania':'Romena','Moldova':'Moldava',
-  'Iran':'Iraniana','Iraq':'Iraquiana','Lebanon':'Libanesa','Syria':'Síria',
-  'Pakistan':'Paquistanesa','Bangladesh':'Bengalesa','Sri Lanka':'Cingalesa',
-  'Myanmar':'Birmanesa','Thailand':'Tailandesa','Malaysia':'Malaia',
-  'Singapore':'Singapuriana','Jamaica':'Jamaicana','Trinidad':'Trinitária',
-  'Haiti':'Haitiana','Dominican Republic':'Dominicana',
+  'brazil':'Brasil','united states':'Estados Unidos','usa':'Estados Unidos','u.s.':'Estados Unidos',
+  'united kingdom':'Reino Unido','england':'Reino Unido','scotland':'Reino Unido','wales':'Reino Unido',
+  'great britain':'Reino Unido','ireland':'Irlanda','france':'França','germany':'Alemanha',
+  'spain':'Espanha','portugal':'Portugal','italy':'Itália','russia':'Rússia',
+  'japan':'Japão','china':'China','colombia':'Colômbia','argentina':'Argentina',
+  'chile':'Chile','mexico':'México','peru':'Peru','uruguay':'Uruguai',
+  'venezuela':'Venezuela','cuba':'Cuba','norway':'Noruega','sweden':'Suécia',
+  'denmark':'Dinamarca','finland':'Finlândia','netherlands':'Países Baixos',
+  'holland':'Países Baixos','belgium':'Bélgica','switzerland':'Suíça','austria':'Áustria',
+  'poland':'Polônia','czech':'República Tcheca','hungary':'Hungria','romania':'Romênia',
+  'greece':'Grécia','turkey':'Turquia','israel':'Israel','india':'Índia',
+  'south africa':'África do Sul','nigeria':'Nigéria','kenya':'Quênia',
+  'egypt':'Egito','morocco':'Marrocos','ethiopia':'Etiópia','senegal':'Senegal',
+  'mozambique':'Moçambique','angola':'Angola','canada':'Canadá','australia':'Austrália',
+  'new zealand':'Nova Zelândia','south korea':'Coreia do Sul','taiwan':'Taiwan',
+  'philippines':'Filipinas','indonesia':'Indonésia','vietnam':'Vietnã',
+  'ukraine':'Ucrânia','georgia':'Geórgia','slovakia':'Eslováquia',
+  'croatia':'Croácia','serbia':'Sérvia','bulgaria':'Bulgária','lithuania':'Lituânia',
+  'latvia':'Letônia','estonia':'Estônia','iran':'Irã','lebanon':'Líbano',
+  'pakistan':'Paquistão','bangladesh':'Bangladesh','thailand':'Tailândia',
+  'malaysia':'Malásia','singapore':'Singapura','jamaica':'Jamaica','haiti':'Haiti',
+  'ghana':'Gana','tanzania':'Tanzânia','uganda':'Uganda','zimbabwe':'Zimbábue',
+  'ethiopia':'Etiópia','cameroon':'Camarões','ivory coast':'Costa do Marfim',
+  'paraguay':'Paraguai','bolivia':'Bolívia','ecuador':'Equador',
+  'dominican republic':'República Dominicana','puerto rico':'Porto Rico',
+  'trinidad':'Trinidad e Tobago','barbados':'Barbados',
+  'luxembourg':'Luxemburgo','iceland':'Islândia','malta':'Malta',
+  'albania':'Albânia','north macedonia':'Macedônia do Norte','moldova':'Moldávia',
+  'belarus':'Bielorrússia','latvia':'Letônia','armenia':'Armênia','azerbaijan':'Azerbaijão',
+  'kazakhstan':'Cazaquistão','uzbekistan':'Uzbequistão',
+  'sri lanka':'Sri Lanka','myanmar':'Mianmar','cambodia':'Camboja',
+  'laos':'Laos','mongolia':'Mongólia','nepal':'Nepal','afghanistan':'Afeganistão',
+  'iraq':'Iraque','saudi arabia':'Arábia Saudita','jordan':'Jordânia',
+  'syria':'Síria','yemen':'Iêmen','qatar':'Catar','kuwait':'Kuwait',
+  'oman':'Omã','bahrain':'Bahrein','uae':'Emirados Árabes','libya':'Líbia',
+  'tunisia':'Tunísia','algeria':'Argélia','sudan':'Sudão','somalia':'Somália',
+  'rwanda':'Ruanda','zambia':'Zâmbia','malawi':'Malawi','botswana':'Botsuana',
+  'namibia':'Namíbia','eritrea':'Eritreia','djibouti':'Djibuti',
 };
+
+function _normCountry(raw) {
+  if (!raw) return null;
+  const low = raw.toLowerCase().trim();
+  for (const [en, pt] of Object.entries(_COUNTRY_PT)) {
+    if (low.includes(en)) return pt;
+  }
+  // Se já parece estar em português (tem acentos ou é curto e não mapeado)
+  if (/[áéíóúâêôãõàüç]/i.test(raw) && raw.length < 30) return raw.trim();
+  return null;
+}
+
 const _natCache = {};
 async function _fetchAuthorNationality(author) {
-  if (_natCache[author]) {
-    _applyNationality(_natCache[author]); return;
+  if (_natCache[author] !== undefined) {
+    if (_natCache[author]) _applyNationality(_natCache[author]);
+    else document.getElementById('nationalityHint').textContent = 'Não encontrado — preencha manualmente';
+    return;
   }
+  document.getElementById('nationalityHint').textContent = '⏳ buscando país…';
   try {
-    document.getElementById('nationalityHint').textContent = '⏳ buscando nacionalidade…';
-    // 1) Tenta OpenLibrary search
+    // Wikipedia REST API — summary do autor
     const q = encodeURIComponent(author);
-    const res = await fetch('https://openlibrary.org/search/authors.json?q=' + q + '&limit=3');
-    if (!res.ok) throw new Error();
-    const data = await res.json();
-    if (data.docs && data.docs.length) {
-      const authorKey = data.docs[0].key; // ex: /authors/OL123A
-      const detRes = await fetch('https://openlibrary.org' + authorKey + '.json');
-      if (detRes.ok) {
-        const det = await detRes.json();
-        // birth_place pode conter o país
-        const bp = det.birth_place || '';
-        // Também tenta 'nationality' field quando disponível
-        const natField = det.nationality || '';
-        const combined = natField || bp;
-        if (combined) {
-          // Procura match no mapeamento
-          let found = null;
-          for (const [en, pt] of Object.entries(_COUNTRY_PT)) {
-            if (combined.toLowerCase().includes(en.toLowerCase())) { found = pt; break; }
-          }
-          if (found) { _natCache[author] = found; _applyNationality(found); return; }
-          // Se não mapeou mas tem dado, retorna o raw para o usuário corrigir
-          if (natField) { _natCache[author] = natField; _applyNationality(natField, true); return; }
-        }
+    const res = await fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + q);
+    if (res.ok) {
+      const data = await res.json();
+      const extract = data.extract || '';
+      // Procurar padrão: "American writer", "Brazilian novelist", "French author" etc.
+      const found = _extractCountryFromExtract(extract);
+      if (found) { _natCache[author] = found; _applyNationality(found); return; }
+    }
+    // Fallback: busca na OpenLibrary só pelo birth_place
+    const olRes = await fetch('https://openlibrary.org/search/authors.json?q=' + q + '&limit=1');
+    if (olRes.ok) {
+      const olData = await olRes.json();
+      if (olData.docs && olData.docs[0]) {
+        const bp = olData.docs[0].birth_place || olData.docs[0].top_subjects?.[0] || '';
+        const found2 = _normCountry(bp);
+        if (found2) { _natCache[author] = found2; _applyNationality(found2); return; }
       }
     }
-    // Sem resultado
+    _natCache[author] = null;
     document.getElementById('nationalityHint').textContent = 'Não encontrado — preencha manualmente';
   } catch(e) {
     document.getElementById('nationalityHint').textContent = 'Não foi possível buscar — preencha manualmente';
   }
 }
-function _applyNationality(val, raw) {
+
+function _extractCountryFromExtract(text) {
+  // Padrões: "Brazilian novelist", "American author", "French writer" etc.
+  const nationalities = [
+    ['brazilian','Brasil'],['american','Estados Unidos'],['british','Reino Unido'],
+    ['english','Reino Unido'],['scottish','Reino Unido'],['welsh','Reino Unido'],
+    ['irish','Irlanda'],['french','França'],['german','Alemanha'],['spanish','Espanha'],
+    ['portuguese','Portugal'],['italian','Itália'],['russian','Rússia'],['soviet','Rússia'],
+    ['japanese','Japão'],['chinese','China'],['colombian','Colômbia'],['argentinian','Argentina'],
+    ['argentine','Argentina'],['chilean','Chile'],['mexican','México'],['peruvian','Peru'],
+    ['uruguayan','Uruguai'],['venezuelan','Venezuela'],['cuban','Cuba'],
+    ['norwegian','Noruega'],['swedish','Suécia'],['danish','Dinamarca'],['finnish','Finlândia'],
+    ['dutch','Países Baixos'],['belgian','Bélgica'],['swiss','Suíça'],['austrian','Áustria'],
+    ['polish','Polônia'],['czech','República Tcheca'],['hungarian','Hungria'],['romanian','Romênia'],
+    ['greek','Grécia'],['turkish','Turquia'],['israeli','Israel'],['indian','Índia'],
+    ['south african','África do Sul'],['nigerian','Nigéria'],['kenyan','Quênia'],
+    ['egyptian','Egito'],['moroccan','Marrocos'],['ethiopian','Etiópia'],
+    ['canadian','Canadá'],['australian','Austrália'],['new zealand','Nova Zelândia'],
+    ['south korean','Coreia do Sul'],['taiwanese','Taiwan'],['filipino','Filipinas'],
+    ['indonesian','Indonésia'],['vietnamese','Vietnã'],['ukrainian','Ucrânia'],
+    ['georgian','Geórgia'],['slovak','Eslováquia'],['croatian','Croácia'],['serbian','Sérvia'],
+    ['bulgarian','Bulgária'],['iranian','Irã'],['pakistani','Paquistão'],
+    ['bangladeshi','Bangladesh'],['thai','Tailândia'],['singaporean','Singapura'],
+    ['jamaican','Jamaica'],['ghanaian','Gana'],['tanzanian','Tanzânia'],
+    ['paraguayan','Paraguai'],['bolivian','Bolívia'],['ecuadorian','Equador'],
+    ['senegalese','Senegal'],['mozambican','Moçambique'],['angolan','Angola'],
+    ['cameroonian','Camarões'],['ugandan','Ugandês'],['zimbabwean','Zimbábue'],
+  ];
+  const low = text.toLowerCase();
+  for (const [adj, country] of nationalities) {
+    if (low.includes(adj)) return country;
+  }
+  return null;
+}
+
+function _applyNationality(val) {
   const el = document.getElementById('fAuthorNationality');
+  if (!el) return;
   if (!el.value) {
     el.value = val;
-    document.getElementById('nationalityHint').textContent = raw ? '⚠ Dado bruto — verifique e ajuste se necessário' : '✓ Nacionalidade detectada automaticamente';
+    document.getElementById('nationalityHint').textContent = '✓ País detectado automaticamente';
   } else {
     document.getElementById('nationalityHint').textContent = 'Preenchido via ISBN quando disponível';
   }
@@ -4733,56 +4785,12 @@ function renderSeries() {
 }
 
 // ── PAÍSES DE AUTORES ──────────────────────────────────────────────────────
-// Mapeamento gentílico PT → código ISO alpha-2 para o mapa SVG
-const _NAT_TO_ISO = {
-  'Brasileira':'BR','Norte-americana':'US','Britânica':'GB','Irlandesa':'IE',
-  'Francesa':'FR','Alemã':'DE','Espanhola':'ES','Portuguesa':'PT',
-  'Italiana':'IT','Russa':'RU','Japonesa':'JP','Chinesa':'CN',
-  'Colombiana':'CO','Argentina':'AR','Chilena':'CL','Mexicana':'MX',
-  'Peruana':'PE','Uruguaia':'UY','Venezuelana':'VE','Cubana':'CU',
-  'Norueguesa':'NO','Sueca':'SE','Dinamarquesa':'DK','Finlandesa':'FI',
-  'Neerlandesa':'NL','Belga':'BE','Suíça':'CH','Austríaca':'AT',
-  'Polonesa':'PL','Tcheca':'CZ','Húngara':'HU','Romena':'RO',
-  'Grega':'GR','Turca':'TR','Israelense':'IL','Indiana':'IN',
-  'Sul-africana':'ZA','Nigeriana':'NG','Queniana':'KE','Egípcia':'EG',
-  'Marroquina':'MA','Etíope':'ET','Senegalesa':'SN','Moçambicana':'MZ',
-  'Angolana':'AO','Canadense':'CA','Australiana':'AU','Neozelandesa':'NZ',
-  'Sul-coreana':'KR','Taiwanesa':'TW','Filipina':'PH',
-  'Indonésia':'ID','Vietnamita':'VN','Ucraniana':'UA','Georgiana':'GE',
-  'Eslovaca':'SK','Croata':'HR','Sérvia':'RS','Búlgara':'BG',
-  'Lituana':'LT','Letã':'LV','Estoniana':'EE','Iraniana':'IR',
-  'Libanesa':'LB','Paquistanesa':'PK','Bengalesa':'BD','Tailandesa':'TH',
-  'Malaio':'MY','Jamaicana':'JM','Haitiana':'HT',
-};
-
-// Coordenadas centróide Mercator reais (lon/lat → x,y em viewBox 960×500)
-// Geradas via projeção Mercator: x=(lon+180)/360*960, y via log(tan(π/4+lat/2))
-const _ISO_POS = {
-  'BR':[355.8,266.9],'US':[219.4,199.2],'CA':[231.1,169.6],'MX':[215.3,221.3],
-  'CO':[293.6,244.6],'VE':[315.0,242.4],'PE':[291.7,260.9],'CL':[301.4,295.2],
-  'AR':[323.3,299.2],'UY':[345.0,290.6],'CU':[279.2,224.0],
-  'GB':[494.4,174.0],'IE':[477.2,175.2],'FR':[506.1,188.4],'ES':[489.7,197.8],
-  'PT':[477.2,199.3],'DE':[528.9,179.4],'NL':[514.7,177.7],'BE':[512.5,180.7],
-  'CH':[522.8,187.3],'AT':[540.6,185.8],'IT':[535.0,194.0],'GR':[560.6,199.8],
-  'NO':[523.6,159.7],'SE':[551.7,160.7],'DK':[527.8,169.2],'FI':[572.2,156.3],
-  'PL':[553.1,178.1],'CZ':[543.1,182.0],'HU':[554.2,186.6],'RO':[569.2,188.9],
-  'HR':[542.2,190.2],'RS':[558.3,192.0],'BG':[570.8,194.1],'UA':[586.7,184.5],
-  'GE':[620.6,194.8],'RU':[792.5,157.3],'TR':[597.8,200.1],'IL':[596.7,211.5],
-  'LB':[599.4,207.4],'IR':[649.2,209.5],'PK':[692.5,212.3],'IN':[719.2,225.1],
-  'BD':[751.1,221.2],'CN':[789.4,204.5],'JP':[884.2,204.1],'KR':[855.0,204.5],
-  'TW':[836.1,221.2],'TH':[780.3,231.0],'VN':[800.8,233.2],'PH':[841.4,234.6],
-  'MY':[804.7,245.0],'ID':[816.4,250.9],'AU':[871.7,280.9],'NZ':[979.2,303.0],
-  'EG':[585.6,217.1],'MA':[480.3,210.4],'SN':[459.7,232.7],'NG':[524.2,239.2],
-  'ET':[612.5,239.2],'KE':[605.3,250.0],'ZA':[569.7,285.8],'MZ':[598.6,272.5],
-  'AO':[549.7,263.3],'LT':[566.4,171.5],'LV':[568.3,167.9],'EE':[569.4,164.2],
-  'SK':[554.7,184.0],'JM':[262.1,232.0],'HT':[258.0,234.0],
-};
 
 function _renderCountrySection(rb, year) {
   const withNat = rb.filter(b => b.authorNationality);
   if (!withNat.length) {
     return '<div class="wrapped-top-authors" style="opacity:.7"><span class="chart-title" style="display:block;margin-bottom:.6rem">Países dos autores</span>' +
-      '<p style="font-size:.82rem;color:var(--stone-light);font-style:italic;font-family:\'Playfair Display\',serif">Nenhum livro de '+year+' tem a nacionalidade do autor preenchida. O campo aparece no modal de adição de livros.</p></div>';
+      '<p style="font-size:.82rem;color:var(--stone-light);font-style:italic;font-family:\'Playfair Display\',serif">Nenhum livro de '+year+' tem o país do autor preenchido. O campo aparece no modal de adição de livros.</p></div>';
   }
 
   const cc = {};
@@ -4791,145 +4799,25 @@ function _renderCountrySection(rb, year) {
   const maxC = sorted[0][1];
   const total = withNat.length;
 
-  // Serializar dados para o script de renderização D3
-  const mapPayload = JSON.stringify(
-    sorted.map(([nat, cnt]) => ({ nat, cnt, iso: _NAT_TO_ISO[nat]||null }))
-  );
-
-  // Barras horizontais
-  const bars = sorted.map(([nat, cnt], i) => {
+  const bars = sorted.map(([country, cnt], i) => {
     const pct  = Math.round(cnt / maxC * 100);
     const pctT = Math.round(cnt / total * 100);
     return `<div class="country-bar-row" style="animation-delay:${Math.min(i*0.04,0.4)}s">
-      <div class="country-bar-label">${esc(nat)}</div>
+      <div class="country-bar-label">${esc(country)}</div>
       <div class="country-bar-track"><div class="country-bar-fill" style="width:${pct}%"></div></div>
       <div class="country-bar-count">${cnt} <span style="opacity:.55;font-size:.6rem">(${pctT}%)</span></div>
     </div>`;
   }).join('');
 
-  const mapId = 'countryMap_' + year;
+  const coverage = withNat.length < rb.length
+    ? `<span style="font-size:.62rem;color:var(--stone-light);font-style:italic;font-family:'Playfair Display',serif;display:block;margin-top:.6rem">${rb.length - withNat.length} livro${rb.length-withNat.length>1?'s':''} sem país preenchido</span>`
+    : '';
 
   return `<div class="wrapped-top-authors country-section">
-    <span class="chart-title" style="display:block;margin-bottom:1rem">Países dos autores · ${withNat.length} de ${rb.length} livros</span>
-    <div class="country-map-wrap">
-      <div id="${mapId}" style="width:100%;min-height:240px;position:relative">
-        <div style="display:flex;align-items:center;justify-content:center;height:240px;font-size:.78rem;color:var(--stone-light);font-style:italic;font-family:'Playfair Display',serif">
-          carregando mapa…
-        </div>
-      </div>
-    </div>
-    <div class="country-bars-wrap" style="margin-top:1.2rem">
-      <span style="font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--stone-light);display:block;margin-bottom:.7rem">Ranking por país</span>
-      ${bars}
-    </div>
-  </div>
-  <script>
-  (function() {
-    const _mapId = '${mapId}';
-    const _data  = ${mapPayload};
-    const _pos   = ${JSON.stringify(_ISO_POS)};
-    const _isDark = document.body.classList.contains('dark');
-    const _landColor   = _isDark ? '#2a2535' : '#ddd5c8';
-    const _oceanColor  = _isDark ? '#1a1525' : '#eee8de';
-    const _wineColor   = _isDark ? '#c04870' : '#6b1f2e';
-    const _strokeColor = _isDark ? '#3a3050' : '#ccc4b8';
-
-    function _drawMap(svgPaths) {
-      const wrap = document.getElementById(_mapId);
-      if (!wrap) return;
-      const W = wrap.offsetWidth || 700;
-      const H = Math.round(W * 0.44);
-      // Escala: os _pos estão em espaço 960×500, mapear para W×H
-      const sx = W / 960, sy = H / 500;
-      const maxC = Math.max(..._data.map(d => d.cnt));
-
-      let svgContent = '<svg width="' + W + '" height="' + H + '" xmlns="http://www.w3.org/2000/svg" style="display:block">';
-      svgContent += '<rect width="' + W + '" height="' + H + '" fill="' + _oceanColor + '" rx="3"/>';
-
-      // Paths dos países (se disponível via topojson)
-      if (svgPaths) {
-        svgPaths.forEach(p => {
-          svgContent += '<path d="' + p + '" fill="' + _landColor + '" stroke="' + _strokeColor + '" stroke-width="0.3"/>';
-        });
-      } else {
-        // Fallback: retângulos representando regiões continentais
-        const regions = [
-          [0.08,0.1,0.22,0.62,'América'],
-          [0.46,0.1,0.18,0.65,'Europa/África'],
-          [0.55,0.1,0.38,0.65,'Ásia'],
-          [0.72,0.5,0.18,0.35,'Oceania'],
-        ];
-        regions.forEach(([rx,ry,rw,rh]) => {
-          svgContent += '<rect x="'+(rx*W)+'" y="'+(ry*H)+'" width="'+(rw*W)+'" height="'+(rh*H)+'" rx="4" fill="' + _landColor + '" stroke="' + _strokeColor + '" stroke-width="0.5"/>';
-        });
-      }
-
-      // Bolhas
-      _data.forEach(({nat, cnt, iso}) => {
-        if (!iso || !_pos[iso]) return;
-        const [px, py] = _pos[iso];
-        const cx = Math.round(px * sx);
-        const cy = Math.round(py * sy);
-        const r  = Math.round(4 + (cnt / maxC) * (H * 0.1));
-        const op = (0.4 + (cnt / maxC) * 0.6).toFixed(2);
-        svgContent += '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="' + _wineColor + '" fill-opacity="' + op + '" stroke="' + _wineColor + '" stroke-width="1" stroke-opacity="0.6">';
-        svgContent += '<title>' + nat + ' · ' + cnt + ' livro' + (cnt>1?'s':'') + '</title></circle>';
-        // Label para países com 2+ livros
-        if (cnt >= 2) {
-          svgContent += '<text x="' + cx + '" y="' + (cy + r + 9) + '" text-anchor="middle" font-family="Jost,sans-serif" font-size="' + Math.max(7, Math.round(H*0.026)) + '" fill="' + _wineColor + '" opacity="0.85">' + cnt + '</text>';
-        }
-      });
-
-      svgContent += '<text x="8" y="' + (H-5) + '" font-family="Jost,sans-serif" font-size="8" fill="' + (_isDark?'rgba(200,180,150,.4)':'rgba(120,108,90,.5)') + '">tamanho da bolha = nº de livros</text>';
-      svgContent += '</svg>';
-      wrap.innerHTML = svgContent;
-    }
-
-    // Tentar carregar TopoJSON real via D3
-    function _tryD3Map() {
-      if (typeof d3 === 'undefined' || typeof topojson === 'undefined') {
-        _drawMap(null); return;
-      }
-      fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
-        .then(r => r.json())
-        .then(world => {
-          const countries = topojson.feature(world, world.objects.countries);
-          const wrap = document.getElementById(_mapId);
-          if (!wrap) return;
-          const W = wrap.offsetWidth || 700;
-          const H = Math.round(W * 0.44);
-          const proj = d3.geoNaturalEarth1().scale(W/6.3).translate([W/2, H/2]);
-          const path = d3.geoPath().projection(proj);
-          const paths = countries.features.map(f => path(f));
-          _drawMap(paths);
-        })
-        .catch(() => _drawMap(null));
-    }
-
-    // Aguardar DOM estar pronto e container ter largura
-    function _init() {
-      const wrap = document.getElementById(_mapId);
-      if (!wrap || !wrap.offsetWidth) { setTimeout(_init, 120); return; }
-      if (typeof d3 !== 'undefined' && typeof topojson !== 'undefined') {
-        _tryD3Map();
-      } else {
-        // Carregar D3 + topojson dinamicamente se ainda não estiverem
-        const d3s = document.createElement('script');
-        d3s.src = 'https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js';
-        d3s.onload = function() {
-          const tjs = document.createElement('script');
-          tjs.src = 'https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js';
-          tjs.onload = _tryD3Map;
-          tjs.onerror = function() { _drawMap(null); };
-          document.head.appendChild(tjs);
-        };
-        d3s.onerror = function() { _drawMap(null); };
-        document.head.appendChild(d3s);
-      }
-    }
-    setTimeout(_init, 80);
-  })();
-  <\/script>`; // eslint-disable-line
+    <span class="chart-title" style="display:block;margin-bottom:1rem">Países dos autores</span>
+    ${bars}
+    ${coverage}
+  </div>`;
 }
 
 // ── YEAR IN BOOKS ─────────────────────────────────────────────────────────
