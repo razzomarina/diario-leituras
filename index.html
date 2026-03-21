@@ -4755,114 +4755,181 @@ const _NAT_TO_ISO = {
   'Malaio':'MY','Jamaicana':'JM','Haitiana':'HT',
 };
 
-// Coordenadas aproximadas (cx, cy) de cada país no viewBox 1000×500 (Mercator simplificado)
+// Coordenadas centróide Mercator reais (lon/lat → x,y em viewBox 960×500)
+// Geradas via projeção Mercator: x=(lon+180)/360*960, y via log(tan(π/4+lat/2))
 const _ISO_POS = {
-  'BR':[310,330],'US':[180,200],'CA':[170,150],'MX':[190,250],
-  'CO':[265,280],'VE':[285,265],'PE':[265,320],'CL':[270,390],
-  'AR':[285,400],'UY':[305,400],'CU':[240,235],
-  'GB':[455,155],'IE':[440,160],'FR':[470,185],'ES':[455,205],
-  'PT':[440,205],'DE':[490,170],'NL':[480,160],'BE':[475,165],
-  'CH':[485,185],'AT':[500,180],'IT':[495,200],'GR':[520,215],
-  'NO':[480,135],'SE':[500,135],'DK':[487,150],'FI':[520,125],
-  'PL':[510,162],'CZ':[500,168],'HU':[513,175],'RO':[525,178],
-  'HR':[505,185],'RS':[515,183],'BG':[525,190],'LT':[520,152],
-  'LV':[522,146],'EE':[522,140],'UA':[535,165],'GE':[555,190],
-  'RU':[600,140],'TR':[548,200],'IL':[548,215],'LB':[546,212],
-  'IR':[570,210],'PK':[600,220],'IN':[620,240],'BD':[640,235],
-  'CN':[680,210],'JP':[730,200],'KR':[718,205],'TW':[710,220],
-  'TH':[670,255],'VN':[680,260],'PH':[710,265],'MY':[685,280],
-  'ID':[695,295],'AU':[730,360],'NZ':[780,390],
-  'EG':[535,225],'MA':[450,225],'SN':[432,255],'NG':[490,270],
-  'ET':[555,270],'KE':[555,285],'ZA':[515,360],'MZ':[540,330],
-  'AO':[500,320],
+  'BR':[355.8,266.9],'US':[219.4,199.2],'CA':[231.1,169.6],'MX':[215.3,221.3],
+  'CO':[293.6,244.6],'VE':[315.0,242.4],'PE':[291.7,260.9],'CL':[301.4,295.2],
+  'AR':[323.3,299.2],'UY':[345.0,290.6],'CU':[279.2,224.0],
+  'GB':[494.4,174.0],'IE':[477.2,175.2],'FR':[506.1,188.4],'ES':[489.7,197.8],
+  'PT':[477.2,199.3],'DE':[528.9,179.4],'NL':[514.7,177.7],'BE':[512.5,180.7],
+  'CH':[522.8,187.3],'AT':[540.6,185.8],'IT':[535.0,194.0],'GR':[560.6,199.8],
+  'NO':[523.6,159.7],'SE':[551.7,160.7],'DK':[527.8,169.2],'FI':[572.2,156.3],
+  'PL':[553.1,178.1],'CZ':[543.1,182.0],'HU':[554.2,186.6],'RO':[569.2,188.9],
+  'HR':[542.2,190.2],'RS':[558.3,192.0],'BG':[570.8,194.1],'UA':[586.7,184.5],
+  'GE':[620.6,194.8],'RU':[792.5,157.3],'TR':[597.8,200.1],'IL':[596.7,211.5],
+  'LB':[599.4,207.4],'IR':[649.2,209.5],'PK':[692.5,212.3],'IN':[719.2,225.1],
+  'BD':[751.1,221.2],'CN':[789.4,204.5],'JP':[884.2,204.1],'KR':[855.0,204.5],
+  'TW':[836.1,221.2],'TH':[780.3,231.0],'VN':[800.8,233.2],'PH':[841.4,234.6],
+  'MY':[804.7,245.0],'ID':[816.4,250.9],'AU':[871.7,280.9],'NZ':[979.2,303.0],
+  'EG':[585.6,217.1],'MA':[480.3,210.4],'SN':[459.7,232.7],'NG':[524.2,239.2],
+  'ET':[612.5,239.2],'KE':[605.3,250.0],'ZA':[569.7,285.8],'MZ':[598.6,272.5],
+  'AO':[549.7,263.3],'LT':[566.4,171.5],'LV':[568.3,167.9],'EE':[569.4,164.2],
+  'SK':[554.7,184.0],'JM':[262.1,232.0],'HT':[258.0,234.0],
 };
 
 function _renderCountrySection(rb, year) {
-  // Apenas livros com nacionalidade preenchida
   const withNat = rb.filter(b => b.authorNationality);
   if (!withNat.length) {
     return '<div class="wrapped-top-authors" style="opacity:.7"><span class="chart-title" style="display:block;margin-bottom:.6rem">Países dos autores</span>' +
       '<p style="font-size:.82rem;color:var(--stone-light);font-style:italic;font-family:\'Playfair Display\',serif">Nenhum livro de '+year+' tem a nacionalidade do autor preenchida. O campo aparece no modal de adição de livros.</p></div>';
   }
 
-  // Contagem por país
   const cc = {};
-  withNat.forEach(b => {
-    const n = b.authorNationality;
-    cc[n] = (cc[n]||0) + 1;
-  });
+  withNat.forEach(b => { const n = b.authorNationality; cc[n] = (cc[n]||0)+1; });
   const sorted = Object.entries(cc).sort((a,b)=>b[1]-a[1]);
   const maxC = sorted[0][1];
   const total = withNat.length;
 
-  // Montar dados do mapa
-  const mapData = {};
-  sorted.forEach(([nat, cnt]) => {
-    const iso = _NAT_TO_ISO[nat];
-    if (iso) mapData[iso] = { nat, cnt };
-  });
-
-  // Gerar bolhas SVG do mapa
-  let bubbles = '';
-  const wineRGB = [107,31,46];
-  Object.entries(mapData).forEach(([iso, {nat, cnt}]) => {
-    const pos = _ISO_POS[iso]; if (!pos) return;
-    const [cx, cy] = pos;
-    const r = 5 + Math.round((cnt / maxC) * 22);
-    const op = 0.35 + (cnt / maxC) * 0.65;
-    bubbles += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="rgba(${wineRGB.join(',')},${op.toFixed(2)})" stroke="rgba(${wineRGB.join(',')},0.5)" stroke-width="0.8" class="country-bubble" data-nat="${esc(nat)}" data-cnt="${cnt}">
-      <title>${nat} · ${cnt} livro${cnt>1?'s':''}</title>
-    </circle>`;
-  });
+  // Serializar dados para o script de renderização D3
+  const mapPayload = JSON.stringify(
+    sorted.map(([nat, cnt]) => ({ nat, cnt, iso: _NAT_TO_ISO[nat]||null }))
+  );
 
   // Barras horizontais
   const bars = sorted.map(([nat, cnt], i) => {
-    const iso = _NAT_TO_ISO[nat] || '';
-    const pct = Math.round(cnt / maxC * 100);
-    const pctTotal = Math.round(cnt / total * 100);
+    const pct  = Math.round(cnt / maxC * 100);
+    const pctT = Math.round(cnt / total * 100);
     return `<div class="country-bar-row" style="animation-delay:${Math.min(i*0.04,0.4)}s">
       <div class="country-bar-label">${esc(nat)}</div>
-      <div class="country-bar-track">
-        <div class="country-bar-fill" style="width:${pct}%"></div>
-      </div>
-      <div class="country-bar-count">${cnt} <span style="opacity:.55;font-size:.6rem">(${pctTotal}%)</span></div>
+      <div class="country-bar-track"><div class="country-bar-fill" style="width:${pct}%"></div></div>
+      <div class="country-bar-count">${cnt} <span style="opacity:.55;font-size:.6rem">(${pctT}%)</span></div>
     </div>`;
   }).join('');
 
+  const mapId = 'countryMap_' + year;
+
   return `<div class="wrapped-top-authors country-section">
     <span class="chart-title" style="display:block;margin-bottom:1rem">Países dos autores · ${withNat.length} de ${rb.length} livros</span>
-    <!-- Mapa -->
     <div class="country-map-wrap">
-      <svg viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg" class="country-map-svg" id="countryMapSvg${year}">
-        <!-- Fundo oceano suave -->
-        <rect width="1000" height="500" fill="var(--cream-mid)" rx="4"/>
-        <!-- Continentes simplificados (formas aproximadas) -->
-        <!-- América do Norte -->
-        <path d="M120,80 L260,80 L275,120 L260,170 L230,200 L210,260 L195,290 L175,300 L155,280 L130,260 L110,220 L100,170 L105,120 Z" fill="var(--stone-pale)" opacity=".7"/>
-        <!-- América Central/Caribe -->
-        <path d="M195,290 L240,280 L255,295 L250,320 L235,330 L215,320 L200,310 Z" fill="var(--stone-pale)" opacity=".7"/>
-        <!-- América do Sul -->
-        <path d="M240,280 L320,270 L345,290 L350,330 L340,390 L320,430 L295,440 L270,430 L250,400 L240,360 L235,320 Z" fill="var(--stone-pale)" opacity=".7"/>
-        <!-- Europa -->
-        <path d="M430,110 L540,110 L560,130 L555,160 L540,185 L520,200 L490,205 L465,215 L445,210 L432,200 L425,180 L428,150 Z" fill="var(--stone-pale)" opacity=".7"/>
-        <!-- África -->
-        <path d="M440,220 L540,215 L565,235 L570,280 L560,340 L540,380 L510,400 L480,395 L460,375 L445,340 L430,290 L428,250 Z" fill="var(--stone-pale)" opacity=".7"/>
-        <!-- Ásia (simplificada) -->
-        <path d="M540,100 L760,90 L790,120 L800,160 L780,200 L750,230 L700,245 L660,240 L620,235 L580,220 L555,200 L545,170 L540,140 Z" fill="var(--stone-pale)" opacity=".7"/>
-        <!-- Oceania -->
-        <path d="M700,320 L790,315 L810,340 L805,380 L780,405 L745,400 L715,380 L700,355 Z" fill="var(--stone-pale)" opacity=".7"/>
-        <!-- Bolhas de países -->
-        ${bubbles}
-        <!-- Legenda do mapa -->
-        <text x="15" y="488" font-family="Jost,sans-serif" font-size="9" fill="var(--stone-light)" opacity=".6">Tamanho da bolha = nº de livros</text>
-      </svg>
+      <div id="${mapId}" style="width:100%;min-height:240px;position:relative">
+        <div style="display:flex;align-items:center;justify-content:center;height:240px;font-size:.78rem;color:var(--stone-light);font-style:italic;font-family:'Playfair Display',serif">
+          carregando mapa…
+        </div>
+      </div>
     </div>
-    <!-- Barras de ranking -->
     <div class="country-bars-wrap" style="margin-top:1.2rem">
       <span style="font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--stone-light);display:block;margin-bottom:.7rem">Ranking por país</span>
       ${bars}
     </div>
-  </div>`;
+  </div>
+  <script>
+  (function() {
+    const _mapId = '${mapId}';
+    const _data  = ${mapPayload};
+    const _pos   = ${JSON.stringify(_ISO_POS)};
+    const _isDark = document.body.classList.contains('dark');
+    const _landColor   = _isDark ? '#2a2535' : '#ddd5c8';
+    const _oceanColor  = _isDark ? '#1a1525' : '#eee8de';
+    const _wineColor   = _isDark ? '#c04870' : '#6b1f2e';
+    const _strokeColor = _isDark ? '#3a3050' : '#ccc4b8';
+
+    function _drawMap(svgPaths) {
+      const wrap = document.getElementById(_mapId);
+      if (!wrap) return;
+      const W = wrap.offsetWidth || 700;
+      const H = Math.round(W * 0.44);
+      // Escala: os _pos estão em espaço 960×500, mapear para W×H
+      const sx = W / 960, sy = H / 500;
+      const maxC = Math.max(..._data.map(d => d.cnt));
+
+      let svgContent = '<svg width="' + W + '" height="' + H + '" xmlns="http://www.w3.org/2000/svg" style="display:block">';
+      svgContent += '<rect width="' + W + '" height="' + H + '" fill="' + _oceanColor + '" rx="3"/>';
+
+      // Paths dos países (se disponível via topojson)
+      if (svgPaths) {
+        svgPaths.forEach(p => {
+          svgContent += '<path d="' + p + '" fill="' + _landColor + '" stroke="' + _strokeColor + '" stroke-width="0.3"/>';
+        });
+      } else {
+        // Fallback: retângulos representando regiões continentais
+        const regions = [
+          [0.08,0.1,0.22,0.62,'América'],
+          [0.46,0.1,0.18,0.65,'Europa/África'],
+          [0.55,0.1,0.38,0.65,'Ásia'],
+          [0.72,0.5,0.18,0.35,'Oceania'],
+        ];
+        regions.forEach(([rx,ry,rw,rh]) => {
+          svgContent += '<rect x="'+(rx*W)+'" y="'+(ry*H)+'" width="'+(rw*W)+'" height="'+(rh*H)+'" rx="4" fill="' + _landColor + '" stroke="' + _strokeColor + '" stroke-width="0.5"/>';
+        });
+      }
+
+      // Bolhas
+      _data.forEach(({nat, cnt, iso}) => {
+        if (!iso || !_pos[iso]) return;
+        const [px, py] = _pos[iso];
+        const cx = Math.round(px * sx);
+        const cy = Math.round(py * sy);
+        const r  = Math.round(4 + (cnt / maxC) * (H * 0.1));
+        const op = (0.4 + (cnt / maxC) * 0.6).toFixed(2);
+        svgContent += '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" fill="' + _wineColor + '" fill-opacity="' + op + '" stroke="' + _wineColor + '" stroke-width="1" stroke-opacity="0.6">';
+        svgContent += '<title>' + nat + ' · ' + cnt + ' livro' + (cnt>1?'s':'') + '</title></circle>';
+        // Label para países com 2+ livros
+        if (cnt >= 2) {
+          svgContent += '<text x="' + cx + '" y="' + (cy + r + 9) + '" text-anchor="middle" font-family="Jost,sans-serif" font-size="' + Math.max(7, Math.round(H*0.026)) + '" fill="' + _wineColor + '" opacity="0.85">' + cnt + '</text>';
+        }
+      });
+
+      svgContent += '<text x="8" y="' + (H-5) + '" font-family="Jost,sans-serif" font-size="8" fill="' + (_isDark?'rgba(200,180,150,.4)':'rgba(120,108,90,.5)') + '">tamanho da bolha = nº de livros</text>';
+      svgContent += '</svg>';
+      wrap.innerHTML = svgContent;
+    }
+
+    // Tentar carregar TopoJSON real via D3
+    function _tryD3Map() {
+      if (typeof d3 === 'undefined' || typeof topojson === 'undefined') {
+        _drawMap(null); return;
+      }
+      fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
+        .then(r => r.json())
+        .then(world => {
+          const countries = topojson.feature(world, world.objects.countries);
+          const wrap = document.getElementById(_mapId);
+          if (!wrap) return;
+          const W = wrap.offsetWidth || 700;
+          const H = Math.round(W * 0.44);
+          const proj = d3.geoNaturalEarth1().scale(W/6.3).translate([W/2, H/2]);
+          const path = d3.geoPath().projection(proj);
+          const paths = countries.features.map(f => path(f));
+          _drawMap(paths);
+        })
+        .catch(() => _drawMap(null));
+    }
+
+    // Aguardar DOM estar pronto e container ter largura
+    function _init() {
+      const wrap = document.getElementById(_mapId);
+      if (!wrap || !wrap.offsetWidth) { setTimeout(_init, 120); return; }
+      if (typeof d3 !== 'undefined' && typeof topojson !== 'undefined') {
+        _tryD3Map();
+      } else {
+        // Carregar D3 + topojson dinamicamente se ainda não estiverem
+        const d3s = document.createElement('script');
+        d3s.src = 'https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js';
+        d3s.onload = function() {
+          const tjs = document.createElement('script');
+          tjs.src = 'https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js';
+          tjs.onload = _tryD3Map;
+          tjs.onerror = function() { _drawMap(null); };
+          document.head.appendChild(tjs);
+        };
+        d3s.onerror = function() { _drawMap(null); };
+        document.head.appendChild(d3s);
+      }
+    }
+    setTimeout(_init, 80);
+  })();
+  <\/script>`; // eslint-disable-line
 }
 
 // ── YEAR IN BOOKS ─────────────────────────────────────────────────────────
