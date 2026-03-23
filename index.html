@@ -281,6 +281,26 @@ select.filter-select:focus { outline: none; border-color: var(--gold); }
 .progress-saved-msg { font-size: .6rem; color: var(--gold); font-style: italic; font-family: 'Playfair Display', serif; opacity: 0; transition: opacity .3s; }
 .progress-saved-msg.show { opacity: 1; }
 
+/* ── PROGRESSO MODO TOGGLE (páginas / %) ── */
+.progress-mode-toggle {
+  display: flex; border: 1px solid var(--border-strong); border-radius: 1px; overflow: hidden; flex-shrink: 0;
+}
+.progress-mode-btn {
+  padding: .22rem .5rem; background: transparent; border: none; cursor: pointer;
+  font-family: 'Jost', sans-serif; font-size: .55rem; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--stone-light); transition: all .15s;
+}
+.progress-mode-btn:first-child { border-right: 1px solid var(--border-strong); }
+.progress-mode-btn.active { background: var(--ink); color: var(--cream); }
+body.dark .progress-mode-btn.active { background: var(--wine); color: white; }
+.progress-pct-input {
+  width: 58px; padding: .28rem .4rem; border: 1px solid var(--border-strong);
+  font-family: 'Playfair Display', serif; font-size: .95rem; text-align: center;
+  color: var(--ink); background: white; border-radius: 1px; transition: border-color .15s;
+}
+.progress-pct-input:focus { outline: none; border-color: var(--gold); }
+body.dark .progress-pct-input { background: var(--cream-mid); }
+
 .reading-actions { display: flex; gap: .3rem; }
 .reading-actions button {
   background: none; border: none; cursor: pointer; width: 26px; height: 26px;
@@ -494,95 +514,6 @@ select.filter-select:focus { outline: none; border-color: var(--gold); }
 .goals-history-bar-fill { height: 4px; border-radius: 2px; background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
 .goals-history-label { font-size: .65rem; color: var(--stone-light); margin-top: .2rem; }
 .goals-history-badge { font-size: .68rem; color: var(--gold); font-style: italic; font-family: 'Playfair Display', serif; flex-shrink: 0; }
-
-/* ── PROGRESSO MODO TOGGLE (páginas / %) ── */
-.progress-mode-toggle {
-  display: flex; border: 1px solid var(--border-strong); border-radius: 1px; overflow: hidden;
-  flex-shrink: 0;
-}
-.progress-mode-btn {
-  padding: .22rem .5rem; background: transparent; border: none; cursor: pointer;
-  font-family: 'Jost', sans-serif; font-size: .55rem; letter-spacing: .08em;
-  text-transform: uppercase; color: var(--stone-light); transition: all .15s;
-}
-.progress-mode-btn:first-child { border-right: 1px solid var(--border-strong); }
-.progress-mode-btn.active { background: var(--ink); color: var(--cream); }
-body.dark .progress-mode-btn.active { background: var(--wine); color: white; }
-.progress-pct-input {
-  width: 58px; padding: .28rem .4rem; border: 1px solid var(--border-strong);
-  font-family: 'Playfair Display', serif; font-size: .95rem; text-align: center;
-  color: var(--ink); background: white; border-radius: 1px; transition: border-color .15s;
-}
-.progress-pct-input:focus { outline: none; border-color: var(--gold); }
-body.dark .progress-pct-input { background: var(--cream-mid); }
-
-/* ── PLANEJAMENTO DE LEITURAS ── */
-.plan-section {
-  background: white; border: 1px solid var(--border); border-top: 2px solid var(--gold);
-  box-shadow: 0 2px 16px var(--shadow-soft); margin-top: 1.5rem;
-}
-body.dark .plan-section { background: var(--cream-mid); }
-.plan-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 1.1rem 1.5rem; border-bottom: 1px solid var(--border);
-  background: var(--cream-mid);
-}
-body.dark .plan-header { background: var(--cream-dark); }
-.plan-header-left { display: flex; align-items: baseline; gap: .8rem; }
-.plan-header-title { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 400; color: var(--ink); }
-.plan-coverage {
-  font-size: .65rem; color: var(--stone-light); font-style: italic;
-  font-family: 'Playfair Display', serif;
-}
-.plan-coverage strong { color: var(--wine); font-style: normal; }
-.plan-item {
-  display: grid; grid-template-columns: 52px 1fr auto;
-  align-items: stretch; border-bottom: 1px solid var(--border);
-  min-height: 74px; transition: background .15s; animation: fadeSlide .3s ease both;
-}
-.plan-item:last-child { border-bottom: none; }
-.plan-item:hover { background: var(--cream); }
-body.dark .plan-item:hover { background: var(--cream-dark); }
-.plan-cover-cell {
-  display: flex; align-items: center; justify-content: center;
-  border-right: 1px solid var(--border); padding: 7px;
-  background: var(--cream-mid); flex-shrink: 0;
-}
-body.dark .plan-cover-cell { background: var(--cream-dark); }
-.plan-main { padding: .8rem 1.2rem; display: flex; flex-direction: column; justify-content: center; gap: .2rem; min-width: 0; }
-.plan-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--ink); }
-.plan-author { font-size: .72rem; color: var(--stone); font-style: italic; font-family: 'Playfair Display', serif; }
-.plan-why { font-size: .72rem; color: var(--stone-light); font-style: italic; font-family: 'Playfair Display', serif; margin-top: .18rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.plan-status-row { display: flex; align-items: center; gap: .5rem; margin-top: .3rem; }
-.plan-status-badge {
-  font-size: .55rem; letter-spacing: .12em; text-transform: uppercase;
-  padding: .1rem .45rem; border-radius: 20px; font-family: 'Jost', sans-serif;
-  border: 1px solid; flex-shrink: 0;
-}
-.plan-status-badge.planejado { color: var(--stone-light); border-color: var(--border-strong); background: transparent; }
-.plan-status-badge.lendo { color: var(--gold); border-color: rgba(184,151,90,.4); background: rgba(184,151,90,.08); }
-.plan-status-badge.lido { color: var(--wine); border-color: rgba(107,31,46,.3); background: rgba(107,31,46,.06); }
-.plan-status-badge.abandonado { color: var(--stone-light); border-color: var(--border); background: var(--cream-mid); text-decoration: line-through; }
-.plan-mini-bar-bg { flex: 1; height: 3px; background: var(--stone-pale); border-radius: 2px; overflow: hidden; max-width: 120px; }
-.plan-mini-bar-fill { height: 3px; background: linear-gradient(90deg, var(--wine), var(--gold)); border-radius: 2px; transition: width .6s ease; }
-.plan-actions {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: .05rem; padding: .5rem .6rem; border-left: 1px solid var(--border); flex-shrink: 0;
-}
-.plan-actions button {
-  background: none; border: none; cursor: pointer; width: 24px; height: 24px;
-  display: flex; align-items: center; justify-content: center; border-radius: 50%;
-  color: var(--stone-light); transition: background .15s; font-size: .82rem;
-}
-.plan-actions button:hover { background: var(--cream-dark); }
-.plan-empty {
-  padding: 3rem 2rem; text-align: center;
-  font-family: 'Playfair Display', serif; font-size: 1rem;
-  font-style: italic; color: var(--stone-light);
-}
-/* Modal de planejamento */
-.plan-modal-overlay { z-index: 101; }
-body.dark .plan-section { border-color: var(--border); }
 
 /* ── MODAL ── */
 .modal-overlay {
@@ -869,9 +800,6 @@ body.dark .dup-warning { background: rgba(192,80,112,.1); border-color: rgba(192
 body.dark footer { color: var(--stone-pale); }
 body.dark .skeleton-line { background: linear-gradient(90deg, var(--cream-mid) 25%, var(--cream-dark) 50%, var(--cream-mid) 75%); background-size: 200% 100%; }
 body.dark .goals-progress-bg, body.dark .goals-history-bar-bg { background: var(--cream-dark); }
-body.dark .goals-history { background: var(--cream-mid); border-color: var(--border); }
-body.dark .plan-section { background: var(--cream-mid); border-color: var(--border); }
-body.dark .plan-header { background: var(--cream-dark); }
 body.dark .view-btn.active { background: var(--ink); color: var(--cream); }
 body.dark .spinner-overlay { background: rgba(24,20,16,.92); }
 
@@ -2309,80 +2237,7 @@ body.dark .quote-story-btn:hover {
       </div>
     </div>
     <div id="goalsCountdown"></div>
-
-    <!-- Planejamento de leituras -->
-    <div class="plan-section" id="planSection">
-      <div class="plan-header">
-        <div class="plan-header-left">
-          <span class="plan-header-title">Planejamento de leituras</span>
-          <span class="plan-coverage" id="planCoverage"></span>
-        </div>
-        <button class="btn btn-gold" onclick="window._openPlanModal()">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-          Planejar leitura
-        </button>
-      </div>
-      <div id="planList"></div>
-    </div>
-
     <div class="goals-history" id="goalsHistory"></div>
-  </div>
-</div>
-
-<!-- MODAL DE PLANEJAMENTO -->
-<div class="modal-overlay hidden plan-modal-overlay" id="planModalOverlay">
-  <div class="modal" style="max-width:520px">
-    <div class="modal-header">
-      <h2 id="planModalTitle">Planejar leitura</h2>
-      <button class="modal-close" onclick="window.closePlanModal()">×</button>
-    </div>
-    <div class="modal-body">
-      <input type="hidden" id="planEditId">
-      <div class="form-group">
-        <label>Buscar livro do acervo ou digitar</label>
-        <input type="text" id="planBookSearch" list="planBookList" placeholder="Título do livro…" autocomplete="off" oninput="window._onPlanSearch(this.value)">
-        <datalist id="planBookList"></datalist>
-        <div id="planCoverPreview" style="display:none;margin-top:.5rem;display:none;align-items:center;gap:.8rem;padding:.6rem;background:var(--cream-mid);border:1px solid var(--border)">
-          <img id="planPreviewImg" src="" style="width:36px;height:52px;object-fit:cover;border-radius:1px">
-          <div>
-            <div id="planPreviewTitle" style="font-family:'Playfair Display',serif;font-size:.9rem;font-weight:500"></div>
-            <div id="planPreviewAuthor" style="font-size:.7rem;color:var(--stone);font-style:italic;font-family:'Playfair Display',serif"></div>
-          </div>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Título *</label>
-          <input type="text" id="planTitle" placeholder="O Nome do Vento">
-        </div>
-        <div class="form-group">
-          <label>Autor(a)</label>
-          <input type="text" id="planAuthor" placeholder="Patrick Rothfuss">
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Por que este ano? <span style="opacity:.6">(opcional)</span></label>
-        <input type="text" id="planWhy" placeholder="Ex: quero fechar a trilogia, indicação da Paula…" maxlength="120">
-      </div>
-      <div class="form-group">
-        <label>Mês pretendido <span style="opacity:.6">(opcional)</span></label>
-        <select id="planMonth">
-          <option value="">Sem mês definido</option>
-          <option value="1">Janeiro</option><option value="2">Fevereiro</option>
-          <option value="3">Março</option><option value="4">Abril</option>
-          <option value="5">Maio</option><option value="6">Junho</option>
-          <option value="7">Julho</option><option value="8">Agosto</option>
-          <option value="9">Setembro</option><option value="10">Outubro</option>
-          <option value="11">Novembro</option><option value="12">Dezembro</option>
-        </select>
-      </div>
-      <input type="hidden" id="planLinkedBookId">
-      <input type="hidden" id="planCoverUrl">
-    </div>
-    <div class="modal-footer">
-      <button class="btn" onclick="window.closePlanModal()">Cancelar</button>
-      <button class="btn btn-primary" onclick="window.savePlanItem()">Salvar</button>
-    </div>
   </div>
 </div>
 
@@ -3020,11 +2875,9 @@ onAuthStateChanged(auth, user => {
     quotesCol = collection(db, 'usuarios', user.uid, 'citacoes');
     goalsCol  = collection(db, 'usuarios', user.uid, 'metas');
     startListening();
-    _initPlanFirestore(user.uid);
   } else {
     [unsubBooks, unsubQuotes, unsubGoals].forEach(u => u && u());
-    if (unsubPlan) { unsubPlan(); unsubPlan = null; }
-    books = []; quotes = []; goals = {}; planItems = [];
+    books = []; quotes = []; goals = {};
     _nytState = { oficial: {}, leitores: {} };
     if (_unsubNyt) { _unsubNyt(); _unsubNyt = null; }
     _nytCol = null;
@@ -3545,7 +3398,7 @@ function switchTab(tab) {
   if (tab === 'stats')  { renderCharts(); renderHeatmap(); }
   if (tab === 'quotes') renderQuotes();
   if (tab === 'tbr')    renderTbr();
-  if (tab === 'goals')  { renderGoals(); renderPlanList(); }
+  if (tab === 'goals')  renderGoals();
   if (tab === 'series') renderSeries();
   if (tab === 'year')   { populateYearSelect(); renderYearInBooks(+document.getElementById('yearSelect').value || new Date().getFullYear()); }
   if (tab === 'mosaic')   { populateMosaicYearSel(); renderMosaic(+document.getElementById('mosaicYearSel').value || new Date().getFullYear()); }
@@ -3672,26 +3525,23 @@ function renderReadingNow() {
       const safe = b.coverUrl ? b.coverUrl.replace(/"/g,'').replace(/'/g,'') : '';
       const bg = titleColor(b.title);
       const pct = b.pageTotal ? Math.round((b.pageCurrent || 0) / b.pageTotal * 100) : 0;
-      const mode = b._progressMode || 'pages'; // 'pages' ou 'pct'
+      const mode = b._progressMode || 'pages';
       return '<div class="reading-item">' +
         (safe ? '<img class="reading-cover" src="' + safe + '" alt="">' : '<div class="reading-cover-ph" style="background:' + bg + '">' + esc(b.title.charAt(0)) + '</div>') +
         '<div class="reading-info">' +
           '<div class="reading-book-title">' + esc(b.title) + '</div>' +
           (b.author ? '<div class="reading-book-author">' + esc(b.author) + '</div>' : '') +
-          // Toggle modo progresso
           '<div class="progress-inline">' +
             '<div class="progress-mode-toggle">' +
               '<button class="progress-mode-btn' + (mode==='pages'?' active':'') + '" onclick="window._setProgressMode(\'' + b.id + '\',\'pages\')" title="Páginas">pág</button>' +
               '<button class="progress-mode-btn' + (mode==='pct'?' active':'') + '" onclick="window._setProgressMode(\'' + b.id + '\',\'pct\')" title="Percentual">%</button>' +
             '</div>' +
-            // Modo páginas
             '<div id="pm_pages_' + b.id + '" style="display:' + (mode==='pages'?'flex':'none') + ';align-items:center;gap:.5rem">' +
               '<span class="progress-sep">p.</span>' +
               '<input class="progress-inline-input" type="number" id="pc_' + b.id + '" value="' + (b.pageCurrent||0) + '" min="0" max="' + (b.pageTotal||9999) + '" title="Página atual">' +
               '<span class="progress-sep">/</span>' +
               '<input class="progress-inline-input" type="number" id="pt_' + b.id + '" value="' + (b.pageTotal||'') + '" min="1" placeholder="total" title="Total de páginas">' +
             '</div>' +
-            // Modo percentual
             '<div id="pm_pct_' + b.id + '" style="display:' + (mode==='pct'?'flex':'none') + ';align-items:center;gap:.4rem">' +
               '<input class="progress-pct-input" type="number" id="pp_' + b.id + '" value="' + pct + '" min="0" max="100" title="Percentual">' +
               '<span class="progress-sep">%</span>' +
@@ -3712,38 +3562,31 @@ function renderReadingNow() {
     }).join('') + '</div></div>';
 }
 
-// Alterna modo de progresso sem salvar no Firebase (só no DOM + memória local)
 window._setProgressMode = function(id, mode) {
   document.getElementById('pm_pages_' + id).style.display = mode === 'pages' ? 'flex' : 'none';
-  document.getElementById('pm_pct_' + id).style.display   = mode === 'pct'   ? 'flex' : 'none';
-  document.querySelectorAll('#pm_pages_' + id).forEach(() => {});
-  // Atualizar active nos botões
+  document.getElementById('pm_pct_'   + id).style.display = mode === 'pct'   ? 'flex' : 'none';
   const toggle = document.getElementById('pm_pages_' + id)?.closest('.progress-inline')?.querySelector('.progress-mode-toggle');
   if (toggle) {
     toggle.querySelectorAll('.progress-mode-btn').forEach(btn => {
       btn.classList.toggle('active', btn.textContent.trim() === (mode === 'pages' ? 'pág' : '%'));
     });
   }
-  // Sincronizar: se trocar para %, calcular pct das páginas; se trocar para páginas, calcular páginas do pct
   const b = books.find(x => x.id === id); if (!b) return;
   if (mode === 'pct') {
     const pc = parseInt(document.getElementById('pc_' + id)?.value) || b.pageCurrent || 0;
-    const pt = parseInt(document.getElementById('pt_' + id)?.value) || b.pageTotal || 0;
-    const p = pt ? Math.min(100, Math.round(pc / pt * 100)) : (b.pageCurrent||0);
+    const pt = parseInt(document.getElementById('pt_' + id)?.value) || b.pageTotal  || 0;
+    const p  = pt ? Math.min(100, Math.round(pc / pt * 100)) : 0;
     const ppEl = document.getElementById('pp_' + id);
     if (ppEl) ppEl.value = p;
   } else {
     const pp = parseInt(document.getElementById('pp_' + id)?.value) || 0;
     const pt = b.pageTotal || 0;
     if (pt) {
-      const pc = Math.round(pp / 100 * pt);
       const pcEl = document.getElementById('pc_' + id);
-      if (pcEl) pcEl.value = pc;
+      if (pcEl) pcEl.value = Math.round(pp / 100 * pt);
     }
   }
-  // Guardar preferência temporariamente no objeto em memória
-  const bObj = books.find(x => x.id === id);
-  if (bObj) bObj._progressMode = mode;
+  if (b) b._progressMode = mode;
 };
 
 // Atualiza progresso sem abrir modal (melhoria 2)
@@ -3754,18 +3597,7 @@ window._updateProgress = async function(id) {
   if (mode === 'pct') {
     const pp = parseInt(document.getElementById('pp_' + id)?.value) || 0;
     pt = parseInt(document.getElementById('pt_' + id)?.value) || b.pageTotal || null;
-    pc = pt ? Math.round(pp / 100 * pt) : pp; // se não tem total, guarda o % como pageCurrent
-    if (!pt) {
-      // sem total de páginas: salvar percentual direto e mostrar como %
-      await setDoc(doc(booksCol, id), { ...b, pageCurrent: pp, pageTotal: null, progressUpdatedAt: Date.now() });
-      const bar = document.getElementById('pb_' + id);
-      const lbl = document.getElementById('pl_' + id);
-      if (bar) bar.style.width = pp + '%';
-      if (lbl) lbl.textContent = pp + '%';
-      const msg = document.getElementById('psm_' + id);
-      if (msg) { msg.classList.add('show'); setTimeout(() => msg.classList.remove('show'), 1800); }
-      return;
-    }
+    pc = pt ? Math.round(pp / 100 * pt) : pp;
   } else {
     pc = parseInt(document.getElementById('pc_' + id)?.value) || 0;
     pt = parseInt(document.getElementById('pt_' + id)?.value) || null;
@@ -3777,11 +3609,16 @@ window._updateProgress = async function(id) {
     const lbl = document.getElementById('pl_' + id);
     if (bar) bar.style.width = pct + '%';
     if (lbl) lbl.textContent = pct + '% · p. ' + pc + ' de ' + pt;
-    // Sincronizar os dois campos de input
     const ppEl = document.getElementById('pp_' + id);
     if (ppEl) ppEl.value = pct;
     const pcEl = document.getElementById('pc_' + id);
     if (pcEl) pcEl.value = pc;
+  } else if (mode === 'pct') {
+    const pp = parseInt(document.getElementById('pp_' + id)?.value) || 0;
+    const bar = document.getElementById('pb_' + id);
+    const lbl = document.getElementById('pl_' + id);
+    if (bar) bar.style.width = pp + '%';
+    if (lbl) lbl.textContent = pp + '%';
   }
   const msg = document.getElementById('psm_' + id);
   if (msg) { msg.classList.add('show'); setTimeout(() => msg.classList.remove('show'), 1800); }
@@ -4149,207 +3986,6 @@ async function saveGoal() {
   showToast('✓ Meta de ' + val + ' livros para ' + cy + ' salva!');
 }
 window.saveGoal = saveGoal;
-
-// ── PLANEJAMENTO DE LEITURAS ───────────────────────────────
-let planItems = [];        // cache local
-let planCol   = null;      // Firestore collection
-let unsubPlan = null;
-
-function _initPlanFirestore(uid) {
-  planCol = collection(db, 'usuarios', uid, 'planejamento');
-  if (unsubPlan) unsubPlan();
-  unsubPlan = onSnapshot(planCol, snap => {
-    planItems = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    renderPlanList();
-    renderGoals(); // recalcula cobertura
-  }, err => console.error(err));
-}
-
-const PLAN_MONTHS = ['','Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-
-function _planStatusFromBooks(item) {
-  // Sincroniza status com o diário real
-  if (!item.linkedBookId) return item.status || 'planejado';
-  const b = books.find(x => x.id === item.linkedBookId);
-  if (!b) return item.status || 'planejado';
-  if (!b.status || b.status === 'lido') return 'lido';
-  if (b.status === 'lendo') return 'lendo';
-  return item.status || 'planejado';
-}
-
-function _planProgress(item) {
-  if (!item.linkedBookId) return 0;
-  const b = books.find(x => x.id === item.linkedBookId);
-  if (!b || !b.pageTotal) return 0;
-  return Math.min(100, Math.round((b.pageCurrent || 0) / b.pageTotal * 100));
-}
-
-function renderPlanList() {
-  const el = document.getElementById('planList'); if (!el) return;
-  const cy = new Date().getFullYear();
-  const yearItems = planItems.filter(p => (p.year || cy) === cy)
-    .sort((a, b) => (a.month||13) - (b.month||13));
-
-  // Atualizar cobertura
-  const target = goals[cy] || null;
-  const covEl = document.getElementById('planCoverage');
-  if (covEl && target) {
-    const planned = yearItems.length;
-    const slots = target - planned;
-    covEl.innerHTML = planned + ' planejado' + (planned!==1?'s':'') + ' de ' + target +
-      (slots > 0 ? ' · <strong>' + slots + ' slot' + (slots!==1?'s':'') + ' em aberto</strong>' : ' · <strong style="color:var(--gold)">planejamento completo ✓</strong>');
-  } else if (covEl) {
-    covEl.textContent = yearItems.length + ' livro' + (yearItems.length!==1?'s':'') + ' planejado' + (yearItems.length!==1?'s':'');
-  }
-
-  if (!yearItems.length) {
-    el.innerHTML = '<div class="plan-empty">Nenhuma leitura planejada para ' + cy + ' ainda.<br>Use o botão acima para começar.</div>';
-    return;
-  }
-
-  el.innerHTML = yearItems.map((item, i) => {
-    const status = _planStatusFromBooks(item);
-    const pct    = status === 'lendo' ? _planProgress(item) : (status === 'lido' ? 100 : 0);
-    const safe   = item.coverUrl ? item.coverUrl.replace(/"/g,'').replace(/'/g,'') : '';
-    const bg     = titleColor(item.title || '?');
-    const statusLabels = { planejado:'planejado', lendo:'lendo', lido:'lido', abandonado:'abandonado' };
-    return '<div class="plan-item" style="animation-delay:' + Math.min(i*.04,.4) + 's">' +
-      '<div class="plan-cover-cell">' +
-        (safe ? '<img src="' + safe + '" style="width:36px;height:52px;object-fit:cover;border-radius:1px;box-shadow:1px 2px 6px var(--shadow)" alt="">'
-              : '<div style="width:36px;height:52px;border-radius:1px;background:' + bg + ';display:flex;align-items:center;justify-content:center;font-family:\'Playfair Display\',serif;font-size:1rem;color:white;font-style:italic">' + esc((item.title||'?').charAt(0)) + '</div>') +
-      '</div>' +
-      '<div class="plan-main">' +
-        '<div class="plan-title">' + esc(item.title || '—') + '</div>' +
-        (item.author ? '<div class="plan-author">' + esc(item.author) + '</div>' : '') +
-        (item.why ? '<div class="plan-why">✦ ' + esc(item.why) + '</div>' : '') +
-        '<div class="plan-status-row">' +
-          '<span class="plan-status-badge ' + status + '">' + (statusLabels[status]||status) + '</span>' +
-          (item.month ? '<span style="font-size:.6rem;color:var(--stone-light);letter-spacing:.08em">' + PLAN_MONTHS[item.month] + '</span>' : '') +
-          (status === 'lendo' && pct > 0 ? '<div class="plan-mini-bar-bg"><div class="plan-mini-bar-fill" style="width:' + pct + '%"></div></div><span style="font-size:.6rem;color:var(--stone-light)">' + pct + '%</span>' : '') +
-          (status === 'lido' && item.linkedBookId ? '<span style="font-size:.6rem;color:var(--wine)">✓ no diário</span>' : '') +
-        '</div>' +
-      '</div>' +
-      '<div class="plan-actions">' +
-        '<button onclick="window._openPlanModal(\'' + item.id + '\')" title="Editar">✎</button>' +
-        (status === 'planejado' ?
-          '<button onclick="window._planStartReading(\'' + item.id + '\')" title="Começar a ler" style="color:var(--gold)">▶</button>' : '') +
-        '<button onclick="window._deletePlanItem(\'' + item.id + '\')" title="Remover"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="11" height="11"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>' +
-      '</div>' +
-    '</div>';
-  }).join('');
-}
-
-window._openPlanModal = function(id) {
-  document.getElementById('planEditId').value   = '';
-  document.getElementById('planTitle').value    = '';
-  document.getElementById('planAuthor').value   = '';
-  document.getElementById('planWhy').value      = '';
-  document.getElementById('planMonth').value    = '';
-  document.getElementById('planLinkedBookId').value = '';
-  document.getElementById('planCoverUrl').value = '';
-  document.getElementById('planBookSearch').value = '';
-  document.getElementById('planCoverPreview').style.display = 'none';
-  document.getElementById('planModalTitle').textContent = 'Planejar leitura';
-
-  // Popular datalist com livros do acervo (quero ler + não iniciados)
-  const suggestions = books.filter(b => b.status === 'quero' || !b.status || b.status === 'lido');
-  document.getElementById('planBookList').innerHTML =
-    suggestions.map(b => '<option value="' + esc(b.title) + '" data-id="' + b.id + '">').join('');
-
-  if (id) {
-    const item = planItems.find(x => x.id === id); if (!item) return;
-    document.getElementById('planEditId').value   = item.id;
-    document.getElementById('planTitle').value    = item.title || '';
-    document.getElementById('planAuthor').value   = item.author || '';
-    document.getElementById('planWhy').value      = item.why || '';
-    document.getElementById('planMonth').value    = item.month || '';
-    document.getElementById('planLinkedBookId').value = item.linkedBookId || '';
-    document.getElementById('planCoverUrl').value = item.coverUrl || '';
-    document.getElementById('planModalTitle').textContent = 'Editar planejamento';
-    if (item.coverUrl) {
-      _showPlanPreview(item.coverUrl, item.title, item.author);
-    }
-  }
-  document.getElementById('planModalOverlay').classList.remove('hidden');
-};
-window.closePlanModal = function() {
-  document.getElementById('planModalOverlay').classList.add('hidden');
-};
-
-window._onPlanSearch = function(val) {
-  if (!val) return;
-  // Tentar encontrar livro no acervo
-  const match = books.find(b => b.title.toLowerCase() === val.toLowerCase());
-  if (match) {
-    document.getElementById('planTitle').value  = match.title;
-    document.getElementById('planAuthor').value = match.author || '';
-    document.getElementById('planLinkedBookId').value = match.id;
-    document.getElementById('planCoverUrl').value = match.coverUrl || '';
-    if (match.coverUrl) _showPlanPreview(match.coverUrl, match.title, match.author);
-  } else {
-    document.getElementById('planTitle').value  = val;
-    document.getElementById('planLinkedBookId').value = '';
-  }
-};
-
-function _showPlanPreview(url, title, author) {
-  const wrap = document.getElementById('planCoverPreview');
-  document.getElementById('planPreviewImg').src = url;
-  document.getElementById('planPreviewTitle').textContent = title || '';
-  document.getElementById('planPreviewAuthor').textContent = author ? 'por ' + author : '';
-  wrap.style.display = 'flex';
-}
-
-window.savePlanItem = async function() {
-  const title = document.getElementById('planTitle').value.trim();
-  if (!title) { showToast('⚠ Título é obrigatório.'); return; }
-  const cy  = new Date().getFullYear();
-  const editId = document.getElementById('planEditId').value;
-  const id  = editId || (Date.now().toString(36) + Math.random().toString(36).slice(2,6));
-  const data = {
-    id, title,
-    author:       document.getElementById('planAuthor').value.trim() || null,
-    why:          document.getElementById('planWhy').value.trim()    || null,
-    month:        parseInt(document.getElementById('planMonth').value) || null,
-    linkedBookId: document.getElementById('planLinkedBookId').value   || null,
-    coverUrl:     document.getElementById('planCoverUrl').value       || null,
-    year:         cy,
-    status:       'planejado',
-    addedAt:      Date.now(),
-  };
-  await setDoc(doc(planCol, id), data);
-  window.closePlanModal();
-  showToast(editId ? '✓ Planejamento atualizado.' : '✓ Leitura planejada!');
-};
-
-window._deletePlanItem = async function(id) {
-  await deleteDoc(doc(planCol, id));
-  showToast('✓ Removido do planejamento.');
-};
-
-window._planStartReading = async function(planId) {
-  const item = planItems.find(x => x.id === planId); if (!item) return;
-  // Se está vinculado a um livro do acervo, mudar status para lendo
-  if (item.linkedBookId) {
-    const b = books.find(x => x.id === item.linkedBookId);
-    if (b && b.status !== 'lendo') {
-      await saveBookToDb({ ...b, status: 'lendo' });
-      showToast('✓ Iniciado! Livro movido para "Lendo".');
-      return;
-    }
-  }
-  // Senão: abrir modal para adicionar como lendo
-  window._openModal('', 'lendo');
-  setTimeout(() => {
-    document.getElementById('fTitle').value  = item.title || '';
-    document.getElementById('fAuthor').value = item.author || '';
-    if (item.coverUrl) {
-      window.currentCoverUrl = item.coverUrl;
-      document.getElementById('fCoverUrl').value = item.coverUrl;
-      if (typeof showCoverPreview === 'function') showCoverPreview(item.coverUrl, item.title, item.author);
-    }
-  }, 100);
-};
 
 // ── MODAL ─────────────────────────────────────────────────
 function openModal(id, defaultStatus) {
@@ -5023,9 +4659,6 @@ document.addEventListener('keydown', e => {
     if (!document.getElementById('unsavedOverlay').classList.contains('hidden')) {
       window._closeUnsavedModal(); return;
     }
-    if (!document.getElementById('planModalOverlay').classList.contains('hidden')) {
-      window.closePlanModal(); return;
-    }
     closeModal(); closeQuoteModal(); closeShuffleModal(); closeStoryModal(); closeConfirm();
   }
   if (e.key === 'Enter' && !document.getElementById('modalOverlay').classList.contains('hidden'))
@@ -5040,7 +4673,6 @@ document.getElementById('quoteModalOverlay').addEventListener('click', e => { if
 document.getElementById('shuffleOverlay').addEventListener('click', e => { if (e.target === document.getElementById('shuffleOverlay')) closeShuffleModal(); });
 document.getElementById('storyOverlay').addEventListener('click',   e => { if (e.target === document.getElementById('storyOverlay')) closeStoryModal(); });
 document.getElementById('confirmOverlay').addEventListener('click', e => { if (e.target === document.getElementById('confirmOverlay')) closeConfirm(); });
-document.getElementById('planModalOverlay').addEventListener('click', e => { if (e.target === document.getElementById('planModalOverlay')) window.closePlanModal(); });
 
 // ── EVENT LISTENERS ───────────────────────────────────────
 document.getElementById('searchInput').addEventListener('input', render);
